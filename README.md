@@ -53,29 +53,6 @@
 
 ![海报](.github/images/poster.jpg)
 
-## 📸 界面预览
-
-### 主界面 - 笔记列表和编辑器
-
-![主界面](.github/images/opennotemain.png)
-
-### Cici（茜茜）智能 Agent 助手面板
-
-![Cici智能助手面板](.github/images/cici_assistant_panel.png)
-
-### 深色主题效果
-
-![深色主题](.github/images/dark_theme.png)
-
-### 类目管理
-
-![类目](.github/images/category.png)
-
-### 设置面板
-
-![设置面板](.github/images/settings_panel.png)
-
-
 ## ✨ 特性
 
 ### 📝 智能笔记管理
@@ -142,6 +119,28 @@
 - **多 AI 提供商**：DeepSeek、OpenAI、Claude (Anthropic)、百炼、智谱、百度、混元、Kimi、火山、Ollama (本地)、自定义兼容 API
 - **MCP 协议支持**：兼容 Model Context Protocol
 - **CLI 命令行工具**：支持终端操作笔记
+
+## 📸 界面预览
+
+### 主界面 - 笔记列表和编辑器
+
+![主界面](.github/images/opennotemain.png)
+
+### Cici（茜茜）智能 Agent 助手面板
+
+![Cici智能助手面板](.github/images/cici_assistant_panel.png)
+
+### 深色主题效果
+
+![深色主题](.github/images/dark_theme.png)
+
+### 类目管理
+
+![类目](.github/images/category.png)
+
+### 设置面板
+
+![设置面板](.github/images/settings_panel.png)
 
 ## 🚀 快速开始
 
