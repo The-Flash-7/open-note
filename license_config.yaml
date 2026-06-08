@@ -1,0 +1,41 @@
+# license_config.yaml - OpenNote 许可证检查配置
+
+# 允许的许可证（与 MIT + Apache 2.0 兼容）
+permittedLicenses:
+  - MIT
+  - MIT-Modern-Variant
+  - Pixar
+  - BSD-2-Clause
+  - BSD-3-Clause
+  - Apache-2.0
+  - ISC
+  - Unlicense
+  - Zlib
+  - Boost
+  - WTFPL
+  - MPL-2.0  # Mozilla 公共许可证，与 Apache 2.0 兼容
+
+# 拒绝的许可证（与 MIT/Apache 2.0 不兼容或有传染性）
+forbiddenLicenses:
+  - GPL-2.0
+  - GPL-3.0
+  - AGPL-3.0
+  - LGPL-2.1
+  - LGPL-3.0
+  - EUPL-1.1
+  - EUPL-1.2
+  - CPAL-1.0
+  - OSL-3.0
+  - Artistic-1.0
+  - SSPL-1.0
+
+# 已知有问题的包，但手动确认为允许（可选）
+approvedPackages: 
+  no-file:
+    - flutter_localizations
+    - flutter_test
+    - flutter_web_plugins
+  Pixar:
+    - hive
+  unknown-license:
+    - hive_flutter

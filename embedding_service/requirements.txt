@@ -1,0 +1,7 @@
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.0.0
+onnxruntime-genai>=0.8.0
+numpy>=1.24.0
+tokenizers>=0.15.0
+chromadb>=0.4.0

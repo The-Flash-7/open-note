@@ -1,0 +1,2239 @@
+{
+  "@@locale": "zh",
+  "common_cancel": "Cancel",
+  "@common_cancel": {
+    "description": "取消按钮"
+  },
+  "common_save": "Save",
+  "@common_save": {
+    "description": "保存按钮"
+  },
+  "common_delete": "Delete",
+  "@common_delete": {
+    "description": "删除按钮"
+  },
+  "common_ok": "OK",
+  "@common_ok": {
+    "description": "确定按钮"
+  },
+  "common_close": "Close",
+  "@common_close": {
+    "description": "关闭按钮"
+  },
+  "common_retry": "Retry",
+  "@common_retry": {
+    "description": "重试按钮"
+  },
+  "common_edit": "Edit",
+  "@common_edit": {
+    "description": "编辑按钮"
+  },
+  "common_create": "Create",
+  "@common_create": {
+    "description": "创建按钮"
+  },
+  "common_add": "Add",
+  "@common_add": {
+    "description": "添加按钮"
+  },
+  "common_clear": "Clear",
+  "@common_clear": {
+    "description": "清空/清除按钮"
+  },
+  "common_paste": "Paste",
+  "@common_paste": {
+    "description": "粘贴按钮"
+  },
+  "common_pause": "Pause",
+  "@common_pause": {
+    "description": "暂停按钮"
+  },
+  "common_resume": "Resume",
+  "@common_resume": {
+    "description": "继续/恢复按钮"
+  },
+  "common_skip": "Skip",
+  "@common_skip": {
+    "description": "跳过按钮"
+  },
+  "common_next": "Next",
+  "@common_next": {
+    "description": "下一步按钮"
+  },
+  "common_previous": "Previous",
+  "@common_previous": {
+    "description": "上一页按钮"
+  },
+  "common_confirmDelete": "Confirm Delete",
+  "@common_confirmDelete": {
+    "description": "删除确认标题"
+  },
+  "common_confirmClear": "Confirm Clear",
+  "@common_confirmClear": {
+    "description": "清空确认标题"
+  },
+  "common_comingSoon": "Coming Soon",
+  "@common_comingSoon": {
+    "description": "即将上线标签"
+  },
+  "common_followSystem": "Follow System",
+  "@common_followSystem": {
+    "description": "跟随系统选项"
+  },
+  "common_lightMode": "Light Mode",
+  "@common_lightMode": {
+    "description": "亮色模式"
+  },
+  "common_darkMode": "Dark Mode",
+  "@common_darkMode": {
+    "description": "暗色模式"
+  },
+  "common_collapse": "Collapse",
+  "@common_collapse": {
+    "description": "收起按钮"
+  },
+  "common_expand": "Expand",
+  "@common_expand": {
+    "description": "展开按钮"
+  },
+  "common_send": "Send",
+  "@common_send": {
+    "description": "发送按钮"
+  },
+  "common_stop": "Stop",
+  "@common_stop": {
+    "description": "停止按钮"
+  },
+  "common_yes": "Yes",
+  "@common_yes": {
+    "description": "是"
+  },
+  "common_no": "No",
+  "@common_no": {
+    "description": "否"
+  },
+  "common_done": "Done",
+  "@common_done": {
+    "description": "完成按钮"
+  },
+  "common_more": "More",
+  "@common_more": {
+    "description": "更多选项"
+  },
+  "common_unknown": "Unknown",
+  "@common_unknown": {
+    "description": "未知状态"
+  },
+  "home_home": "Home",
+  "@home_home": {
+    "description": "导航-首页"
+  },
+  "home_categories": "Categories",
+  "@home_categories": {
+    "description": "导航-目录"
+  },
+  "home_ai": "AI",
+  "@home_ai": {
+    "description": "导航-AI"
+  },
+  "home_favorites": "Favorites",
+  "@home_favorites": {
+    "description": "导航-收藏"
+  },
+  "home_settings": "Settings",
+  "@home_settings": {
+    "description": "导航-设置"
+  },
+  "home_note": "Notes",
+  "@home_note": {
+    "description": "平板导航-笔记"
+  },
+  "home_dragDropImport": "Drop files to import notes",
+  "@home_dragDropImport": {
+    "description": "拖拽导入覆盖层"
+  },
+  "home_successImportCount": "Successfully imported {count} file(s)",
+  "@home_successImportCount": {
+    "description": "导入成功"
+  },
+  "home_failImportCount": "{count} file(s) failed to import",
+  "@home_failImportCount": {
+    "description": "导入失败"
+  },
+  "home_clipboardUrlDetected": "URL detected in clipboard, create a note?",
+  "@home_clipboardUrlDetected": {
+    "description": "剪贴板URL提示"
+  },
+  "home_dismiss": "Dismiss",
+  "@home_dismiss": {
+    "description": "忽略按钮"
+  },
+  "home_summaryGenerationPaused": "Summary generation paused ({processedCount}/{totalPending})",
+  "@home_summaryGenerationPaused": {
+    "description": "摘要暂停状态"
+  },
+  "home_selectedCount": "{count} selected",
+  "@home_selectedCount": {
+    "description": "多选计数"
+  },
+  "home_allNotes": "All Notes",
+  "@home_allNotes": {
+    "description": "笔记列表标题"
+  },
+  "home_cancelMultiSelect": "Cancel Multi-select",
+  "@home_cancelMultiSelect": {
+    "description": "取消多选"
+  },
+  "home_multiSelect": "Multi-select",
+  "@home_multiSelect": {
+    "description": "多选切换"
+  },
+  "home_trash": "Trash",
+  "@home_trash": {
+    "description": "回收站图标提示"
+  },
+  "home_trashWithCount": "Trash ({count})",
+  "@home_trashWithCount": {
+    "description": "回收站带数量"
+  },
+  "home_newBlankNote": "New Blank Note",
+  "@home_newBlankNote": {
+    "description": "新建空白笔记"
+  },
+  "home_createFromUrl": "Create from URL",
+  "@home_createFromUrl": {
+    "description": "从URL创建"
+  },
+  "home_importFromFile": "Import from File",
+  "@home_importFromFile": {
+    "description": "从文件导入"
+  },
+  "home_noteMovedToTrash": "Note moved to trash",
+  "@home_noteMovedToTrash": {
+    "description": "删除后提示"
+  },
+  "home_selectNoteToStart": "Select a note to start viewing",
+  "@home_selectNoteToStart": {
+    "description": "空内容提示"
+  },
+  "home_confirmDeleteNoteContent": "Are you sure you want to delete \"{title}\"?",
+  "@home_confirmDeleteNoteContent": {
+    "description": "删除确认内容"
+  },
+  "home_confirmBatchDelete": "Confirm Batch Delete",
+  "@home_confirmBatchDelete": {
+    "description": "批量删除标题"
+  },
+  "home_confirmBatchDeleteContent": "Are you sure you want to delete {count} selected notes?",
+  "@home_confirmBatchDeleteContent": {
+    "description": "批量删除内容"
+  },
+  "home_selectedNotesCount": "{count} notes selected",
+  "@home_selectedNotesCount": {
+    "description": "批量操作栏"
+  },
+  "home_deletedCountNotes": "{count} note(s) deleted",
+  "@home_deletedCountNotes": {
+    "description": "批量删除后提示"
+  },
+  "home_trashTitle": "Trash",
+  "@home_trashTitle": {
+    "description": "回收站对话框标题"
+  },
+  "home_trashEmpty": "Trash is empty",
+  "@home_trashEmpty": {
+    "description": "空回收站提示"
+  },
+  "home_daysAgoDeleted": "Deleted {days} days ago",
+  "@home_daysAgoDeleted": {
+    "description": "回收站副标题"
+  },
+  "home_restore": "Restore",
+  "@home_restore": {
+    "description": "恢复按钮"
+  },
+  "home_noteRestored": "Note restored",
+  "@home_noteRestored": {
+    "description": "恢复后提示"
+  },
+  "home_permanentlyDelete": "Permanently Delete",
+  "@home_permanentlyDelete": {
+    "description": "永久删除"
+  },
+  "home_notePermanentlyDeleted": "Note permanently deleted",
+  "@home_notePermanentlyDeleted": {
+    "description": "永久删除提示"
+  },
+  "home_emptyTrash": "Empty Trash",
+  "@home_emptyTrash": {
+    "description": "清空回收站按钮"
+  },
+  "home_emptyTrashTitle": "Empty Trash",
+  "@home_emptyTrashTitle": {
+    "description": "清空回收站标题"
+  },
+  "home_emptyTrashContent": "Are you sure you want to permanently delete {count} note(s)? This cannot be undone.",
+  "@home_emptyTrashContent": {
+    "description": "清空回收站内容"
+  },
+  "home_trashEmptied": "Trash emptied",
+  "@home_trashEmptied": {
+    "description": "清空后提示"
+  },
+  "home_switchTheme": "Switch Theme",
+  "@home_switchTheme": {
+    "description": "切换主题标题"
+  },
+  "home_switchToLight": "Switch to Light Mode",
+  "@home_switchToLight": {
+    "description": "切换亮色"
+  },
+  "home_switchToDark": "Switch to Dark Mode",
+  "@home_switchToDark": {
+    "description": "切换暗色"
+  },
+  "home_unfavorite": "Unfavorite",
+  "@home_unfavorite": {
+    "description": "取消收藏菜单"
+  },
+  "home_favorite": "Favorite",
+  "@home_favorite": {
+    "description": "收藏菜单"
+  },
+  "home_share": "Share",
+  "@home_share": {
+    "description": "分享菜单"
+  },
+  "home_shareComingSoon": "Sharing feature coming soon",
+  "@home_shareComingSoon": {
+    "description": "分享功能提示"
+  },
+  "editor_untitledNote": "Untitled Note",
+  "@editor_untitledNote": {
+    "description": "默认标题"
+  },
+  "editor_saving": "Saving...",
+  "@editor_saving": {
+    "description": "保存中状态"
+  },
+  "editor_autoSaved": "Auto-saved",
+  "@editor_autoSaved": {
+    "description": "自动保存成功"
+  },
+  "editor_autoSaveFailed": "Auto-save failed",
+  "@editor_autoSaveFailed": {
+    "description": "自动保存失败"
+  },
+  "editor_selectCategory": "Select Category",
+  "@editor_selectCategory": {
+    "description": "分类选择器"
+  },
+  "editor_noCategory": "No Category",
+  "@editor_noCategory": {
+    "description": "无分类选项"
+  },
+  "editor_clearCategory": "Clear Category",
+  "@editor_clearCategory": {
+    "description": "清除分类"
+  },
+  "editor_noteContentCannotBeEmpty": "Note content cannot be empty",
+  "@editor_noteContentCannotBeEmpty": {
+    "description": "内容不能为空"
+  },
+  "editor_saveSuccess": "Saved successfully",
+  "@editor_saveSuccess": {
+    "description": "保存成功"
+  },
+  "editor_saveFailed": "Save failed: {error}",
+  "@editor_saveFailed": {
+    "description": "保存失败"
+  },
+  "editor_fillTitleAndContentFirst": "Please fill in title and content first",
+  "@editor_fillTitleAndContentFirst": {
+    "description": "填写提示"
+  },
+  "editor_configTimeoutRetry": "Config load timeout, please try again",
+  "@editor_configTimeoutRetry": {
+    "description": "配置超时"
+  },
+  "editor_configureAIFirst": "Please configure AI service first",
+  "@editor_configureAIFirst": {
+    "description": "AI未配置"
+  },
+  "editor_generateSuggestionsFailed": "Failed to generate suggestions: {error}",
+  "@editor_generateSuggestionsFailed": {
+    "description": "建议生成失败"
+  },
+  "editor_smartSuggestions": "Smart Suggestions",
+  "@editor_smartSuggestions": {
+    "description": "智能建议标题"
+  },
+  "editor_categorySuggestion": "Category Suggestion:",
+  "@editor_categorySuggestion": {
+    "description": "分类建议标签"
+  },
+  "editor_tagSuggestion": "Tag Suggestion:",
+  "@editor_tagSuggestion": {
+    "description": "标签建议标签"
+  },
+  "editor_noSuggestions": "No suggestions available",
+  "@editor_noSuggestions": {
+    "description": "无建议"
+  },
+  "editor_applySuggestions": "Apply Suggestions",
+  "@editor_applySuggestions": {
+    "description": "应用建议按钮"
+  },
+  "editor_newNote": "New Note",
+  "@editor_newNote": {
+    "description": "新笔记标题"
+  },
+  "editor_editNote": "Edit Note",
+  "@editor_editNote": {
+    "description": "编辑笔记标题"
+  },
+  "editor_preview": "Preview",
+  "@editor_preview": {
+    "description": "预览模式"
+  },
+  "editor_smartSuggestionsTooltip": "Smart Suggestions",
+  "@editor_smartSuggestionsTooltip": {
+    "description": "智能建议提示"
+  },
+  "editor_aiAssistant": "AI Assistant",
+  "@editor_aiAssistant": {
+    "description": "AI助手提示"
+  },
+  "editor_source": "Source: ",
+  "@editor_source": {
+    "description": "来源标签"
+  },
+  "editor_title": "Title",
+  "@editor_title": {
+    "description": "标题文本框"
+  },
+  "editor_startWritingMarkdown": "Start writing your Markdown note...",
+  "@editor_startWritingMarkdown": {
+    "description": "Markdown占位符"
+  },
+  "editor_startWritingPlainText": "Start writing your plain text note...",
+  "@editor_startWritingPlainText": {
+    "description": "纯文本占位符"
+  },
+  "editor_startWritingRichText": "Start writing your rich text note...",
+  "@editor_startWritingRichText": {
+    "description": "富文本占位符"
+  },
+  "settings_preferences": "Preferences",
+  "@settings_preferences": {
+    "description": "设置导航-首选项"
+  },
+  "settings_aiService": "AI Service",
+  "@settings_aiService": {
+    "description": "设置导航-AI服务"
+  },
+  "settings_appearance": "Appearance",
+  "@settings_appearance": {
+    "description": "设置导航-外观"
+  },
+  "settings_knowledgeBase": "Knowledge Base",
+  "@settings_knowledgeBase": {
+    "description": "设置导航-知识库"
+  },
+  "settings_assistant": "Assistant",
+  "@settings_assistant": {
+    "description": "设置导航-智能助理"
+  },
+  "settings_cliTools": "CLI Tools",
+  "@settings_cliTools": {
+    "description": "设置导航-CLI"
+  },
+  "settings_title": "Settings",
+  "@settings_title": {
+    "description": "设置对话框标题"
+  },
+  "settings_featureInDevelopment": "Feature in development...",
+  "@settings_featureInDevelopment": {
+    "description": "开发中占位"
+  },
+  "settings_customConfig": "Custom Config",
+  "@settings_customConfig": {
+    "description": "自定义配置标题"
+  },
+  "settings_quickAddPresets": "Quick Add Presets",
+  "@settings_quickAddPresets": {
+    "description": "快速添加标题"
+  },
+  "settings_quickAddDescription": "Click to quickly add common provider configs",
+  "@settings_quickAddDescription": {
+    "description": "快速添加描述"
+  },
+  "settings_noAIConfig": "No AI config yet",
+  "@settings_noAIConfig": {
+    "description": "无AI配置"
+  },
+  "settings_clickToAddPreset": "Click below or use quick add presets",
+  "@settings_clickToAddPreset": {
+    "description": "空状态提示"
+  },
+  "settings_configured": "Configured",
+  "@settings_configured": {
+    "description": "已配置列表"
+  },
+  "settings_configCount": "{count}",
+  "@settings_configCount": {
+    "description": "配置数量"
+  },
+  "settings_current": "Current",
+  "@settings_current": {
+    "description": "当前徽章"
+  },
+  "settings_setModelFirst": "Please configure a model first",
+  "@settings_setModelFirst": {
+    "description": "配置模型提示"
+  },
+  "settings_addProvider": "Add {name}",
+  "@settings_addProvider": {
+    "description": "添加提供商"
+  },
+  "settings_apiAddress": "API Address: ",
+  "@settings_apiAddress": {
+    "description": "API地址标签"
+  },
+  "settings_presetsModels": "Preset Models: {models}",
+  "@settings_presetsModels": {
+    "description": "预设模型"
+  },
+  "settings_apiKey": "API Key",
+  "@settings_apiKey": {
+    "description": "API密钥标签"
+  },
+  "settings_enterApiKey": "Enter your API key",
+  "@settings_enterApiKey": {
+    "description": "API密钥提示"
+  },
+  "settings_enterApiKeyError": "Please enter API key",
+  "@settings_enterApiKeyError": {
+    "description": "API密钥错误"
+  },
+  "settings_vendorName": "Vendor Name",
+  "@settings_vendorName": {
+    "description": "厂商名称"
+  },
+  "settings_vendorNameHint": "e.g.: My API, Proxy",
+  "@settings_vendorNameHint": {
+    "description": "厂商名称提示"
+  },
+  "settings_baseUrl": "Base URL",
+  "@settings_baseUrl": {
+    "description": "Base URL标签"
+  },
+  "settings_baseUrlHint": "https://api.example.com/v1",
+  "@settings_baseUrlHint": {
+    "description": "Base URL提示"
+  },
+  "settings_modelList": "Model List",
+  "@settings_modelList": {
+    "description": "模型列表"
+  },
+  "settings_modelListHint": "Comma separated, e.g.: model-1,model-2",
+  "@settings_modelListHint": {
+    "description": "模型列表提示"
+  },
+  "settings_enterVendorName": "Please enter vendor name",
+  "@settings_enterVendorName": {
+    "description": "厂商名称错误"
+  },
+  "settings_enterAtLeastOneModel": "Please enter at least one model",
+  "@settings_enterAtLeastOneModel": {
+    "description": "模型错误"
+  },
+  "settings_displayName": "Display Name",
+  "@settings_displayName": {
+    "description": "显示名称"
+  },
+  "settings_confirmDeleteConfig": "Delete config \"{name}\"?",
+  "@settings_confirmDeleteConfig": {
+    "description": "删除配置确认"
+  },
+  "settings_connectionSuccess": "Successfully connected to {name}",
+  "@settings_connectionSuccess": {
+    "description": "连接成功"
+  },
+  "settings_unknownError": "Unknown error",
+  "@settings_unknownError": {
+    "description": "未知错误"
+  },
+  "settings_testException": "Test exception: {error}",
+  "@settings_testException": {
+    "description": "测试异常"
+  },
+  "settings_testConnection": "Test Connection",
+  "@settings_testConnection": {
+    "description": "测试连接"
+  },
+  "settings_testingConnection": "Testing connection...",
+  "@settings_testingConnection": {
+    "description": "测试连接中"
+  },
+  "settings_connectionSuccessful": "Connection Successful",
+  "@settings_connectionSuccessful": {
+    "description": "连接成功标签"
+  },
+  "settings_connectionFailed": "Connection Failed",
+  "@settings_connectionFailed": {
+    "description": "连接失败标签"
+  },
+  "search_placeholder": "Search notes...",
+  "@search_placeholder": {
+    "description": "搜索框"
+  },
+  "search_categoryFilter": "Category Filter",
+  "@search_categoryFilter": {
+    "description": "分类筛选"
+  },
+  "search_allCategories": "All Categories",
+  "@search_allCategories": {
+    "description": "所有分类"
+  },
+  "search_enterToSearch": "Enter keywords to search",
+  "@search_enterToSearch": {
+    "description": "输入提示"
+  },
+  "search_noResults": "No notes found",
+  "@search_noResults": {
+    "description": "无结果"
+  },
+  "search_noHistory": "No search history",
+  "@search_noHistory": {
+    "description": "无历史"
+  },
+  "search_recentSearches": "Recent Searches",
+  "@search_recentSearches": {
+    "description": "最近搜索"
+  },
+  "search_untitledNote": "Untitled Note",
+  "@search_untitledNote": {
+    "description": "未命名回退"
+  },
+  "search_justNow": "Just now",
+  "@search_justNow": {
+    "description": "刚刚"
+  },
+  "search_minutesAgo": "{count} min ago",
+  "@search_minutesAgo": {
+    "description": "分钟前"
+  },
+  "search_hoursAgo": "{count} hr ago",
+  "@search_hoursAgo": {
+    "description": "小时前"
+  },
+  "search_yesterday": "Yesterday",
+  "@search_yesterday": {
+    "description": "昨天"
+  },
+  "search_daysAgo": "{count} days ago",
+  "@search_daysAgo": {
+    "description": "天前"
+  },
+  "search_enterHint": "Enter",
+  "@search_enterHint": {
+    "description": "Enter键"
+  },
+  "search_open": "Open",
+  "@search_open": {
+    "description": "打开"
+  },
+  "search_navigateHint": "↑↓",
+  "@search_navigateHint": {
+    "description": "上下键"
+  },
+  "search_navigate": "Navigate",
+  "@search_navigate": {
+    "description": "导航"
+  },
+  "search_escHint": "Esc",
+  "@search_escHint": {
+    "description": "Esc键"
+  },
+  "search_closeHint": "Close",
+  "@search_closeHint": {
+    "description": "关闭"
+  },
+  "dialog_newNote": "New Note",
+  "@dialog_newNote": {
+    "description": "新建笔记"
+  },
+  "dialog_blankNote": "Blank Note",
+  "@dialog_blankNote": {
+    "description": "空白笔记"
+  },
+  "dialog_createBlankNote": "Create a new blank note",
+  "@dialog_createBlankNote": {
+    "description": "空白笔记副标题"
+  },
+  "dialog_importFromFile": "Import from File",
+  "@dialog_importFromFile": {
+    "description": "从文件导入"
+  },
+  "dialog_importFromFileSubtitle": "Create notes from TXT, code, or HTML files",
+  "@dialog_importFromFileSubtitle": {
+    "description": "从文件导入副标题"
+  },
+  "dialog_noteImportSuccess": "Note imported successfully",
+  "@dialog_noteImportSuccess": {
+    "description": "导入成功"
+  },
+  "dialog_importFailedUnsupported": "Import failed: Unsupported file format",
+  "@dialog_importFailedUnsupported": {
+    "description": "不支持格式"
+  },
+  "dialog_importFailed": "Import failed: {error}",
+  "@dialog_importFailed": {
+    "description": "导入失败"
+  },
+  "dialog_selectNoteFormat": "Select Note Format",
+  "@dialog_selectNoteFormat": {
+    "description": "选择格式"
+  },
+  "dialog_markdown": "Markdown",
+  "@dialog_markdown": {
+    "description": "Markdown格式"
+  },
+  "dialog_markdownDescription": "Supports rich text, code blocks, tables, etc.",
+  "@dialog_markdownDescription": {
+    "description": "Markdown描述"
+  },
+  "dialog_plainText": "Plain Text",
+  "@dialog_plainText": {
+    "description": "纯文本"
+  },
+  "dialog_plainTextDescription": "Simple plain text format, no special formatting",
+  "@dialog_plainTextDescription": {
+    "description": "纯文本描述"
+  },
+  "dialog_richText": "Rich Text",
+  "@dialog_richText": {
+    "description": "富文本"
+  },
+  "dialog_richTextDescription": "Quill editor, supports bold, italic, lists, etc.",
+  "@dialog_richTextDescription": {
+    "description": "富文本描述"
+  },
+  "dialog_code": "Code",
+  "@dialog_code": {
+    "description": "代码"
+  },
+  "dialog_codeDescription": "Code editor with syntax highlighting",
+  "@dialog_codeDescription": {
+    "description": "代码描述"
+  },
+  "dialog_createFromUrl": "Create Note from URL",
+  "@dialog_createFromUrl": {
+    "description": "URL创建"
+  },
+  "dialog_webUrl": "Web URL",
+  "@dialog_webUrl": {
+    "description": "URL字段"
+  },
+  "dialog_urlHint": "example.com",
+  "@dialog_urlHint": {
+    "description": "URL提示"
+  },
+  "dialog_enterUrl": "Please enter URL",
+  "@dialog_enterUrl": {
+    "description": "URL错误"
+  },
+  "dialog_invalidUrlFormat": "Invalid URL format",
+  "@dialog_invalidUrlFormat": {
+    "description": "URL格式错误"
+  },
+  "dialog_extractFailed": "Content extraction failed",
+  "@dialog_extractFailed": {
+    "description": "提取失败"
+  },
+  "dialog_extractingContent": "Extracting content...",
+  "@dialog_extractingContent": {
+    "description": "提取中"
+  },
+  "dialog_extractSuccess": "Extracted successfully",
+  "@dialog_extractSuccess": {
+    "description": "提取成功"
+  },
+  "dialog_aiInitializing": "AI is initializing note...",
+  "@dialog_aiInitializing": {
+    "description": "AI初始化"
+  },
+  "dialog_noteAutoInitialized": "Note auto-initialized",
+  "@dialog_noteAutoInitialized": {
+    "description": "自动初始化"
+  },
+  "dialog_summary": "Summary",
+  "@dialog_summary": {
+    "description": "摘要"
+  },
+  "dialog_keywords": "Keywords",
+  "@dialog_keywords": {
+    "description": "关键词"
+  },
+  "dialog_category": "Category",
+  "@dialog_category": {
+    "description": "分类"
+  },
+  "dialog_tags": "Tags",
+  "@dialog_tags": {
+    "description": "标签"
+  },
+  "dialog_extractContent": "Extract Content",
+  "@dialog_extractContent": {
+    "description": "提取内容按钮"
+  },
+  "dialog_createNote": "Create Note",
+  "@dialog_createNote": {
+    "description": "创建笔记按钮"
+  },
+  "dialog_manageModelsTitle": "Manage Models - {providerName}",
+  "@dialog_manageModelsTitle": {
+    "description": "模型管理标题"
+  },
+  "dialog_newModelLabel": "New Model Name",
+  "@dialog_newModelLabel": {
+    "description": "新模型标签"
+  },
+  "dialog_addModelTooltip": "Add Model",
+  "@dialog_addModelTooltip": {
+    "description": "添加模型"
+  },
+  "dialog_currentModelsHeader": "Current Models ({count}):",
+  "@dialog_currentModelsHeader": {
+    "description": "当前模型"
+  },
+  "dialog_setDefaultTooltip": "Set as Default",
+  "@dialog_setDefaultTooltip": {
+    "description": "设为默认"
+  },
+  "dialog_modelsUpdated": "Model list updated",
+  "@dialog_modelsUpdated": {
+    "description": "模型更新"
+  },
+  "category_title": "Category Manager",
+  "@category_title": {
+    "description": "分类管理"
+  },
+  "category_flatViewTooltip": "Flat View",
+  "@category_flatViewTooltip": {
+    "description": "平铺视图"
+  },
+  "category_treeViewTooltip": "Tree View",
+  "@category_treeViewTooltip": {
+    "description": "树形视图"
+  },
+  "category_createNewTooltip": "New Category",
+  "@category_createNewTooltip": {
+    "description": "新建分类"
+  },
+  "category_emptyState": "No categories yet",
+  "@category_emptyState": {
+    "description": "无分类"
+  },
+  "category_createTitle": "New Category",
+  "@category_createTitle": {
+    "description": "新建分类标题"
+  },
+  "category_createChildTitle": "New Subcategory",
+  "@category_createChildTitle": {
+    "description": "新建子分类"
+  },
+  "category_nameHint": "Enter category name",
+  "@category_nameHint": {
+    "description": "分类名称提示"
+  },
+  "category_nameEmptyError": "Category name cannot be empty",
+  "@category_nameEmptyError": {
+    "description": "名称为空"
+  },
+  "category_nameTooLongError": "Category name cannot exceed 20 characters",
+  "@category_nameTooLongError": {
+    "description": "名称过长"
+  },
+  "category_nameDashError": "Category name cannot contain \"-\" character",
+  "@category_nameDashError": {
+    "description": "名称含横杠"
+  },
+  "category_duplicateNameError": "A category with this name already exists at this level",
+  "@category_duplicateNameError": {
+    "description": "名称重复"
+  },
+  "category_deleteTitle": "Delete Category",
+  "@category_deleteTitle": {
+    "description": "删除分类"
+  },
+  "category_deleteConfirm": "Are you sure you want to delete \"{name}\"?",
+  "@category_deleteConfirm": {
+    "description": "删除确认"
+  },
+  "category_deleteWarning": "This category has {count} note(s). Deleting the category will also delete these notes!",
+  "@category_deleteWarning": {
+    "description": "删除警告"
+  },
+  "category_renameTitle": "Rename Category",
+  "@category_renameTitle": {
+    "description": "重命名"
+  },
+  "category_newNameHint": "Enter new category name",
+  "@category_newNameHint": {
+    "description": "新名称提示"
+  },
+  "category_renameTooltip": "Rename",
+  "@category_renameTooltip": {
+    "description": "重命名"
+  },
+  "category_addChildTooltip": "Add Subcategory",
+  "@category_addChildTooltip": {
+    "description": "添加子分类"
+  },
+  "ai_ciciGreeting": "Hi, I'm Cici",
+  "@ai_ciciGreeting": {
+    "description": "AI问候"
+  },
+  "ai_ciciSubtitle": "Based on your note knowledge base, I can help you:",
+  "@ai_ciciSubtitle": {
+    "description": "AI副标题"
+  },
+  "ai_quickActionSearch": "Find Notes",
+  "@ai_quickActionSearch": {
+    "description": "查找笔记"
+  },
+  "ai_quickActionSummarize": "Summarize",
+  "@ai_quickActionSummarize": {
+    "description": "总结提炼"
+  },
+  "ai_quickActionQa": "Q&A",
+  "@ai_quickActionQa": {
+    "description": "答疑解惑"
+  },
+  "ai_sampleUserMessage1": "Help me find notes about \"OKR methodology\"",
+  "@ai_sampleUserMessage1": {
+    "description": "示例消息1"
+  },
+  "ai_sampleAssistantFound": "Sure, I found",
+  "@ai_sampleAssistantFound": {
+    "description": "示例回复-找到"
+  },
+  "ai_sampleAssistantNotes": "1 related note:",
+  "@ai_sampleAssistantNotes": {
+    "description": "示例回复-数量"
+  },
+  "ai_sampleNoteTitle": "OKR Methodology: Goal Setting and Implementation",
+  "@ai_sampleNoteTitle": {
+    "description": "示例笔记标题"
+  },
+  "ai_sampleNoteDesc": "Introduces the definition of OKR, core principles, and application methods in teams...",
+  "@ai_sampleNoteDesc": {
+    "description": "示例笔记描述"
+  },
+  "ai_sampleUserMessage2": "What are the core principles of OKR?",
+  "@ai_sampleUserMessage2": {
+    "description": "示例消息2"
+  },
+  "ai_sampleAssistantPrinciples": "The core principles of OKR include:",
+  "@ai_sampleAssistantPrinciples": {
+    "description": "示例回复-原则"
+  },
+  "ai_samplePrinciple1": "• Objectives (O) should be challenging to inspire potential;",
+  "@ai_samplePrinciple1": {
+    "description": "示例原则1"
+  },
+  "ai_samplePrinciple2": "• Key Results (KR) should be measurable to ensure goals are trackable;",
+  "@ai_samplePrinciple2": {
+    "description": "示例原则2"
+  },
+  "ai_samplePrinciple3": "• Maintain transparency and alignment, team goals consistent top to bottom;",
+  "@ai_samplePrinciple3": {
+    "description": "示例原则3"
+  },
+  "ai_samplePrinciple4": "• Regular reviews, continuous learning and improvement.",
+  "@ai_samplePrinciple4": {
+    "description": "示例原则4"
+  },
+  "ai_sampleAssistantConclusion": "These principles help teams focus on priorities and improve execution.",
+  "@ai_sampleAssistantConclusion": {
+    "description": "示例结论"
+  },
+  "ai_inputPlaceholder": "Ask a question, or use natural language to find notes...",
+  "@ai_inputPlaceholder": {
+    "description": "AI输入框"
+  },
+  "ai_quickActionSearchTemplate": "Help me find notes about \"\"",
+  "@ai_quickActionSearchTemplate": {
+    "description": "搜索模板"
+  },
+  "ai_quickActionSummarizeWithNote": "Please summarize the core content of this note \"{title}\"",
+  "@ai_quickActionSummarizeWithNote": {
+    "description": "总结当前笔记"
+  },
+  "ai_quickActionSummarizeDefault": "Please summarize the core content of the current note",
+  "@ai_quickActionSummarizeDefault": {
+    "description": "总结默认"
+  },
+  "ai_quickActionQaTemplate": "I have a question I'd like answered based on note content...",
+  "@ai_quickActionQaTemplate": {
+    "description": "问答模板"
+  },
+  "ai_newSessionTitle": "New Session",
+  "@ai_newSessionTitle": {
+    "description": "新会话"
+  },
+  "ai_newSessionConfirm": "Start a new session? Current conversation will be cleared.",
+  "@ai_newSessionConfirm": {
+    "description": "新会话确认"
+  },
+  "ai_thinkingAnalyzing": "Analyzing user request...",
+  "@ai_thinkingAnalyzing": {
+    "description": "分析需求"
+  },
+  "ai_knowledgeBaseDisabled": "⚠️ Knowledge base is not enabled, using plain text search",
+  "@ai_knowledgeBaseDisabled": {
+    "description": "知识库未启用"
+  },
+  "ai_replyFailed": "AI reply failed: {error}",
+  "@ai_replyFailed": {
+    "description": "回复失败"
+  },
+  "ai_toolCallInterrupted": "Call interrupted",
+  "@ai_toolCallInterrupted": {
+    "description": "调用中断"
+  },
+  "ai_executionCancelled": "Execution cancelled",
+  "@ai_executionCancelled": {
+    "description": "执行取消"
+  },
+  "ai_operationInterrupted": "Operation interrupted by user",
+  "@ai_operationInterrupted": {
+    "description": "用户中断"
+  },
+  "ai_inputDefaultPlaceholder": "Ask a question, or search notes with natural language",
+  "@ai_inputDefaultPlaceholder": {
+    "description": "默认输入框"
+  },
+  "ai_toolCategoryExplore": "Explore",
+  "@ai_toolCategoryExplore": {
+    "description": "工具类别-探索"
+  },
+  "ai_toolCategoryEdit": "Edit",
+  "@ai_toolCategoryEdit": {
+    "description": "工具类别-编辑"
+  },
+  "ai_toolCategoryWrite": "Write",
+  "@ai_toolCategoryWrite": {
+    "description": "工具类别-写入"
+  },
+  "ai_toolCategoryDelete": "Delete",
+  "@ai_toolCategoryDelete": {
+    "description": "工具类别-删除"
+  },
+  "ai_toolCategorySummarize": "Summarize",
+  "@ai_toolCategorySummarize": {
+    "description": "工具类别-总结"
+  },
+  "ai_toolCategoryExtract": "Extract",
+  "@ai_toolCategoryExtract": {
+    "description": "工具类别-提取"
+  },
+  "ai_toolCategoryProcess": "Process",
+  "@ai_toolCategoryProcess": {
+    "description": "工具类别-处理"
+  },
+  "ai_toolTerminated": "Execution terminated",
+  "@ai_toolTerminated": {
+    "description": "执行终止"
+  },
+  "ai_toolInProgress": "Executing...",
+  "@ai_toolInProgress": {
+    "description": "执行中"
+  },
+  "ai_toolCompleted": "Completed",
+  "@ai_toolCompleted": {
+    "description": "执行完成"
+  },
+  "ai_toolBadgeCount": "{category} {count} times",
+  "@ai_toolBadgeCount": {
+    "description": "工具统计"
+  },
+  "ai_thinking": "Thinking",
+  "@ai_thinking": {
+    "description": "思考中"
+  },
+  "ai_summaryTitle": "AI Summary",
+  "@ai_summaryTitle": {
+    "description": "AI摘要标题"
+  },
+  "ai_clickToExpand": "Click to expand and view summary",
+  "@ai_clickToExpand": {
+    "description": "点击展开"
+  },
+  "ai_generateSummary": "Generate Summary",
+  "@ai_generateSummary": {
+    "description": "生成摘要"
+  },
+  "ai_regenerate": "Regenerate",
+  "@ai_regenerate": {
+    "description": "重新生成"
+  },
+  "ai_generatingSummary": "Generating summary...",
+  "@ai_generatingSummary": {
+    "description": "生成摘要中"
+  },
+  "ai_keywordsLabel": "Keywords: ",
+  "@ai_keywordsLabel": {
+    "description": "关键词标签"
+  },
+  "ai_noAiConfig": "AI service not configured, cannot generate summary",
+  "@ai_noAiConfig": {
+    "description": "AI未配置"
+  },
+  "ai_goToSettings": "Go to Settings",
+  "@ai_goToSettings": {
+    "description": "前往设置"
+  },
+  "ai_generating": "Generating...",
+  "@ai_generating": {
+    "description": "生成中"
+  },
+  "ai_clickToGenerate": "Click to generate AI summary",
+  "@ai_clickToGenerate": {
+    "description": "点击生成"
+  },
+  "card_unfavoriteTooltip": "Unfavorite",
+  "@card_unfavoriteTooltip": {
+    "description": "取消收藏"
+  },
+  "card_favoriteTooltip": "Favorite",
+  "@card_favoriteTooltip": {
+    "description": "收藏"
+  },
+  "card_deleteTooltip": "Delete",
+  "@card_deleteTooltip": {
+    "description": "删除"
+  },
+  "card_untitledNote": "Untitled Note",
+  "@card_untitledNote": {
+    "description": "未命名"
+  },
+  "card_justNow": "Just now",
+  "@card_justNow": {
+    "description": "刚刚"
+  },
+  "card_minutesAgo": "{minutes} min ago",
+  "@card_minutesAgo": {
+    "description": "分钟前"
+  },
+  "card_hoursAgo": "{hours} hr ago",
+  "@card_hoursAgo": {
+    "description": "小时前"
+  },
+  "card_yesterday": "Yesterday",
+  "@card_yesterday": {
+    "description": "昨天"
+  },
+  "card_daysAgo": "{days} days ago",
+  "@card_daysAgo": {
+    "description": "天前"
+  },
+  "tag_sectionTitle": "Tags",
+  "@tag_sectionTitle": {
+    "description": "标签区域"
+  },
+  "tag_availableTagsTitle": "Available Tags",
+  "@tag_availableTagsTitle": {
+    "description": "可选标签"
+  },
+  "tag_noTagsEmpty": "No tags yet, tap below to create",
+  "@tag_noTagsEmpty": {
+    "description": "无标签"
+  },
+  "tag_createNew": "Create New Tag",
+  "@tag_createNew": {
+    "description": "创建标签"
+  },
+  "tag_addTag": "Add Tag",
+  "@tag_addTag": {
+    "description": "添加标签"
+  },
+  "tag_nameHint": "Tag name",
+  "@tag_nameHint": {
+    "description": "标签名提示"
+  },
+  "tag_confirmTooltip": "Confirm",
+  "@tag_confirmTooltip": {
+    "description": "确定"
+  },
+  "onboarding_skip": "Skip",
+  "@onboarding_skip": {
+    "description": "跳过"
+  },
+  "onboarding_previous": "Previous",
+  "@onboarding_previous": {
+    "description": "上一页"
+  },
+  "onboarding_next": "Next",
+  "@onboarding_next": {
+    "description": "下一步"
+  },
+  "onboarding_welcomeTitle": "Welcome to OpenNote",
+  "@onboarding_welcomeTitle": {
+    "description": "欢迎标题"
+  },
+  "onboarding_welcomeSubtitle": "Smart note assistant for efficient recording",
+  "@onboarding_welcomeSubtitle": {
+    "description": "欢迎副标题"
+  },
+  "onboarding_startConfig": "Start Configuring",
+  "@onboarding_startConfig": {
+    "description": "开始配置"
+  },
+  "onboarding_configLater": "Configure Later",
+  "@onboarding_configLater": {
+    "description": "稍后配置"
+  },
+  "onboarding_imageLoadError": "Image failed to load",
+  "@onboarding_imageLoadError": {
+    "description": "图片加载失败"
+  },
+  "onboarding_selectProviderTitle": "Choose AI Provider",
+  "@onboarding_selectProviderTitle": {
+    "description": "选择服务商"
+  },
+  "onboarding_selectProviderSubtitle": "Select the AI provider you want to use, you can add more later in settings",
+  "@onboarding_selectProviderSubtitle": {
+    "description": "选择副标题"
+  },
+  "onboarding_noProviderSelected": "Please select an AI provider first",
+  "@onboarding_noProviderSelected": {
+    "description": "未选择厂商"
+  },
+  "onboarding_returnToSelectProvider": "Go back and choose your preferred AI provider",
+  "@onboarding_returnToSelectProvider": {
+    "description": "返回选择"
+  },
+  "onboarding_configCustomTitle": "Configure Custom AI Service",
+  "@onboarding_configCustomTitle": {
+    "description": "自定义配置"
+  },
+  "onboarding_configProviderTitle": "Configure {providerName}",
+  "@onboarding_configProviderTitle": {
+    "description": "配置提供商"
+  },
+  "onboarding_customConfigSubtitle": "Enter vendor info, API address, model list, and API key",
+  "@onboarding_customConfigSubtitle": {
+    "description": "自定义副标题"
+  },
+  "onboarding_providerConfigSubtitle": "Enter API key to complete configuration",
+  "@onboarding_providerConfigSubtitle": {
+    "description": "提供商副标题"
+  },
+  "onboarding_vendorLabel": "Vendor",
+  "@onboarding_vendorLabel": {
+    "description": "厂商标签"
+  },
+  "onboarding_apiUrlLabel": "API Address",
+  "@onboarding_apiUrlLabel": {
+    "description": "API地址标签"
+  },
+  "onboarding_presetModelsLabel": "Preset Models",
+  "@onboarding_presetModelsLabel": {
+    "description": "预设模型标签"
+  },
+  "onboarding_apiKeyLabel": "API Key",
+  "@onboarding_apiKeyLabel": {
+    "description": "API密钥标签"
+  },
+  "onboarding_apiKeyVerifiedHint": "API key verified",
+  "@onboarding_apiKeyVerifiedHint": {
+    "description": "已验证提示"
+  },
+  "onboarding_apiKeyHint": "Enter API key",
+  "@onboarding_apiKeyHint": {
+    "description": "API密钥提示"
+  },
+  "onboarding_getApiKey": "Get API Key",
+  "@onboarding_getApiKey": {
+    "description": "获取密钥"
+  },
+  "onboarding_testingConnection": "Testing connection...",
+  "@onboarding_testingConnection": {
+    "description": "测试中"
+  },
+  "onboarding_testConnection": "Test Connection",
+  "@onboarding_testConnection": {
+    "description": "测试连接"
+  },
+  "onboarding_completeConfig": "Complete Config",
+  "@onboarding_completeConfig": {
+    "description": "完成配置"
+  },
+  "onboarding_vendorNameLabel": "Vendor Name",
+  "@onboarding_vendorNameLabel": {
+    "description": "厂商名称"
+  },
+  "onboarding_vendorNameHint": "e.g.: My AI Service",
+  "@onboarding_vendorNameHint": {
+    "description": "厂商名称提示"
+  },
+  "onboarding_apiUrlInputHint": "e.g.: https://api.example.com/v1",
+  "@onboarding_apiUrlInputHint": {
+    "description": "API地址提示"
+  },
+  "onboarding_modelListLabel": "Model List",
+  "@onboarding_modelListLabel": {
+    "description": "模型列表"
+  },
+  "onboarding_modelInputHint": "Enter model name",
+  "@onboarding_modelInputHint": {
+    "description": "模型输入提示"
+  },
+  "onboarding_addModel": "Add",
+  "@onboarding_addModel": {
+    "description": "添加模型"
+  },
+  "onboarding_defaultModelLabel": "Default Model",
+  "@onboarding_defaultModelLabel": {
+    "description": "默认模型"
+  },
+  "onboarding_selectDefaultModel": "Select default model",
+  "@onboarding_selectDefaultModel": {
+    "description": "选择默认"
+  },
+  "onboarding_errorSelectVendorFirst": "Please select a vendor first",
+  "@onboarding_errorSelectVendorFirst": {
+    "description": "选择厂商错误"
+  },
+  "onboarding_errorEnterApiKey": "Please enter API key",
+  "@onboarding_errorEnterApiKey": {
+    "description": "输入密钥错误"
+  },
+  "onboarding_errorEnterVendorName": "Please enter vendor name",
+  "@onboarding_errorEnterVendorName": {
+    "description": "输入厂商错误"
+  },
+  "onboarding_errorEnterApiUrl": "Please enter API address",
+  "@onboarding_errorEnterApiUrl": {
+    "description": "输入地址错误"
+  },
+  "onboarding_errorAddModel": "Please add at least one model",
+  "@onboarding_errorAddModel": {
+    "description": "添加模型错误"
+  },
+  "onboarding_connectionSuccess": "Connection successful",
+  "@onboarding_connectionSuccess": {
+    "description": "连接成功"
+  },
+  "onboarding_connectionFailed": "Connection failed, please check API key and network",
+  "@onboarding_connectionFailed": {
+    "description": "连接失败"
+  },
+  "onboarding_testException": "Test exception: {error}",
+  "@onboarding_testException": {
+    "description": "测试异常"
+  },
+  "onboarding_saveConfigFailed": "Failed to save config: {error}",
+  "@onboarding_saveConfigFailed": {
+    "description": "保存失败"
+  },
+  "onboarding_configSuccess": "Configured successfully!",
+  "@onboarding_configSuccess": {
+    "description": "配置成功"
+  },
+  "onboarding_configSuccessSubtitle": "You can now start using AI features",
+  "@onboarding_configSuccessSubtitle": {
+    "description": "配置成功副标题"
+  },
+  "onboarding_configIncomplete": "Configuration Incomplete",
+  "@onboarding_configIncomplete": {
+    "description": "配置未完成"
+  },
+  "onboarding_configIncompleteSubtitle": "You haven't completed the AI service configuration yet. Please return and complete it before using.",
+  "@onboarding_configIncompleteSubtitle": {
+    "description": "未完成副标题"
+  },
+  "onboarding_infoTip": "Tip",
+  "@onboarding_infoTip": {
+    "description": "提示"
+  },
+  "onboarding_swipedToCompleteWarning": "You swiped to the completion page, but the AI service configuration has not been saved. Please return to the config page to complete API key entry and connection testing.",
+  "@onboarding_swipedToCompleteWarning": {
+    "description": "滑动警告"
+  },
+  "onboarding_nextStepTitle": "Next Steps",
+  "@onboarding_nextStepTitle": {
+    "description": "下一步标题"
+  },
+  "onboarding_nextStep1": "Create a new note and try AI smart summaries",
+  "@onboarding_nextStep1": {
+    "description": "下一步1"
+  },
+  "onboarding_nextStep2": "Use keyword extraction to quickly organize notes",
+  "@onboarding_nextStep2": {
+    "description": "下一步2"
+  },
+  "onboarding_nextStep3": "Let AI auto-categorize your notes",
+  "@onboarding_nextStep3": {
+    "description": "下一步3"
+  },
+  "onboarding_startUsing": "Start Using",
+  "@onboarding_startUsing": {
+    "description": "开始使用"
+  },
+  "onboarding_returnToConfig": "Return to Config",
+  "@onboarding_returnToConfig": {
+    "description": "返回配置"
+  },
+  "toolbar_bold": "Bold",
+  "@toolbar_bold": {
+    "description": "加粗"
+  },
+  "toolbar_italic": "Italic",
+  "@toolbar_italic": {
+    "description": "斜体"
+  },
+  "toolbar_strikethrough": "Strikethrough",
+  "@toolbar_strikethrough": {
+    "description": "删除线"
+  },
+  "toolbar_heading1": "H1",
+  "@toolbar_heading1": {
+    "description": "H1"
+  },
+  "toolbar_heading2": "H2",
+  "@toolbar_heading2": {
+    "description": "H2"
+  },
+  "toolbar_heading3": "H3",
+  "@toolbar_heading3": {
+    "description": "H3"
+  },
+  "toolbar_code": "Code",
+  "@toolbar_code": {
+    "description": "代码"
+  },
+  "toolbar_quote": "Quote",
+  "@toolbar_quote": {
+    "description": "引用"
+  },
+  "toolbar_list": "List",
+  "@toolbar_list": {
+    "description": "列表"
+  },
+  "toolbar_numberedList": "Numbered List",
+  "@toolbar_numberedList": {
+    "description": "编号"
+  },
+  "toolbar_todo": "Todo",
+  "@toolbar_todo": {
+    "description": "待办"
+  },
+  "toolbar_link": "Link",
+  "@toolbar_link": {
+    "description": "链接"
+  },
+  "toolbar_image": "Image",
+  "@toolbar_image": {
+    "description": "图片"
+  },
+  "toolbar_divider": "Divider",
+  "@toolbar_divider": {
+    "description": "分割线"
+  },
+  "toolbar_table": "Table",
+  "@toolbar_table": {
+    "description": "表格"
+  },
+  "toolbar_tableHeader": "Col 1 | Col 2 | Col 3",
+  "@toolbar_tableHeader": {
+    "description": "表格模板头"
+  },
+  "toolbar_tableContent": "Content",
+  "@toolbar_tableContent": {
+    "description": "表格内容"
+  },
+  "format_unavailable": "Unavailable",
+  "@format_unavailable": {
+    "description": "暂不可用"
+  },
+  "empty_noNotesTitle": "No notes yet",
+  "@empty_noNotesTitle": {
+    "description": "无笔记标题"
+  },
+  "empty_noNotesDesc": "Tap + in the top right to create your first note",
+  "@empty_noNotesDesc": {
+    "description": "无笔记描述"
+  },
+  "empty_createNote": "Create Note",
+  "@empty_createNote": {
+    "description": "创建笔记"
+  },
+  "empty_noSearchResultsTitle": "No matching notes found",
+  "@empty_noSearchResultsTitle": {
+    "description": "无搜索结果"
+  },
+  "empty_noSearchResultsDesc": "Try different keywords",
+  "@empty_noSearchResultsDesc": {
+    "description": "无搜索描述"
+  },
+  "empty_clearSearch": "Clear Search",
+  "@empty_clearSearch": {
+    "description": "清除搜索"
+  },
+  "empty_noTagsTitle": "No tags yet",
+  "@empty_noTagsTitle": {
+    "description": "无标签标题"
+  },
+  "empty_noTagsDesc": "You can add tags while editing notes",
+  "@empty_noTagsDesc": {
+    "description": "无标签描述"
+  },
+  "empty_noFavoritesTitle": "No favorite notes",
+  "@empty_noFavoritesTitle": {
+    "description": "无收藏标题"
+  },
+  "empty_noFavoritesDesc": "Tap the star on a note card to favorite it",
+  "@empty_noFavoritesDesc": {
+    "description": "无收藏描述"
+  },
+  "empty_browseNotes": "Browse Notes",
+  "@empty_browseNotes": {
+    "description": "浏览笔记"
+  },
+  "empty_retry": "Retry",
+  "@empty_retry": {
+    "description": "重试"
+  },
+  "empty_networkErrorTitle": "Network Connection Failed",
+  "@empty_networkErrorTitle": {
+    "description": "网络错误"
+  },
+  "empty_networkErrorDesc": "Please check your network and try again",
+  "@empty_networkErrorDesc": {
+    "description": "网络错误描述"
+  },
+  "empty_aiServiceErrorTitle": "AI Service Temporarily Unavailable",
+  "@empty_aiServiceErrorTitle": {
+    "description": "AI服务错误"
+  },
+  "empty_aiServiceErrorDesc": "Please try again later or check AI config",
+  "@empty_aiServiceErrorDesc": {
+    "description": "AI错误描述"
+  },
+  "navigation_menu": "Menu",
+  "@navigation_menu": {
+    "description": "菜单"
+  },
+  "navigation_search": "Search...",
+  "@navigation_search": {
+    "description": "搜索框占位"
+  },
+  "update_newVersionFound": "New Version Found",
+  "@update_newVersionFound": {
+    "description": "发现新版本"
+  },
+  "update_skipThisVersion": "Skip This Version",
+  "@update_skipThisVersion": {
+    "description": "跳过版本"
+  },
+  "update_remindLater": "Remind Later",
+  "@update_remindLater": {
+    "description": "稍后提醒"
+  },
+  "update_update": "Update",
+  "@update_update": {
+    "description": "更新"
+  },
+  "preferences_versionNumber": "Version",
+  "@preferences_versionNumber": {
+    "description": "版本号"
+  },
+  "preferences_platform": "Platform",
+  "@preferences_platform": {
+    "description": "平台"
+  },
+  "preferences_buildNumber": "Build",
+  "@preferences_buildNumber": {
+    "description": "构建号"
+  },
+  "preferences_autoCheckUpdate": "Auto Check for Updates",
+  "@preferences_autoCheckUpdate": {
+    "description": "自动检查更新"
+  },
+  "preferences_checking": "Checking...",
+  "@preferences_checking": {
+    "description": "检查中"
+  },
+  "preferences_latestVersion": "Up to Date",
+  "@preferences_latestVersion": {
+    "description": "最新版本"
+  },
+  "preferences_checkFailedRetry": "Check failed, retry",
+  "@preferences_checkFailedRetry": {
+    "description": "检查失败"
+  },
+  "preferences_checkForUpdate": "Check for Updates",
+  "@preferences_checkForUpdate": {
+    "description": "检查更新"
+  },
+  "preferences_newVersionFound": "New version v{version} found",
+  "@preferences_newVersionFound": {
+    "description": "发现新版本"
+  },
+  "preferences_downloadingUpdate": "Downloading update",
+  "@preferences_downloadingUpdate": {
+    "description": "下载中"
+  },
+  "preferences_downloadComplete": "Download complete",
+  "@preferences_downloadComplete": {
+    "description": "下载完成"
+  },
+  "preferences_installPrompt": "Installer has been opened, please follow prompts to update",
+  "@preferences_installPrompt": {
+    "description": "安装提示"
+  },
+  "preferences_skippedVersions": "Skipped Versions",
+  "@preferences_skippedVersions": {
+    "description": "跳过版本"
+  },
+  "preferences_language": "Language",
+  "@preferences_language": {
+    "description": "语言"
+  },
+  "preferences_languageZhCN": "简体中文",
+  "@preferences_languageZhCN": {
+    "description": "简体中文"
+  },
+  "preferences_languageZhTW": "繁體中文",
+  "@preferences_languageZhTW": {
+    "description": "繁体中文"
+  },
+  "preferences_languageEn": "English",
+  "@preferences_languageEn": {
+    "description": "英文"
+  },
+  "preferences_languageRu": "Русский",
+  "@preferences_languageRu": {
+    "description": "俄语"
+  },
+  "preferences_languageRestartHint": "Restart the app for language changes to take effect",
+  "@preferences_languageRestartHint": {
+    "description": "重启提示"
+  },
+  "kb_preparingService": "Preparing service...",
+  "@kb_preparingService": {
+    "description": "准备服务"
+  },
+  "kb_startingService": "Starting service...",
+  "@kb_startingService": {
+    "description": "启动服务"
+  },
+  "kb_initializingVectorService": "Initializing vector service, please wait...",
+  "@kb_initializingVectorService": {
+    "description": "初始化向量"
+  },
+  "kb_serviceStartupFailed": "Service startup failed",
+  "@kb_serviceStartupFailed": {
+    "description": "启动失败"
+  },
+  "kb_knowledgeBaseReady": "Knowledge base is ready",
+  "@kb_knowledgeBaseReady": {
+    "description": "已就绪"
+  },
+  "kb_knowledgeBaseNotEnabled": "Knowledge base not enabled",
+  "@kb_knowledgeBaseNotEnabled": {
+    "description": "未启用"
+  },
+  "kb_serviceRunning": "Service running",
+  "@kb_serviceRunning": {
+    "description": "运行中"
+  },
+  "kb_localModelLoaded": "Local model loaded",
+  "@kb_localModelLoaded": {
+    "description": "模型已加载"
+  },
+  "kb_enableKnowledgeBaseVectorization": "Enable to use local Embedding model for note vectorization indexing",
+  "@kb_enableKnowledgeBaseVectorization": {
+    "description": "向量化说明"
+  },
+  "kb_enableToggle": "Enable/Disable",
+  "@kb_enableToggle": {
+    "description": "启用开关"
+  },
+  "kb_enableKnowledgeBase": "Enable Knowledge Base",
+  "@kb_enableKnowledgeBase": {
+    "description": "启用知识库"
+  },
+  "kb_autoVectorIndexing": "Notes will be automatically vectorized when enabled",
+  "@kb_autoVectorIndexing": {
+    "description": "自动索引说明"
+  },
+  "kb_embeddingModel": "Embedding Model",
+  "@kb_embeddingModel": {
+    "description": "Embedding模型"
+  },
+  "kb_model": "Model",
+  "@kb_model": {
+    "description": "模型"
+  },
+  "kb_vectorDimensions": "Vector Dimensions",
+  "@kb_vectorDimensions": {
+    "description": "向量维度"
+  },
+  "kb_downloadSource": "Download Source",
+  "@kb_downloadSource": {
+    "description": "下载源"
+  },
+  "kb_modelscope": "ModelScope (modelscope.cn)",
+  "@kb_modelscope": {
+    "description": "魔搭社区"
+  },
+  "kb_modelVersion": "Model Version:",
+  "@kb_modelVersion": {
+    "description": "模型版本"
+  },
+  "kb_highestPrecision": "~617MB · Highest precision",
+  "@kb_highestPrecision": {
+    "description": "精度最高"
+  },
+  "kb_balancedRecommended": "~309MB · Balanced (recommended)",
+  "@kb_balancedRecommended": {
+    "description": "平衡推荐"
+  },
+  "kb_lightweightMode": "~197MB · Lightweight",
+  "@kb_lightweightMode": {
+    "description": "轻量模式"
+  },
+  "kb_status": "Status",
+  "@kb_status": {
+    "description": "状态"
+  },
+  "kb_downloaded": "Downloaded",
+  "@kb_downloaded": {
+    "description": "已下载"
+  },
+  "kb_notDownloaded": "Not downloaded",
+  "@kb_notDownloaded": {
+    "description": "未下载"
+  },
+  "kb_path": "Path",
+  "@kb_path": {
+    "description": "路径"
+  },
+  "kb_error": "Error: {error}",
+  "@kb_error": {
+    "description": "错误"
+  },
+  "kb_verifyingFile": "Verifying file integrity...",
+  "@kb_verifyingFile": {
+    "description": "校验中"
+  },
+  "kb_downloading": "Downloading... {progress}%",
+  "@kb_downloading": {
+    "description": "下载中"
+  },
+  "kb_downloadModel": "Download Model",
+  "@kb_downloadModel": {
+    "description": "下载模型"
+  },
+  "kb_selectLocalPath": "Select Local Path",
+  "@kb_selectLocalPath": {
+    "description": "选择路径"
+  },
+  "kb_indexSettings": "Index Settings",
+  "@kb_indexSettings": {
+    "description": "索引设置"
+  },
+  "kb_chunkSize": "Chunk Size",
+  "@kb_chunkSize": {
+    "description": "分块大小"
+  },
+  "kb_chunkOverlap": "Chunk Overlap",
+  "@kb_chunkOverlap": {
+    "description": "分块重叠"
+  },
+  "kb_cacheSize": "Cache Size",
+  "@kb_cacheSize": {
+    "description": "缓存大小"
+  },
+  "kb_indexStats": "Index Stats",
+  "@kb_indexStats": {
+    "description": "索引统计"
+  },
+  "kb_preparingPythonService": "Preparing Vector service...",
+  "@kb_preparingPythonService": {
+    "description": "准备Python"
+  },
+  "kb_startingPythonService": "Starting Vector service...",
+  "@kb_startingPythonService": {
+    "description": "启动Python"
+  },
+  "kb_knowledgeBaseNotEnabledPrompt": "Knowledge base not enabled, please enable it above first",
+  "@kb_knowledgeBaseNotEnabledPrompt": {
+    "description": "未启用提示"
+  },
+  "kb_indexedNotes": "Indexed Notes",
+  "@kb_indexedNotes": {
+    "description": "已索引"
+  },
+  "kb_totalVectors": "Total Vectors",
+  "@kb_totalVectors": {
+    "description": "总向量"
+  },
+  "kb_lastUpdate": "Last Update",
+  "@kb_lastUpdate": {
+    "description": "最后更新"
+  },
+  "kb_notIndexed": "Not indexed",
+  "@kb_notIndexed": {
+    "description": "未索引"
+  },
+  "kb_indexingProgress": "Indexing {progress}/{total} notes...",
+  "@kb_indexingProgress": {
+    "description": "索引进度"
+  },
+  "kb_indexFailedAll": "Index failed: All {count} notes failed",
+  "@kb_indexFailedAll": {
+    "description": "索引失败"
+  },
+  "kb_indexCompleteWithFailures": "Index complete: {success} success, {failed} failed",
+  "@kb_indexCompleteWithFailures": {
+    "description": "部分失败"
+  },
+  "kb_indexComplete": "Index complete: {count} successful",
+  "@kb_indexComplete": {
+    "description": "索引完成"
+  },
+  "kb_collapseErrorDetails": "Collapse error details",
+  "@kb_collapseErrorDetails": {
+    "description": "收起错误"
+  },
+  "kb_viewErrorDetails": "View error details ({count})",
+  "@kb_viewErrorDetails": {
+    "description": "查看错误"
+  },
+  "kb_unindexedNotesPrompt": "{count} note(s) not indexed, click \"Rebuild Index\" to update",
+  "@kb_unindexedNotesPrompt": {
+    "description": "未索引提示"
+  },
+  "kb_rebuildIndex": "Rebuild Index",
+  "@kb_rebuildIndex": {
+    "description": "重建索引"
+  },
+  "kb_clearIndex": "Clear Index",
+  "@kb_clearIndex": {
+    "description": "清空索引"
+  },
+  "kb_confirmClearIndex": "Confirm Clear Index",
+  "@kb_confirmClearIndex": {
+    "description": "清空索引确认"
+  },
+  "kb_confirmClearIndexContent": "All notes will need to be re-indexed. Continue?",
+  "@kb_confirmClearIndexContent": {
+    "description": "清空内容"
+  },
+  "kb_confirmRebuildIndex": "Confirm Rebuild Index",
+  "@kb_confirmRebuildIndex": {
+    "description": "重建索引确认"
+  },
+  "kb_confirmRebuildIndexContent": "{count} note(s) will be vectorized.\nThis may take a few minutes. Continue?",
+  "@kb_confirmRebuildIndexContent": {
+    "description": "重建内容"
+  },
+  "kb_startRebuild": "Start Rebuild",
+  "@kb_startRebuild": {
+    "description": "开始重建"
+  },
+  "kb_rebuildFailed": "Rebuild index failed",
+  "@kb_rebuildFailed": {
+    "description": "重建失败"
+  },
+  "kb_rebuildFailedPythonService": "Rebuild failed: Vector service failed to start, check model config",
+  "@kb_rebuildFailedPythonService": {
+    "description": "Python启动失败"
+  },
+  "kb_rebuildFailedNotReady": "Rebuild failed: Knowledge base not ready, download model and enable it first",
+  "@kb_rebuildFailedNotReady": {
+    "description": "未就绪"
+  },
+  "kb_rebuildFailedHealthCheck": "Rebuild failed: Vector service not running properly, try again later",
+  "@kb_rebuildFailedHealthCheck": {
+    "description": "健康检查失败"
+  },
+  "assistant_memoryCapability": "Memory Capability",
+  "@assistant_memoryCapability": {
+    "description": "记忆能力"
+  },
+  "assistant_aiModelSelection": "AI Model Selection",
+  "@assistant_aiModelSelection": {
+    "description": "AI模型选择"
+  },
+  "assistant_memoryInjectionControl": "Memory Injection Control",
+  "@assistant_memoryInjectionControl": {
+    "description": "记忆注入"
+  },
+  "assistant_clearMemory": "Clear Memory",
+  "@assistant_clearMemory": {
+    "description": "清空记忆"
+  },
+  "assistant_roleControl": "Role Control",
+  "@assistant_roleControl": {
+    "description": "角色控制"
+  },
+  "assistant_enableLongTermMemory": "Enable Long-term Memory",
+  "@assistant_enableLongTermMemory": {
+    "description": "启用长期记忆"
+  },
+  "assistant_memoryDisabledHint": "Disabling will stop recording and using all memories",
+  "@assistant_memoryDisabledHint": {
+    "description": "禁用提示"
+  },
+  "assistant_configureAIModelFirst": "Please configure an available AI model first",
+  "@assistant_configureAIModelFirst": {
+    "description": "配置模型提示"
+  },
+  "assistant_configureAIModelsFirst": "Please configure available AI models in \"AI Service\" first",
+  "@assistant_configureAIModelsFirst": {
+    "description": "配置模型提示2"
+  },
+  "assistant_noAvailableModels": "Status: No available models",
+  "@assistant_noAvailableModels": {
+    "description": "无模型"
+  },
+  "assistant_availableModelsCount": "Status: {count} available models",
+  "@assistant_availableModelsCount": {
+    "description": "可用模型"
+  },
+  "assistant_profileMemory": "Profile Memory",
+  "@assistant_profileMemory": {
+    "description": "档案记忆"
+  },
+  "assistant_profileMemorySubtitle": "Name, occupation, language preferences, etc.",
+  "@assistant_profileMemorySubtitle": {
+    "description": "档案副标题"
+  },
+  "assistant_factPreferenceMemory": "Fact Preference Memory",
+  "@assistant_factPreferenceMemory": {
+    "description": "事实偏好"
+  },
+  "assistant_factPreferenceSubtitle": "Usage habits, specific preferences, etc.",
+  "@assistant_factPreferenceSubtitle": {
+    "description": "事实副标题"
+  },
+  "assistant_experienceSummaryMemory": "Experience Summary Memory",
+  "@assistant_experienceSummaryMemory": {
+    "description": "经验总结"
+  },
+  "assistant_experienceSummarySubtitle": "Workflows, strategies, etc.",
+  "@assistant_experienceSummarySubtitle": {
+    "description": "经验副标题"
+  },
+  "assistant_clearProfileMemory": "Clear Profile Memory ({count})",
+  "@assistant_clearProfileMemory": {
+    "description": "清空档案"
+  },
+  "assistant_clearFactMemory": "Clear Fact Memory ({count})",
+  "@assistant_clearFactMemory": {
+    "description": "清空事实"
+  },
+  "assistant_clearExperienceMemory": "Clear Experience Memory ({count})",
+  "@assistant_clearExperienceMemory": {
+    "description": "清空经验"
+  },
+  "assistant_clearAllMemory": "Clear All Memory ({count})",
+  "@assistant_clearAllMemory": {
+    "description": "清空全部"
+  },
+  "assistant_roleCustomizationInDevelopment": "Role tone and personality customization coming soon",
+  "@assistant_roleCustomizationInDevelopment": {
+    "description": "角色自定义开发中"
+  },
+  "assistant_confirmClearMemoryContent": "Are you sure you want to clear all {typeName}? This cannot be undone.",
+  "@assistant_confirmClearMemoryContent": {
+    "description": "清空记忆确认"
+  },
+  "assistant_clearedMemory": "{typeName} cleared",
+  "@assistant_clearedMemory": {
+    "description": "已清空"
+  },
+  "assistant_confirmClearAllMemoryContent": "Are you sure you want to clear all types of memory? This cannot be undone.",
+  "@assistant_confirmClearAllMemoryContent": {
+    "description": "清空全部确认"
+  },
+  "assistant_clearedAllMemory": "All memory cleared",
+  "@assistant_clearedAllMemory": {
+    "description": "已清空全部"
+  },
+  "assistant_clearAll": "Clear All",
+  "@assistant_clearAll": {
+    "description": "清空全部"
+  },
+  "cli_checkingEnv": "Checking environment...",
+  "@cli_checkingEnv": {
+    "description": "检查环境"
+  },
+  "cli_envNotMet": "Environment requirements not met",
+  "@cli_envNotMet": {
+    "description": "环境不满足"
+  },
+  "cli_installingCLI": "Installing CLI...",
+  "@cli_installingCLI": {
+    "description": "安装CLI"
+  },
+  "cli_installSuccess": "Installation Successful",
+  "@cli_installSuccess": {
+    "description": "安装成功"
+  },
+  "cli_installFailed": "Installation Failed",
+  "@cli_installFailed": {
+    "description": "安装失败"
+  },
+  "cli_executingPipInstall": "Executing: pip install open-note-cli --upgrade",
+  "@cli_executingPipInstall": {
+    "description": "pip安装"
+  },
+  "cli_installingPleaseWait": "Installing, please wait...",
+  "@cli_installingPleaseWait": {
+    "description": "安装中"
+  },
+  "cli_cliInstalledSuccessfully": "CLI tool installed successfully!",
+  "@cli_cliInstalledSuccessfully": {
+    "description": "安装成功消息"
+  },
+  "cli_installComplete": "Installation Complete",
+  "@cli_installComplete": {
+    "description": "安装完成"
+  },
+  "cli_usageMethod": "Usage: opennote --help",
+  "@cli_usageMethod": {
+    "description": "使用方法"
+  },
+  "cli_fallbackInstallMethod": "Fallback installation method:",
+  "@cli_fallbackInstallMethod": {
+    "description": "降级安装"
+  },
+  "cli_recheck": "Recheck",
+  "@cli_recheck": {
+    "description": "重新检查"
+  },
+  "splash_startFailed": "Startup Failed",
+  "@splash_startFailed": {
+    "description": "启动失败"
+  },
+  "preferences_followSystem": "Follow System",
+  "@preferences_followSystem": {
+    "description": "Follow system option"
+  },
+  "home_newNote": "New Note",
+  "@home_newNote": {
+    "description": "New note button tooltip"
+  },
+  "settings_modelCount": "models",
+  "@settings_modelCount": {
+    "description": "settings_modelCount"
+  },
+  "common_notConfigured": "Not configured",
+  "@common_notConfigured": {
+    "description": "common_notConfigured"
+  },
+  "settings_defaultModel": "Default Model",
+  "@settings_defaultModel": {
+    "description": "settings_defaultModel"
+  },
+  "settings_autoFollowSystemTheme": "Auto follow system theme",
+  "@settings_autoFollowSystemTheme": {
+    "description": "settings_autoFollowSystemTheme"
+  },
+  "settings_alwaysUseLightTheme": "Always use light theme",
+  "@settings_alwaysUseLightTheme": {
+    "description": "settings_alwaysUseLightTheme"
+  },
+  "settings_alwaysUseDarkTheme": "Always use dark theme",
+  "@settings_alwaysUseDarkTheme": {
+    "description": "settings_alwaysUseDarkTheme"
+  },
+  "kb_serviceJustStarted": "Service just started, preparing initialization...",
+  "@kb_serviceJustStarted": {
+    "description": "kb_serviceJustStarted"
+  },
+  "kb_chromaDbInitializing": "Initializing ChromaDB database...",
+  "@kb_chromaDbInitializing": {
+    "description": "kb_chromaDbInitializing"
+  },
+  "kb_loadingEmbeddingModel": "Loading Embedding AI model...",
+  "@kb_loadingEmbeddingModel": {
+    "description": "kb_loadingEmbeddingModel"
+  },
+  "kb_chromaDbInitFailed": "ChromaDB init failed",
+  "@kb_chromaDbInitFailed": {
+    "description": "kb_chromaDbInitFailed"
+  },
+  "kb_modelLoadFailed": "Embedding model load failed",
+  "@kb_modelLoadFailed": {
+    "description": "kb_modelLoadFailed"
+  },
+  "kb_serviceInitError": "Service init error",
+  "@kb_serviceInitError": {
+    "description": "kb_serviceInitError"
+  },
+  "kb_vectorServiceNotRunning": "Vector service not running",
+  "@kb_vectorServiceNotRunning": {
+    "description": "kb_vectorServiceNotRunning"
+  },
+  "kb_serviceNotStarted": "Service not started",
+  "@kb_serviceNotStarted": {
+    "description": "kb_serviceNotStarted"
+  },
+  "kb_cannotFetchStatus": "Cannot fetch service status",
+  "@kb_cannotFetchStatus": {
+    "description": "kb_cannotFetchStatus"
+  },
+  "kb_serviceConnectionFailed": "Service connection failed",
+  "@kb_serviceConnectionFailed": {
+    "description": "kb_serviceConnectionFailed"
+  },
+  "kb_vectorServicePrepareFailed": "Vector service prepare failed",
+  "@kb_vectorServicePrepareFailed": {
+    "description": "kb_vectorServicePrepareFailed"
+  },
+  "kb_vectorServicePrepareError": "Vector service prepare error",
+  "@kb_vectorServicePrepareError": {
+    "description": "kb_vectorServicePrepareError"
+  },
+  "kb_vectorServiceStartFailed": "Vector service start failed, check model config",
+  "@kb_vectorServiceStartFailed": {
+    "description": "kb_vectorServiceStartFailed"
+  },
+  "kb_vectorServiceError": "Vector service error",
+  "@kb_vectorServiceError": {
+    "description": "kb_vectorServiceError"
+  },
+  "kb_serviceAlreadyRunning": "Service already running",
+  "@kb_serviceAlreadyRunning": {
+    "description": "kb_serviceAlreadyRunning"
+  },
+  "kb_serviceStarted": "Service started",
+  "@kb_serviceStarted": {
+    "description": "kb_serviceStarted"
+  },
+  "kb_serviceStartFailedPython": "Start failed, check Python environment and dependencies",
+  "@kb_serviceStartFailedPython": {
+    "description": "kb_serviceStartFailedPython"
+  },
+  "kb_directoryNotExist": "Directory does not exist",
+  "@kb_directoryNotExist": {
+    "description": "kb_directoryNotExist"
+  },
+  "kb_missingModelFile": "Missing model file: model.onnx",
+  "@kb_missingModelFile": {
+    "description": "kb_missingModelFile"
+  },
+  "kb_missingTokenizer": "Missing tokenizer.json",
+  "@kb_missingTokenizer": {
+    "description": "kb_missingTokenizer"
+  },
+  "kb_modelFileSizeAbnormal": "Model file size abnormal",
+  "@kb_modelFileSizeAbnormal": {
+    "description": "kb_modelFileSizeAbnormal"
+  },
+  "kb_knowledgeBaseNotReady": "Knowledge base not ready, download model and enable it first",
+  "@kb_knowledgeBaseNotReady": {
+    "description": "kb_knowledgeBaseNotReady"
+  },
+  "kb_vectorServiceStartFailedIndex": "Vector service start failed, cannot index",
+  "@kb_vectorServiceStartFailedIndex": {
+    "description": "kb_vectorServiceStartFailedIndex"
+  },
+  "kb_healthCheckFailed": "Health check failed, service may not be running",
+  "@kb_healthCheckFailed": {
+    "description": "kb_healthCheckFailed"
+  },
+  "cli_pythonNotInstalled": "Python not found, please install Python 3.10+ first",
+  "@cli_pythonNotInstalled": {
+    "description": "cli_pythonNotInstalled"
+  },
+  "cli_pipNotInstalled": "pip not found, please install pip first",
+  "@cli_pipNotInstalled": {
+    "description": "cli_pipNotInstalled"
+  },
+  "cli_installProcessError": "Installation error: ",
+  "@cli_installProcessError": {
+    "description": "cli_installProcessError"
+  },
+  "cli_envInstructionsMac": "Please install Python 3.10+ and pip:\n\nUsing Homebrew:\n  brew install python3\n\nOr download from https://python.org",
+  "@cli_envInstructionsMac": {
+    "description": "cli_envInstructionsMac"
+  },
+  "cli_envInstructionsWindows": "Please install Python 3.10+:\n\nDownload from https://python.org\nCheck \"Add Python to PATH\" during installation",
+  "@cli_envInstructionsWindows": {
+    "description": "cli_envInstructionsWindows"
+  },
+  "cli_envInstructionsLinux": "Please install Python 3.10+ and pip:\n\nUbuntu/Debian:\n  sudo apt install python3 python3-pip\n\nFedora:\n  sudo dnf install python3 python3-pip",
+  "@cli_envInstructionsLinux": {
+    "description": "cli_envInstructionsLinux"
+  },
+  "cli_envCheckFailed": "Environment check failed",
+  "@cli_envCheckFailed": {
+    "description": "cli_envCheckFailed"
+  },
+  "cli_envStatus": "Environment Status",
+  "@cli_envStatus": {
+    "description": "cli_envStatus"
+  },
+  "cli_installCLI": "Install CLI",
+  "@cli_installCLI": {
+    "description": "cli_installCLI"
+  },
+  "cli_usage": "Usage",
+  "@cli_usage": {
+    "description": "cli_usage"
+  },
+  "cli_cliStatus": "CLI Status",
+  "@cli_cliStatus": {
+    "description": "cli_cliStatus"
+  },
+  "cli_installed": "Installed",
+  "@cli_installed": {
+    "description": "cli_installed"
+  },
+  "cli_notInstalled": "Not installed",
+  "@cli_notInstalled": {
+    "description": "cli_notInstalled"
+  },
+  "cli_notDetected": "Not detected",
+  "@cli_notDetected": {
+    "description": "cli_notDetected"
+  },
+  "cli_installDescription": "Click the button to automatically install OpenNote CLI tool to your system",
+  "@cli_installDescription": {
+    "description": "cli_installDescription"
+  },
+  "cli_helpText": "opennote --help              # View help\nopennote note list           # List notes\nopennote note search <query> # Search notes\nopennote mcp start           # Start MCP service",
+  "@cli_helpText": {
+    "description": "cli_helpText"
+  },
+  "ai_copyMessage": "Copy",
+  "@ai_copyMessage": {
+    "description": "ai_copyMessage"
+  },
+  "ai_messageCopied": "Copied",
+  "@ai_messageCopied": {
+    "description": "ai_messageCopied"
+  },
+  "ai_undoMessage": "Undo",
+  "@ai_undoMessage": {
+    "description": "ai_undoMessage"
+  },
+  "ai_newSession": "New Session",
+  "@ai_newSession": {
+    "description": "ai_newSession"
+  },
+  "kb_switchModelWarning": "Switching model version will clear the vector index. The index will be rebuilt after switching.",
+  "@kb_switchModelWarning": {
+    "description": "kb_switchModelWarning"
+  }
+}

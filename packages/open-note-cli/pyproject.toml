@@ -1,0 +1,26 @@
+[project]
+name = "open-note-cli"
+version = "0.3.1"
+description = "OpenNote CLI - 跨平台笔记管理命令行工具"
+readme = "README.md"
+license = {text = "MIT OR Apache-2.0"}
+requires-python = ">=3.10"
+authors = [
+    {name = "litongshuai", email = "litongshuai.leader@qq.com"}
+]
+urls = {Homepage = "https://github.com/The-Flash-7/open-note"}
+dependencies = [
+    "open-note-core>=0.3.1",
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+]
+
+[project.scripts]
+opennote = "open_note_cli.cli:app"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,25 @@
+[project]
+name = "open-note-mcp"
+version = "0.3.1"
+description = "OpenNote MCP Server - Model Context Protocol 服务"
+readme = "README.md"
+license = {text = "MIT OR Apache-2.0"}
+requires-python = ">=3.10"
+authors = [
+    {name = "litongshuai", email = "litongshuai.leader@qq.com"}
+]
+urls = {Homepage = "https://github.com/The-Flash-7/open-note"}
+dependencies = [
+    "open-note-core>=0.3.1",
+    "mcp>=1.0.0",
+]
+
+[project.scripts]
+open-note-mcp = "open_note_mcp.mcp_server:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

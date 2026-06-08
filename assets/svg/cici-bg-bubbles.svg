@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="600" height="350">
+  <defs>
+    <radialGradient id="bubbleGrad1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00C389" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#00C389" stop-opacity="0.05"/>
+    </radialGradient>
+    <radialGradient id="bubbleGrad2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00C389" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#00C389" stop-opacity="0.04"/>
+    </radialGradient>
+    <radialGradient id="bubbleGrad3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00C389" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#00C389" stop-opacity="0.06"/>
+    </radialGradient>
+    <pattern id="dotGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="0.6" fill="#00C389" opacity="0.025"/>
+    </pattern>
+  </defs>
+
+  <rect width="600" height="350" fill="url(#dotGrid)"/>
+
+  <circle cx="500" cy="80" r="80" fill="url(#bubbleGrad1)"/>
+  <circle cx="450" cy="200" r="90" fill="url(#bubbleGrad3)"/>
+  <circle cx="300" cy="120" r="60" fill="url(#bubbleGrad2)"/>
+  <circle cx="520" cy="250" r="55" fill="url(#bubbleGrad2)"/>
+  <circle cx="150" cy="180" r="50" fill="url(#bubbleGrad2)"/>
+
+  <circle cx="200" cy="60" r="18" fill="url(#bubbleGrad2)"/>
+  <circle cx="350" cy="220" r="25" fill="url(#bubbleGrad1)"/>
+  <circle cx="100" cy="180" r="15" fill="url(#bubbleGrad2)"/>
+  <circle cx="400" cy="100" r="20" fill="url(#bubbleGrad2)"/>
+  <circle cx="280" cy="280" r="18" fill="url(#bubbleGrad1)"/>
+  <circle cx="480" cy="140" r="12" fill="url(#bubbleGrad2)"/>
+  <circle cx="180" cy="250" r="16" fill="url(#bubbleGrad1)"/>
+  <circle cx="80" cy="120" r="14" fill="url(#bubbleGrad2)"/>
+  <circle cx="420" cy="60" r="15" fill="url(#bubbleGrad2)"/>
+  <circle cx="250" cy="150" r="13" fill="url(#bubbleGrad2)"/>
+</svg>

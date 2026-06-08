@@ -1,0 +1,2239 @@
+{
+  "@@locale": "zh",
+  "common_cancel": "Отмена",
+  "@common_cancel": {
+    "description": "取消按钮"
+  },
+  "common_save": "Сохранить",
+  "@common_save": {
+    "description": "保存按钮"
+  },
+  "common_delete": "Удалить",
+  "@common_delete": {
+    "description": "删除按钮"
+  },
+  "common_ok": "ОК",
+  "@common_ok": {
+    "description": "确定按钮"
+  },
+  "common_close": "Закрыть",
+  "@common_close": {
+    "description": "关闭按钮"
+  },
+  "common_retry": "Повторить",
+  "@common_retry": {
+    "description": "重试按钮"
+  },
+  "common_edit": "Редактировать",
+  "@common_edit": {
+    "description": "编辑按钮"
+  },
+  "common_create": "Создать",
+  "@common_create": {
+    "description": "创建按钮"
+  },
+  "common_add": "Добавить",
+  "@common_add": {
+    "description": "添加按钮"
+  },
+  "common_clear": "Очистить",
+  "@common_clear": {
+    "description": "清空/清除按钮"
+  },
+  "common_paste": "Вставить",
+  "@common_paste": {
+    "description": "粘贴按钮"
+  },
+  "common_pause": "Пауза",
+  "@common_pause": {
+    "description": "暂停按钮"
+  },
+  "common_resume": "Продолжить",
+  "@common_resume": {
+    "description": "继续/恢复按钮"
+  },
+  "common_skip": "Пропустить",
+  "@common_skip": {
+    "description": "跳过按钮"
+  },
+  "common_next": "Далее",
+  "@common_next": {
+    "description": "下一步按钮"
+  },
+  "common_previous": "Назад",
+  "@common_previous": {
+    "description": "上一页按钮"
+  },
+  "common_confirmDelete": "Подтвердить удаление",
+  "@common_confirmDelete": {
+    "description": "删除确认标题"
+  },
+  "common_confirmClear": "Подтвердить очистку",
+  "@common_confirmClear": {
+    "description": "清空确认标题"
+  },
+  "common_comingSoon": "Скоро",
+  "@common_comingSoon": {
+    "description": "即将上线标签"
+  },
+  "common_followSystem": "Как в системе",
+  "@common_followSystem": {
+    "description": "跟随系统选项"
+  },
+  "common_lightMode": "Светлая тема",
+  "@common_lightMode": {
+    "description": "亮色模式"
+  },
+  "common_darkMode": "Тёмная тема",
+  "@common_darkMode": {
+    "description": "暗色模式"
+  },
+  "common_collapse": "Свернуть",
+  "@common_collapse": {
+    "description": "收起按钮"
+  },
+  "common_expand": "Развернуть",
+  "@common_expand": {
+    "description": "展开按钮"
+  },
+  "common_send": "Отправить",
+  "@common_send": {
+    "description": "发送按钮"
+  },
+  "common_stop": "Стоп",
+  "@common_stop": {
+    "description": "停止按钮"
+  },
+  "common_yes": "Да",
+  "@common_yes": {
+    "description": "是"
+  },
+  "common_no": "Нет",
+  "@common_no": {
+    "description": "否"
+  },
+  "common_done": "Готово",
+  "@common_done": {
+    "description": "完成按钮"
+  },
+  "common_more": "Ещё",
+  "@common_more": {
+    "description": "更多选项"
+  },
+  "common_unknown": "Неизвестно",
+  "@common_unknown": {
+    "description": "未知状态"
+  },
+  "home_home": "Главная",
+  "@home_home": {
+    "description": "导航-首页"
+  },
+  "home_categories": "Категории",
+  "@home_categories": {
+    "description": "导航-目录"
+  },
+  "home_ai": "ИИ",
+  "@home_ai": {
+    "description": "导航-AI"
+  },
+  "home_favorites": "Избранное",
+  "@home_favorites": {
+    "description": "导航-收藏"
+  },
+  "home_settings": "Настройки",
+  "@home_settings": {
+    "description": "导航-设置"
+  },
+  "home_note": "Заметки",
+  "@home_note": {
+    "description": "平板导航-笔记"
+  },
+  "home_dragDropImport": "Перетащите файлы для импорта",
+  "@home_dragDropImport": {
+    "description": "拖拽导入覆盖层"
+  },
+  "home_successImportCount": "Успешно импортировано: {count} файл(ов)",
+  "@home_successImportCount": {
+    "description": "导入成功"
+  },
+  "home_failImportCount": "Не удалось импортировать: {count} файл(ов)",
+  "@home_failImportCount": {
+    "description": "导入失败"
+  },
+  "home_clipboardUrlDetected": "URL обнаружен в буфере обмена, создать заметку?",
+  "@home_clipboardUrlDetected": {
+    "description": "剪贴板URL提示"
+  },
+  "home_dismiss": "Отклонить",
+  "@home_dismiss": {
+    "description": "忽略按钮"
+  },
+  "home_summaryGenerationPaused": "Создание резюме приостановлено ({processedCount}/{totalPending})",
+  "@home_summaryGenerationPaused": {
+    "description": "摘要暂停状态"
+  },
+  "home_selectedCount": "Выбрано: {count}",
+  "@home_selectedCount": {
+    "description": "多选计数"
+  },
+  "home_allNotes": "Все заметки",
+  "@home_allNotes": {
+    "description": "笔记列表标题"
+  },
+  "home_cancelMultiSelect": "Отменить多选",
+  "@home_cancelMultiSelect": {
+    "description": "取消多选"
+  },
+  "home_multiSelect": "Множественный выбор",
+  "@home_multiSelect": {
+    "description": "多选切换"
+  },
+  "home_trash": "Корзина",
+  "@home_trash": {
+    "description": "回收站图标提示"
+  },
+  "home_trashWithCount": "Корзина ({count})",
+  "@home_trashWithCount": {
+    "description": "回收站带数量"
+  },
+  "home_newBlankNote": "Новая пустая заметка",
+  "@home_newBlankNote": {
+    "description": "新建空白笔记"
+  },
+  "home_createFromUrl": "Создать из URL",
+  "@home_createFromUrl": {
+    "description": "从URL创建"
+  },
+  "home_importFromFile": "Импорт из файла",
+  "@home_importFromFile": {
+    "description": "从文件导入"
+  },
+  "home_noteMovedToTrash": "Заметка перемещена в корзину",
+  "@home_noteMovedToTrash": {
+    "description": "删除后提示"
+  },
+  "home_selectNoteToStart": "Выберите заметку для просмотра",
+  "@home_selectNoteToStart": {
+    "description": "空内容提示"
+  },
+  "home_confirmDeleteNoteContent": "Удалить заметку \"{title}\"?",
+  "@home_confirmDeleteNoteContent": {
+    "description": "删除确认内容"
+  },
+  "home_confirmBatchDelete": "Подтвердить удаление",
+  "@home_confirmBatchDelete": {
+    "description": "批量删除标题"
+  },
+  "home_confirmBatchDeleteContent": "Удалить {count} выбранных заметок?",
+  "@home_confirmBatchDeleteContent": {
+    "description": "批量删除内容"
+  },
+  "home_selectedNotesCount": "Выбрано заметок: {count}",
+  "@home_selectedNotesCount": {
+    "description": "批量操作栏"
+  },
+  "home_deletedCountNotes": "Удалено заметок: {count}",
+  "@home_deletedCountNotes": {
+    "description": "批量删除后提示"
+  },
+  "home_trashTitle": "Корзина",
+  "@home_trashTitle": {
+    "description": "回收站对话框标题"
+  },
+  "home_trashEmpty": "Корзина пуста",
+  "@home_trashEmpty": {
+    "description": "空回收站提示"
+  },
+  "home_daysAgoDeleted": "Удалено {days} дн. назад",
+  "@home_daysAgoDeleted": {
+    "description": "回收站副标题"
+  },
+  "home_restore": "Восстановить",
+  "@home_restore": {
+    "description": "恢复按钮"
+  },
+  "home_noteRestored": "Заметка восстановлена",
+  "@home_noteRestored": {
+    "description": "恢复后提示"
+  },
+  "home_permanentlyDelete": "Удалить навсегда",
+  "@home_permanentlyDelete": {
+    "description": "永久删除"
+  },
+  "home_notePermanentlyDeleted": "Заметка удалена навсегда",
+  "@home_notePermanentlyDeleted": {
+    "description": "永久删除提示"
+  },
+  "home_emptyTrash": "Очистить корзину",
+  "@home_emptyTrash": {
+    "description": "清空回收站按钮"
+  },
+  "home_emptyTrashTitle": "Очистить корзину",
+  "@home_emptyTrashTitle": {
+    "description": "清空回收站标题"
+  },
+  "home_emptyTrashContent": "Удалить {count} заметок из корзины навсегда? Это действие нельзя отменить.",
+  "@home_emptyTrashContent": {
+    "description": "清空回收站内容"
+  },
+  "home_trashEmptied": "Корзина очищена",
+  "@home_trashEmptied": {
+    "description": "清空后提示"
+  },
+  "home_switchTheme": "Сменить тему",
+  "@home_switchTheme": {
+    "description": "切换主题标题"
+  },
+  "home_switchToLight": "Переключить на светлую тему",
+  "@home_switchToLight": {
+    "description": "切换亮色"
+  },
+  "home_switchToDark": "Переключить на тёмную тему",
+  "@home_switchToDark": {
+    "description": "切换暗色"
+  },
+  "home_unfavorite": "Убрать из избранного",
+  "@home_unfavorite": {
+    "description": "取消收藏菜单"
+  },
+  "home_favorite": "В избранное",
+  "@home_favorite": {
+    "description": "收藏菜单"
+  },
+  "home_share": "Поделиться",
+  "@home_share": {
+    "description": "分享菜单"
+  },
+  "home_shareComingSoon": "Функция обмена скоро появится",
+  "@home_shareComingSoon": {
+    "description": "分享功能提示"
+  },
+  "editor_untitledNote": "Без названия",
+  "@editor_untitledNote": {
+    "description": "默认标题"
+  },
+  "editor_saving": "Сохранение...",
+  "@editor_saving": {
+    "description": "保存中状态"
+  },
+  "editor_autoSaved": "Автосохранение выполнено",
+  "@editor_autoSaved": {
+    "description": "自动保存成功"
+  },
+  "editor_autoSaveFailed": "Ошибка автосохранения",
+  "@editor_autoSaveFailed": {
+    "description": "自动保存失败"
+  },
+  "editor_selectCategory": "Выбрать категорию",
+  "@editor_selectCategory": {
+    "description": "分类选择器"
+  },
+  "editor_noCategory": "Без категории",
+  "@editor_noCategory": {
+    "description": "无分类选项"
+  },
+  "editor_clearCategory": "Очистить категорию",
+  "@editor_clearCategory": {
+    "description": "清除分类"
+  },
+  "editor_noteContentCannotBeEmpty": "Содержимое заметки не может быть пустым",
+  "@editor_noteContentCannotBeEmpty": {
+    "description": "内容不能为空"
+  },
+  "editor_saveSuccess": "Сохранено",
+  "@editor_saveSuccess": {
+    "description": "保存成功"
+  },
+  "editor_saveFailed": "Ошибка сохранения: {error}",
+  "@editor_saveFailed": {
+    "description": "保存失败"
+  },
+  "editor_fillTitleAndContentFirst": "Сначала заполните заголовок и содержание",
+  "@editor_fillTitleAndContentFirst": {
+    "description": "填写提示"
+  },
+  "editor_configTimeoutRetry": "Таймаут загрузки конфигурации, попробуйте снова",
+  "@editor_configTimeoutRetry": {
+    "description": "配置超时"
+  },
+  "editor_configureAIFirst": "Сначала настройте ИИ-сервис",
+  "@editor_configureAIFirst": {
+    "description": "AI未配置"
+  },
+  "editor_generateSuggestionsFailed": "Ошибка генерации предложений: {error}",
+  "@editor_generateSuggestionsFailed": {
+    "description": "建议生成失败"
+  },
+  "editor_smartSuggestions": "Умные предложения",
+  "@editor_smartSuggestions": {
+    "description": "智能建议标题"
+  },
+  "editor_categorySuggestion": "Категория:",
+  "@editor_categorySuggestion": {
+    "description": "分类建议标签"
+  },
+  "editor_tagSuggestion": "Теги:",
+  "@editor_tagSuggestion": {
+    "description": "标签建议标签"
+  },
+  "editor_noSuggestions": "Предложений нет",
+  "@editor_noSuggestions": {
+    "description": "无建议"
+  },
+  "editor_applySuggestions": "Применить",
+  "@editor_applySuggestions": {
+    "description": "应用建议按钮"
+  },
+  "editor_newNote": "Новая заметка",
+  "@editor_newNote": {
+    "description": "新笔记标题"
+  },
+  "editor_editNote": "Редактировать",
+  "@editor_editNote": {
+    "description": "编辑笔记标题"
+  },
+  "editor_preview": "Предпросмотр",
+  "@editor_preview": {
+    "description": "预览模式"
+  },
+  "editor_smartSuggestionsTooltip": "Умные предложения",
+  "@editor_smartSuggestionsTooltip": {
+    "description": "智能建议提示"
+  },
+  "editor_aiAssistant": "ИИ-ассистент",
+  "@editor_aiAssistant": {
+    "description": "AI助手提示"
+  },
+  "editor_source": "Источник: ",
+  "@editor_source": {
+    "description": "来源标签"
+  },
+  "editor_title": "Заголовок",
+  "@editor_title": {
+    "description": "标题文本框"
+  },
+  "editor_startWritingMarkdown": "Начните писать Markdown заметку...",
+  "@editor_startWritingMarkdown": {
+    "description": "Markdown占位符"
+  },
+  "editor_startWritingPlainText": "Начните писать текстовую заметку...",
+  "@editor_startWritingPlainText": {
+    "description": "纯文本占位符"
+  },
+  "editor_startWritingRichText": "Начните писать форматированную заметку...",
+  "@editor_startWritingRichText": {
+    "description": "富文本占位符"
+  },
+  "settings_preferences": "Настройки",
+  "@settings_preferences": {
+    "description": "设置导航-首选项"
+  },
+  "settings_aiService": "ИИ-сервис",
+  "@settings_aiService": {
+    "description": "设置导航-AI服务"
+  },
+  "settings_appearance": "Внешний вид",
+  "@settings_appearance": {
+    "description": "设置导航-外观"
+  },
+  "settings_knowledgeBase": "База знаний",
+  "@settings_knowledgeBase": {
+    "description": "设置导航-知识库"
+  },
+  "settings_assistant": "Ассистент",
+  "@settings_assistant": {
+    "description": "设置导航-智能助理"
+  },
+  "settings_cliTools": "CLI",
+  "@settings_cliTools": {
+    "description": "设置导航-CLI"
+  },
+  "settings_title": "Настройки",
+  "@settings_title": {
+    "description": "设置对话框标题"
+  },
+  "settings_featureInDevelopment": "В разработке...",
+  "@settings_featureInDevelopment": {
+    "description": "开发中占位"
+  },
+  "settings_customConfig": "Пользовательская конфигурация",
+  "@settings_customConfig": {
+    "description": "自定义配置标题"
+  },
+  "settings_quickAddPresets": "Быстрое добавление",
+  "@settings_quickAddPresets": {
+    "description": "快速添加标题"
+  },
+  "settings_quickAddDescription": "Нажмите для быстрого добавления популярных провайдеров",
+  "@settings_quickAddDescription": {
+    "description": "快速添加描述"
+  },
+  "settings_noAIConfig": "Конфигурация ИИ отсутствует",
+  "@settings_noAIConfig": {
+    "description": "无AI配置"
+  },
+  "settings_clickToAddPreset": "Нажмите кнопку ниже",
+  "@settings_clickToAddPreset": {
+    "description": "空状态提示"
+  },
+  "settings_configured": "Настроено",
+  "@settings_configured": {
+    "description": "已配置列表"
+  },
+  "settings_configCount": "{count}",
+  "@settings_configCount": {
+    "description": "配置数量"
+  },
+  "settings_current": "Текущий",
+  "@settings_current": {
+    "description": "当前徽章"
+  },
+  "settings_setModelFirst": "Сначала настройте модель",
+  "@settings_setModelFirst": {
+    "description": "配置模型提示"
+  },
+  "settings_addProvider": "Добавить {name}",
+  "@settings_addProvider": {
+    "description": "添加提供商"
+  },
+  "settings_apiAddress": "API адрес: ",
+  "@settings_apiAddress": {
+    "description": "API地址标签"
+  },
+  "settings_presetsModels": "Модели: {models}",
+  "@settings_presetsModels": {
+    "description": "预设模型"
+  },
+  "settings_apiKey": "API ключ",
+  "@settings_apiKey": {
+    "description": "API密钥标签"
+  },
+  "settings_enterApiKey": "Введите ваш API ключ",
+  "@settings_enterApiKey": {
+    "description": "API密钥提示"
+  },
+  "settings_enterApiKeyError": "Введите API ключ",
+  "@settings_enterApiKeyError": {
+    "description": "API密钥错误"
+  },
+  "settings_vendorName": "Название провайдера",
+  "@settings_vendorName": {
+    "description": "厂商名称"
+  },
+  "settings_vendorNameHint": "например: Мой API, Прокси",
+  "@settings_vendorNameHint": {
+    "description": "厂商名称提示"
+  },
+  "settings_baseUrl": "Base URL",
+  "@settings_baseUrl": {
+    "description": "Base URL标签"
+  },
+  "settings_baseUrlHint": "https://api.example.com/v1",
+  "@settings_baseUrlHint": {
+    "description": "Base URL提示"
+  },
+  "settings_modelList": "Список моделей",
+  "@settings_modelList": {
+    "description": "模型列表"
+  },
+  "settings_modelListHint": "через запятую, например: model-1,model-2",
+  "@settings_modelListHint": {
+    "description": "模型列表提示"
+  },
+  "settings_enterVendorName": "Введите название провайдера",
+  "@settings_enterVendorName": {
+    "description": "厂商名称错误"
+  },
+  "settings_enterAtLeastOneModel": "Введите хотя бы одну модель",
+  "@settings_enterAtLeastOneModel": {
+    "description": "模型错误"
+  },
+  "settings_displayName": "Отображаемое имя",
+  "@settings_displayName": {
+    "description": "显示名称"
+  },
+  "settings_confirmDeleteConfig": "Удалить \"{name}\"?",
+  "@settings_confirmDeleteConfig": {
+    "description": "删除配置确认"
+  },
+  "settings_connectionSuccess": "Подключено к {name}",
+  "@settings_connectionSuccess": {
+    "description": "连接成功"
+  },
+  "settings_unknownError": "Неизвестная ошибка",
+  "@settings_unknownError": {
+    "description": "未知错误"
+  },
+  "settings_testException": "Ошибка теста: {error}",
+  "@settings_testException": {
+    "description": "测试异常"
+  },
+  "settings_testConnection": "Тест подключения",
+  "@settings_testConnection": {
+    "description": "测试连接"
+  },
+  "settings_testingConnection": "Тестирование...",
+  "@settings_testingConnection": {
+    "description": "测试连接中"
+  },
+  "settings_connectionSuccessful": "Подключено",
+  "@settings_connectionSuccessful": {
+    "description": "连接成功标签"
+  },
+  "settings_connectionFailed": "Не подключено",
+  "@settings_connectionFailed": {
+    "description": "连接失败标签"
+  },
+  "search_placeholder": "Поиск заметок...",
+  "@search_placeholder": {
+    "description": "搜索框"
+  },
+  "search_categoryFilter": "Фильтр по категории",
+  "@search_categoryFilter": {
+    "description": "分类筛选"
+  },
+  "search_allCategories": "Все категории",
+  "@search_allCategories": {
+    "description": "所有分类"
+  },
+  "search_enterToSearch": "Введите ключевые слова",
+  "@search_enterToSearch": {
+    "description": "输入提示"
+  },
+  "search_noResults": "Заметки не найдены",
+  "@search_noResults": {
+    "description": "无结果"
+  },
+  "search_noHistory": "Нет истории поиска",
+  "@search_noHistory": {
+    "description": "无历史"
+  },
+  "search_recentSearches": "Недавние запросы",
+  "@search_recentSearches": {
+    "description": "最近搜索"
+  },
+  "search_untitledNote": "Без названия",
+  "@search_untitledNote": {
+    "description": "未命名回退"
+  },
+  "search_justNow": "Только что",
+  "@search_justNow": {
+    "description": "刚刚"
+  },
+  "search_minutesAgo": "{count} мин. назад",
+  "@search_minutesAgo": {
+    "description": "分钟前"
+  },
+  "search_hoursAgo": "{count} ч. назад",
+  "@search_hoursAgo": {
+    "description": "小时前"
+  },
+  "search_yesterday": "Вчера",
+  "@search_yesterday": {
+    "description": "昨天"
+  },
+  "search_daysAgo": "{count} дн. назад",
+  "@search_daysAgo": {
+    "description": "天前"
+  },
+  "search_enterHint": "Enter",
+  "@search_enterHint": {
+    "description": "Enter键"
+  },
+  "search_open": "Открыть",
+  "@search_open": {
+    "description": "打开"
+  },
+  "search_navigateHint": "↑↓",
+  "@search_navigateHint": {
+    "description": "上下键"
+  },
+  "search_navigate": "Навигация",
+  "@search_navigate": {
+    "description": "导航"
+  },
+  "search_escHint": "Esc",
+  "@search_escHint": {
+    "description": "Esc键"
+  },
+  "search_closeHint": "Закрыть",
+  "@search_closeHint": {
+    "description": "关闭"
+  },
+  "dialog_newNote": "Новая заметка",
+  "@dialog_newNote": {
+    "description": "新建笔记"
+  },
+  "dialog_blankNote": "Пустая заметка",
+  "@dialog_blankNote": {
+    "description": "空白笔记"
+  },
+  "dialog_createBlankNote": "Создать новую пустую заметку",
+  "@dialog_createBlankNote": {
+    "description": "空白笔记副标题"
+  },
+  "dialog_importFromFile": "Импорт из файла",
+  "@dialog_importFromFile": {
+    "description": "从文件导入"
+  },
+  "dialog_importFromFileSubtitle": "Создать заметки из TXT, кода или HTML файлов",
+  "@dialog_importFromFileSubtitle": {
+    "description": "从文件导入副标题"
+  },
+  "dialog_noteImportSuccess": "Заметка импортирована",
+  "@dialog_noteImportSuccess": {
+    "description": "导入成功"
+  },
+  "dialog_importFailedUnsupported": "Формат файла не поддерживается",
+  "@dialog_importFailedUnsupported": {
+    "description": "不支持格式"
+  },
+  "dialog_importFailed": "Ошибка импорта: {error}",
+  "@dialog_importFailed": {
+    "description": "导入失败"
+  },
+  "dialog_selectNoteFormat": "Выберите формат",
+  "@dialog_selectNoteFormat": {
+    "description": "选择格式"
+  },
+  "dialog_markdown": "Markdown",
+  "@dialog_markdown": {
+    "description": "Markdown格式"
+  },
+  "dialog_markdownDescription": "Поддерживает форматирование, код, таблицы",
+  "@dialog_markdownDescription": {
+    "description": "Markdown描述"
+  },
+  "dialog_plainText": "Текст",
+  "@dialog_plainText": {
+    "description": "纯文本"
+  },
+  "dialog_plainTextDescription": "Простой текст без форматирования",
+  "@dialog_plainTextDescription": {
+    "description": "纯文本描述"
+  },
+  "dialog_richText": "Форматированный",
+  "@dialog_richText": {
+    "description": "富文本"
+  },
+  "dialog_richTextDescription": "Редактор Quill: жирный, курсив, списки",
+  "@dialog_richTextDescription": {
+    "description": "富文本描述"
+  },
+  "dialog_code": "Код",
+  "@dialog_code": {
+    "description": "代码"
+  },
+  "dialog_codeDescription": "Редактор кода с подсветкой синтаксиса",
+  "@dialog_codeDescription": {
+    "description": "代码描述"
+  },
+  "dialog_createFromUrl": "Создать заметку из URL",
+  "@dialog_createFromUrl": {
+    "description": "URL创建"
+  },
+  "dialog_webUrl": "URL страницы",
+  "@dialog_webUrl": {
+    "description": "URL字段"
+  },
+  "dialog_urlHint": "example.com",
+  "@dialog_urlHint": {
+    "description": "URL提示"
+  },
+  "dialog_enterUrl": "Введите URL",
+  "@dialog_enterUrl": {
+    "description": "URL错误"
+  },
+  "dialog_invalidUrlFormat": "Неверный формат URL",
+  "@dialog_invalidUrlFormat": {
+    "description": "URL格式错误"
+  },
+  "dialog_extractFailed": "Ошибка извлечения содержимого",
+  "@dialog_extractFailed": {
+    "description": "提取失败"
+  },
+  "dialog_extractingContent": "Извлечение содержимого...",
+  "@dialog_extractingContent": {
+    "description": "提取中"
+  },
+  "dialog_extractSuccess": "Извлечено",
+  "@dialog_extractSuccess": {
+    "description": "提取成功"
+  },
+  "dialog_aiInitializing": "ИИ инициализирует заметку...",
+  "@dialog_aiInitializing": {
+    "description": "AI初始化"
+  },
+  "dialog_noteAutoInitialized": "Заметка инициализирована",
+  "@dialog_noteAutoInitialized": {
+    "description": "自动初始化"
+  },
+  "dialog_summary": "Резюме",
+  "@dialog_summary": {
+    "description": "摘要"
+  },
+  "dialog_keywords": "Ключевые слова",
+  "@dialog_keywords": {
+    "description": "关键词"
+  },
+  "dialog_category": "Категория",
+  "@dialog_category": {
+    "description": "分类"
+  },
+  "dialog_tags": "Теги",
+  "@dialog_tags": {
+    "description": "标签"
+  },
+  "dialog_extractContent": "Извлечь содержимое",
+  "@dialog_extractContent": {
+    "description": "提取内容按钮"
+  },
+  "dialog_createNote": "Создать заметку",
+  "@dialog_createNote": {
+    "description": "创建笔记按钮"
+  },
+  "dialog_manageModelsTitle": "Управление моделями - {providerName}",
+  "@dialog_manageModelsTitle": {
+    "description": "模型管理标题"
+  },
+  "dialog_newModelLabel": "Новая модель",
+  "@dialog_newModelLabel": {
+    "description": "新模型标签"
+  },
+  "dialog_addModelTooltip": "Добавить модель",
+  "@dialog_addModelTooltip": {
+    "description": "添加模型"
+  },
+  "dialog_currentModelsHeader": "Текущие модели ({count}):",
+  "@dialog_currentModelsHeader": {
+    "description": "当前模型"
+  },
+  "dialog_setDefaultTooltip": "По умолчанию",
+  "@dialog_setDefaultTooltip": {
+    "description": "设为默认"
+  },
+  "dialog_modelsUpdated": "Список моделей обновлён",
+  "@dialog_modelsUpdated": {
+    "description": "模型更新"
+  },
+  "category_title": "Категории",
+  "@category_title": {
+    "description": "分类管理"
+  },
+  "category_flatViewTooltip": "Плоский вид",
+  "@category_flatViewTooltip": {
+    "description": "平铺视图"
+  },
+  "category_treeViewTooltip": "Древовидный вид",
+  "@category_treeViewTooltip": {
+    "description": "树形视图"
+  },
+  "category_createNewTooltip": "Новая категория",
+  "@category_createNewTooltip": {
+    "description": "新建分类"
+  },
+  "category_emptyState": "Категорий пока нет",
+  "@category_emptyState": {
+    "description": "无分类"
+  },
+  "category_createTitle": "Новая категория",
+  "@category_createTitle": {
+    "description": "新建分类标题"
+  },
+  "category_createChildTitle": "Новая подкатегория",
+  "@category_createChildTitle": {
+    "description": "新建子分类"
+  },
+  "category_nameHint": "Введите название",
+  "@category_nameHint": {
+    "description": "分类名称提示"
+  },
+  "category_nameEmptyError": "Название не может быть пустым",
+  "@category_nameEmptyError": {
+    "description": "名称为空"
+  },
+  "category_nameTooLongError": "Название не более 20 символов",
+  "@category_nameTooLongError": {
+    "description": "名称过长"
+  },
+  "category_nameDashError": "Название не может содержать \"-\"",
+  "@category_nameDashError": {
+    "description": "名称含横杠"
+  },
+  "category_duplicateNameError": "Такое имя уже существует",
+  "@category_duplicateNameError": {
+    "description": "名称重复"
+  },
+  "category_deleteTitle": "Удалить категорию",
+  "@category_deleteTitle": {
+    "description": "删除分类"
+  },
+  "category_deleteConfirm": "Удалить \"{name}\"?",
+  "@category_deleteConfirm": {
+    "description": "删除确认"
+  },
+  "category_deleteWarning": "В категории {count} заметок. Они будут удалены вместе с категорией!",
+  "@category_deleteWarning": {
+    "description": "删除警告"
+  },
+  "category_renameTitle": "Переименовать",
+  "@category_renameTitle": {
+    "description": "重命名"
+  },
+  "category_newNameHint": "Введите новое название",
+  "@category_newNameHint": {
+    "description": "新名称提示"
+  },
+  "category_renameTooltip": "Переименовать",
+  "@category_renameTooltip": {
+    "description": "重命名"
+  },
+  "category_addChildTooltip": "Добавить подкатегорию",
+  "@category_addChildTooltip": {
+    "description": "添加子分类"
+  },
+  "ai_ciciGreeting": "Привет, я Cici",
+  "@ai_ciciGreeting": {
+    "description": "AI问候"
+  },
+  "ai_ciciSubtitle": "На основе вашей базы знаний я могу помочь:",
+  "@ai_ciciSubtitle": {
+    "description": "AI副标题"
+  },
+  "ai_quickActionSearch": "Найти заметки",
+  "@ai_quickActionSearch": {
+    "description": "查找笔记"
+  },
+  "ai_quickActionSummarize": "Обобщить",
+  "@ai_quickActionSummarize": {
+    "description": "总结提炼"
+  },
+  "ai_quickActionQa": "Вопрос-ответ",
+  "@ai_quickActionQa": {
+    "description": "答疑解惑"
+  },
+  "ai_sampleUserMessage1": "Найди заметки про \"OKR\"",
+  "@ai_sampleUserMessage1": {
+    "description": "示例消息1"
+  },
+  "ai_sampleAssistantFound": "Хорошо, я нашёл",
+  "@ai_sampleAssistantFound": {
+    "description": "示例回复-找到"
+  },
+  "ai_sampleAssistantNotes": "1 релевантная заметка:",
+  "@ai_sampleAssistantNotes": {
+    "description": "示例回复-数量"
+  },
+  "ai_sampleNoteTitle": "OKR: постановка целей и реализация",
+  "@ai_sampleNoteTitle": {
+    "description": "示例笔记标题"
+  },
+  "ai_sampleNoteDesc": "Определение OKR, основные принципы и применение в команде...",
+  "@ai_sampleNoteDesc": {
+    "description": "示例笔记描述"
+  },
+  "ai_sampleUserMessage2": "Каковы основные принципы OKR?",
+  "@ai_sampleUserMessage2": {
+    "description": "示例消息2"
+  },
+  "ai_sampleAssistantPrinciples": "Основные принципы OKR:",
+  "@ai_sampleAssistantPrinciples": {
+    "description": "示例回复-原则"
+  },
+  "ai_samplePrinciple1": "• Цели (O) должны быть амбициозными;",
+  "@ai_samplePrinciple1": {
+    "description": "示例原则1"
+  },
+  "ai_samplePrinciple2": "• Ключевые результаты (KR) должны быть измеримыми;",
+  "@ai_samplePrinciple2": {
+    "description": "示例原则2"
+  },
+  "ai_samplePrinciple3": "• Прозрачность и согласованность на всех уровнях;",
+  "@ai_samplePrinciple3": {
+    "description": "示例原则3"
+  },
+  "ai_samplePrinciple4": "• Регулярный анализ, непрерывное обучение.",
+  "@ai_samplePrinciple4": {
+    "description": "示例原则4"
+  },
+  "ai_sampleAssistantConclusion": "Эти принципы помогают команде сфокусироваться на главном.",
+  "@ai_sampleAssistantConclusion": {
+    "description": "示例结论"
+  },
+  "ai_inputPlaceholder": "Задайте вопрос или найдите заметки на естественном языке...",
+  "@ai_inputPlaceholder": {
+    "description": "AI输入框"
+  },
+  "ai_quickActionSearchTemplate": "Найди заметки про \"\"",
+  "@ai_quickActionSearchTemplate": {
+    "description": "搜索模板"
+  },
+  "ai_quickActionSummarizeWithNote": "Обобщи эту заметку \"{title}\"",
+  "@ai_quickActionSummarizeWithNote": {
+    "description": "总结当前笔记"
+  },
+  "ai_quickActionSummarizeDefault": "Обобщи текущую заметку",
+  "@ai_quickActionSummarizeDefault": {
+    "description": "总结默认"
+  },
+  "ai_quickActionQaTemplate": "У меня есть вопрос по содержимому заметок...",
+  "@ai_quickActionQaTemplate": {
+    "description": "问答模板"
+  },
+  "ai_newSessionTitle": "Новый чат",
+  "@ai_newSessionTitle": {
+    "description": "新会话"
+  },
+  "ai_newSessionConfirm": "Начать новый чат? Текущий будет очищен.",
+  "@ai_newSessionConfirm": {
+    "description": "新会话确认"
+  },
+  "ai_thinkingAnalyzing": "Анализ запроса...",
+  "@ai_thinkingAnalyzing": {
+    "description": "分析需求"
+  },
+  "ai_knowledgeBaseDisabled": "⚠️ База знаний отключена, используется текстовый поиск",
+  "@ai_knowledgeBaseDisabled": {
+    "description": "知识库未启用"
+  },
+  "ai_replyFailed": "Ошибка ответа ИИ: {error}",
+  "@ai_replyFailed": {
+    "description": "回复失败"
+  },
+  "ai_toolCallInterrupted": "Вызов прерван",
+  "@ai_toolCallInterrupted": {
+    "description": "调用中断"
+  },
+  "ai_executionCancelled": "Выполнение отменено",
+  "@ai_executionCancelled": {
+    "description": "执行取消"
+  },
+  "ai_operationInterrupted": "Операция прервана пользователем",
+  "@ai_operationInterrupted": {
+    "description": "用户中断"
+  },
+  "ai_inputDefaultPlaceholder": "Задайте вопрос или найдите заметки",
+  "@ai_inputDefaultPlaceholder": {
+    "description": "默认输入框"
+  },
+  "ai_toolCategoryExplore": "Поиск",
+  "@ai_toolCategoryExplore": {
+    "description": "工具类别-探索"
+  },
+  "ai_toolCategoryEdit": "Редактирование",
+  "@ai_toolCategoryEdit": {
+    "description": "工具类别-编辑"
+  },
+  "ai_toolCategoryWrite": "Запись",
+  "@ai_toolCategoryWrite": {
+    "description": "工具类别-写入"
+  },
+  "ai_toolCategoryDelete": "Удаление",
+  "@ai_toolCategoryDelete": {
+    "description": "工具类别-删除"
+  },
+  "ai_toolCategorySummarize": "Обобщение",
+  "@ai_toolCategorySummarize": {
+    "description": "工具类别-总结"
+  },
+  "ai_toolCategoryExtract": "Извлечение",
+  "@ai_toolCategoryExtract": {
+    "description": "工具类别-提取"
+  },
+  "ai_toolCategoryProcess": "Обработка",
+  "@ai_toolCategoryProcess": {
+    "description": "工具类别-处理"
+  },
+  "ai_toolTerminated": "Выполнение завершено",
+  "@ai_toolTerminated": {
+    "description": "执行终止"
+  },
+  "ai_toolInProgress": "Выполняется...",
+  "@ai_toolInProgress": {
+    "description": "执行中"
+  },
+  "ai_toolCompleted": "Завершено",
+  "@ai_toolCompleted": {
+    "description": "执行完成"
+  },
+  "ai_toolBadgeCount": "{category}: {count} раз",
+  "@ai_toolBadgeCount": {
+    "description": "工具统计"
+  },
+  "ai_thinking": "Думает",
+  "@ai_thinking": {
+    "description": "思考中"
+  },
+  "ai_summaryTitle": "ИИ Резюме",
+  "@ai_summaryTitle": {
+    "description": "AI摘要标题"
+  },
+  "ai_clickToExpand": "Нажмите для просмотра",
+  "@ai_clickToExpand": {
+    "description": "点击展开"
+  },
+  "ai_generateSummary": "Создать резюме",
+  "@ai_generateSummary": {
+    "description": "生成摘要"
+  },
+  "ai_regenerate": "Пересоздать",
+  "@ai_regenerate": {
+    "description": "重新生成"
+  },
+  "ai_generatingSummary": "Создание резюме...",
+  "@ai_generatingSummary": {
+    "description": "生成摘要中"
+  },
+  "ai_keywordsLabel": "Ключевые слова: ",
+  "@ai_keywordsLabel": {
+    "description": "关键词标签"
+  },
+  "ai_noAiConfig": "ИИ-сервис не настроен",
+  "@ai_noAiConfig": {
+    "description": "AI未配置"
+  },
+  "ai_goToSettings": "В настройки",
+  "@ai_goToSettings": {
+    "description": "前往设置"
+  },
+  "ai_generating": "Генерация...",
+  "@ai_generating": {
+    "description": "生成中"
+  },
+  "ai_clickToGenerate": "Нажмите для создания резюме",
+  "@ai_clickToGenerate": {
+    "description": "点击生成"
+  },
+  "card_unfavoriteTooltip": "Убрать из избранного",
+  "@card_unfavoriteTooltip": {
+    "description": "取消收藏"
+  },
+  "card_favoriteTooltip": "В избранное",
+  "@card_favoriteTooltip": {
+    "description": "收藏"
+  },
+  "card_deleteTooltip": "Удалить",
+  "@card_deleteTooltip": {
+    "description": "删除"
+  },
+  "card_untitledNote": "Без названия",
+  "@card_untitledNote": {
+    "description": "未命名"
+  },
+  "card_justNow": "Только что",
+  "@card_justNow": {
+    "description": "刚刚"
+  },
+  "card_minutesAgo": "{minutes} мин. назад",
+  "@card_minutesAgo": {
+    "description": "分钟前"
+  },
+  "card_hoursAgo": "{hours} ч. назад",
+  "@card_hoursAgo": {
+    "description": "小时前"
+  },
+  "card_yesterday": "Вчера",
+  "@card_yesterday": {
+    "description": "昨天"
+  },
+  "card_daysAgo": "{days} дн. назад",
+  "@card_daysAgo": {
+    "description": "天前"
+  },
+  "tag_sectionTitle": "Теги",
+  "@tag_sectionTitle": {
+    "description": "标签区域"
+  },
+  "tag_availableTagsTitle": "Доступные теги",
+  "@tag_availableTagsTitle": {
+    "description": "可选标签"
+  },
+  "tag_noTagsEmpty": "Тегов нет, создайте ниже",
+  "@tag_noTagsEmpty": {
+    "description": "无标签"
+  },
+  "tag_createNew": "Создать тег",
+  "@tag_createNew": {
+    "description": "创建标签"
+  },
+  "tag_addTag": "Добавить тег",
+  "@tag_addTag": {
+    "description": "添加标签"
+  },
+  "tag_nameHint": "Имя тега",
+  "@tag_nameHint": {
+    "description": "标签名提示"
+  },
+  "tag_confirmTooltip": "ОК",
+  "@tag_confirmTooltip": {
+    "description": "确定"
+  },
+  "onboarding_skip": "Пропустить",
+  "@onboarding_skip": {
+    "description": "跳过"
+  },
+  "onboarding_previous": "Назад",
+  "@onboarding_previous": {
+    "description": "上一页"
+  },
+  "onboarding_next": "Далее",
+  "@onboarding_next": {
+    "description": "下一步"
+  },
+  "onboarding_welcomeTitle": "Добро пожаловать в OpenNote",
+  "@onboarding_welcomeTitle": {
+    "description": "欢迎标题"
+  },
+  "onboarding_welcomeSubtitle": "Умный помощник для заметок",
+  "@onboarding_welcomeSubtitle": {
+    "description": "欢迎副标题"
+  },
+  "onboarding_startConfig": "Начать настройку",
+  "@onboarding_startConfig": {
+    "description": "开始配置"
+  },
+  "onboarding_configLater": "Настроить позже",
+  "@onboarding_configLater": {
+    "description": "稍后配置"
+  },
+  "onboarding_imageLoadError": "Ошибка загрузки изображения",
+  "@onboarding_imageLoadError": {
+    "description": "图片加载失败"
+  },
+  "onboarding_selectProviderTitle": "Выберите ИИ-провайдера",
+  "@onboarding_selectProviderTitle": {
+    "description": "选择服务商"
+  },
+  "onboarding_selectProviderSubtitle": "Выберите провайдера, позже можно добавить больше",
+  "@onboarding_selectProviderSubtitle": {
+    "description": "选择副标题"
+  },
+  "onboarding_noProviderSelected": "Сначала выберите провайдера",
+  "@onboarding_noProviderSelected": {
+    "description": "未选择厂商"
+  },
+  "onboarding_returnToSelectProvider": "Вернитесь и выберите провайдера",
+  "@onboarding_returnToSelectProvider": {
+    "description": "返回选择"
+  },
+  "onboarding_configCustomTitle": "Настроить пользовательский ИИ",
+  "@onboarding_configCustomTitle": {
+    "description": "自定义配置"
+  },
+  "onboarding_configProviderTitle": "Настройка {providerName}",
+  "@onboarding_configProviderTitle": {
+    "description": "配置提供商"
+  },
+  "onboarding_customConfigSubtitle": "Введите информацию о провайдере, API адрес, модели и ключ",
+  "@onboarding_customConfigSubtitle": {
+    "description": "自定义副标题"
+  },
+  "onboarding_providerConfigSubtitle": "Введите API ключ",
+  "@onboarding_providerConfigSubtitle": {
+    "description": "提供商副标题"
+  },
+  "onboarding_vendorLabel": "Провайдер",
+  "@onboarding_vendorLabel": {
+    "description": "厂商标签"
+  },
+  "onboarding_apiUrlLabel": "API адрес",
+  "@onboarding_apiUrlLabel": {
+    "description": "API地址标签"
+  },
+  "onboarding_presetModelsLabel": "Модели",
+  "@onboarding_presetModelsLabel": {
+    "description": "预设模型标签"
+  },
+  "onboarding_apiKeyLabel": "API ключ",
+  "@onboarding_apiKeyLabel": {
+    "description": "API密钥标签"
+  },
+  "onboarding_apiKeyVerifiedHint": "API ключ подтверждён",
+  "@onboarding_apiKeyVerifiedHint": {
+    "description": "已验证提示"
+  },
+  "onboarding_apiKeyHint": "Введите API ключ",
+  "@onboarding_apiKeyHint": {
+    "description": "API密钥提示"
+  },
+  "onboarding_getApiKey": "Получить API ключ",
+  "@onboarding_getApiKey": {
+    "description": "获取密钥"
+  },
+  "onboarding_testingConnection": "Тестирование...",
+  "@onboarding_testingConnection": {
+    "description": "测试中"
+  },
+  "onboarding_testConnection": "Тест подключения",
+  "@onboarding_testConnection": {
+    "description": "测试连接"
+  },
+  "onboarding_completeConfig": "Завершить",
+  "@onboarding_completeConfig": {
+    "description": "完成配置"
+  },
+  "onboarding_vendorNameLabel": "Название провайдера",
+  "@onboarding_vendorNameLabel": {
+    "description": "厂商名称"
+  },
+  "onboarding_vendorNameHint": "например: Мой ИИ",
+  "@onboarding_vendorNameHint": {
+    "description": "厂商名称提示"
+  },
+  "onboarding_apiUrlInputHint": "например: https://api.example.com/v1",
+  "@onboarding_apiUrlInputHint": {
+    "description": "API地址提示"
+  },
+  "onboarding_modelListLabel": "Модели",
+  "@onboarding_modelListLabel": {
+    "description": "模型列表"
+  },
+  "onboarding_modelInputHint": "Введите модель",
+  "@onboarding_modelInputHint": {
+    "description": "模型输入提示"
+  },
+  "onboarding_addModel": "Добавить",
+  "@onboarding_addModel": {
+    "description": "添加模型"
+  },
+  "onboarding_defaultModelLabel": "Модель по умолчанию",
+  "@onboarding_defaultModelLabel": {
+    "description": "默认模型"
+  },
+  "onboarding_selectDefaultModel": "Выберите модель",
+  "@onboarding_selectDefaultModel": {
+    "description": "选择默认"
+  },
+  "onboarding_errorSelectVendorFirst": "Выберите провайдера",
+  "@onboarding_errorSelectVendorFirst": {
+    "description": "选择厂商错误"
+  },
+  "onboarding_errorEnterApiKey": "Введите API ключ",
+  "@onboarding_errorEnterApiKey": {
+    "description": "输入密钥错误"
+  },
+  "onboarding_errorEnterVendorName": "Введите название",
+  "@onboarding_errorEnterVendorName": {
+    "description": "输入厂商错误"
+  },
+  "onboarding_errorEnterApiUrl": "Введите API адрес",
+  "@onboarding_errorEnterApiUrl": {
+    "description": "输入地址错误"
+  },
+  "onboarding_errorAddModel": "Добавьте хотя бы одну модель",
+  "@onboarding_errorAddModel": {
+    "description": "添加模型错误"
+  },
+  "onboarding_connectionSuccess": "Подключено",
+  "@onboarding_connectionSuccess": {
+    "description": "连接成功"
+  },
+  "onboarding_connectionFailed": "Ошибка подключения, проверьте ключ и сеть",
+  "@onboarding_connectionFailed": {
+    "description": "连接失败"
+  },
+  "onboarding_testException": "Ошибка: {error}",
+  "@onboarding_testException": {
+    "description": "测试异常"
+  },
+  "onboarding_saveConfigFailed": "Ошибка сохранения: {error}",
+  "@onboarding_saveConfigFailed": {
+    "description": "保存失败"
+  },
+  "onboarding_configSuccess": "Настроено!",
+  "@onboarding_configSuccess": {
+    "description": "配置成功"
+  },
+  "onboarding_configSuccessSubtitle": "Теперь вы можете использовать ИИ",
+  "@onboarding_configSuccessSubtitle": {
+    "description": "配置成功副标题"
+  },
+  "onboarding_configIncomplete": "Настройка не завершена",
+  "@onboarding_configIncomplete": {
+    "description": "配置未完成"
+  },
+  "onboarding_configIncompleteSubtitle": "Вы не завершили настройку ИИ. Вернитесь и завершите.",
+  "@onboarding_configIncompleteSubtitle": {
+    "description": "未完成副标题"
+  },
+  "onboarding_infoTip": "Совет",
+  "@onboarding_infoTip": {
+    "description": "提示"
+  },
+  "onboarding_swipedToCompleteWarning": "Вы перешли на страницу завершения, но конфигурация не сохранена. Вернитесь и завершите настройку.",
+  "@onboarding_swipedToCompleteWarning": {
+    "description": "滑动警告"
+  },
+  "onboarding_nextStepTitle": "Следующие шаги",
+  "@onboarding_nextStepTitle": {
+    "description": "下一步标题"
+  },
+  "onboarding_nextStep1": "Создайте заметку и попробуйте ИИ-резюме",
+  "@onboarding_nextStep1": {
+    "description": "下一步1"
+  },
+  "onboarding_nextStep2": "Используйте извлечение ключевых слов",
+  "@onboarding_nextStep2": {
+    "description": "下一步2"
+  },
+  "onboarding_nextStep3": "Позвольте ИИ автоматически классифицировать заметки",
+  "@onboarding_nextStep3": {
+    "description": "下一步3"
+  },
+  "onboarding_startUsing": "Начать",
+  "@onboarding_startUsing": {
+    "description": "开始使用"
+  },
+  "onboarding_returnToConfig": "Вернуться",
+  "@onboarding_returnToConfig": {
+    "description": "返回配置"
+  },
+  "toolbar_bold": "Жирный",
+  "@toolbar_bold": {
+    "description": "加粗"
+  },
+  "toolbar_italic": "Курсив",
+  "@toolbar_italic": {
+    "description": "斜体"
+  },
+  "toolbar_strikethrough": "Зачёркнутый",
+  "@toolbar_strikethrough": {
+    "description": "删除线"
+  },
+  "toolbar_heading1": "H1",
+  "@toolbar_heading1": {
+    "description": "H1"
+  },
+  "toolbar_heading2": "H2",
+  "@toolbar_heading2": {
+    "description": "H2"
+  },
+  "toolbar_heading3": "H3",
+  "@toolbar_heading3": {
+    "description": "H3"
+  },
+  "toolbar_code": "Код",
+  "@toolbar_code": {
+    "description": "代码"
+  },
+  "toolbar_quote": "Цитата",
+  "@toolbar_quote": {
+    "description": "引用"
+  },
+  "toolbar_list": "Список",
+  "@toolbar_list": {
+    "description": "列表"
+  },
+  "toolbar_numberedList": "Нумерация",
+  "@toolbar_numberedList": {
+    "description": "编号"
+  },
+  "toolbar_todo": "Задача",
+  "@toolbar_todo": {
+    "description": "待办"
+  },
+  "toolbar_link": "Ссылка",
+  "@toolbar_link": {
+    "description": "链接"
+  },
+  "toolbar_image": "Изображение",
+  "@toolbar_image": {
+    "description": "图片"
+  },
+  "toolbar_divider": "Разделитель",
+  "@toolbar_divider": {
+    "description": "分割线"
+  },
+  "toolbar_table": "Таблица",
+  "@toolbar_table": {
+    "description": "表格"
+  },
+  "toolbar_tableHeader": "Кол 1 | Кол 2 | Кол 3",
+  "@toolbar_tableHeader": {
+    "description": "表格模板头"
+  },
+  "toolbar_tableContent": "Содержимое",
+  "@toolbar_tableContent": {
+    "description": "表格内容"
+  },
+  "format_unavailable": "Недоступно",
+  "@format_unavailable": {
+    "description": "暂不可用"
+  },
+  "empty_noNotesTitle": "Заметок пока нет",
+  "@empty_noNotesTitle": {
+    "description": "无笔记标题"
+  },
+  "empty_noNotesDesc": "Нажмите + для создания первой заметки",
+  "@empty_noNotesDesc": {
+    "description": "无笔记描述"
+  },
+  "empty_createNote": "Создать заметку",
+  "@empty_createNote": {
+    "description": "创建笔记"
+  },
+  "empty_noSearchResultsTitle": "Ничего не найдено",
+  "@empty_noSearchResultsTitle": {
+    "description": "无搜索结果"
+  },
+  "empty_noSearchResultsDesc": "Попробуйте другие ключевые слова",
+  "@empty_noSearchResultsDesc": {
+    "description": "无搜索描述"
+  },
+  "empty_clearSearch": "Очистить поиск",
+  "@empty_clearSearch": {
+    "description": "清除搜索"
+  },
+  "empty_noTagsTitle": "Тегов пока нет",
+  "@empty_noTagsTitle": {
+    "description": "无标签标题"
+  },
+  "empty_noTagsDesc": "Теги можно добавить при редактировании",
+  "@empty_noTagsDesc": {
+    "description": "无标签描述"
+  },
+  "empty_noFavoritesTitle": "Избранных заметок нет",
+  "@empty_noFavoritesTitle": {
+    "description": "无收藏标题"
+  },
+  "empty_noFavoritesDesc": "Нажмите звёздочку на карточке заметки",
+  "@empty_noFavoritesDesc": {
+    "description": "无收藏描述"
+  },
+  "empty_browseNotes": "Просмотреть заметки",
+  "@empty_browseNotes": {
+    "description": "浏览笔记"
+  },
+  "empty_retry": "Повторить",
+  "@empty_retry": {
+    "description": "重试"
+  },
+  "empty_networkErrorTitle": "Ошибка сети",
+  "@empty_networkErrorTitle": {
+    "description": "网络错误"
+  },
+  "empty_networkErrorDesc": "Проверьте соединение",
+  "@empty_networkErrorDesc": {
+    "description": "网络错误描述"
+  },
+  "empty_aiServiceErrorTitle": "ИИ-сервис временно недоступен",
+  "@empty_aiServiceErrorTitle": {
+    "description": "AI服务错误"
+  },
+  "empty_aiServiceErrorDesc": "Попробуйте позже",
+  "@empty_aiServiceErrorDesc": {
+    "description": "AI错误描述"
+  },
+  "navigation_menu": "Меню",
+  "@navigation_menu": {
+    "description": "菜单"
+  },
+  "navigation_search": "Поиск...",
+  "@navigation_search": {
+    "description": "搜索框占位"
+  },
+  "update_newVersionFound": "Доступна новая версия",
+  "@update_newVersionFound": {
+    "description": "发现新版本"
+  },
+  "update_skipThisVersion": "Пропустить",
+  "@update_skipThisVersion": {
+    "description": "跳过版本"
+  },
+  "update_remindLater": "Напомнить позже",
+  "@update_remindLater": {
+    "description": "稍后提醒"
+  },
+  "update_update": "Обновить",
+  "@update_update": {
+    "description": "更新"
+  },
+  "preferences_versionNumber": "Версия",
+  "@preferences_versionNumber": {
+    "description": "版本号"
+  },
+  "preferences_platform": "Платформа",
+  "@preferences_platform": {
+    "description": "平台"
+  },
+  "preferences_buildNumber": "Сборка",
+  "@preferences_buildNumber": {
+    "description": "构建号"
+  },
+  "preferences_autoCheckUpdate": "Автопроверка обновлений",
+  "@preferences_autoCheckUpdate": {
+    "description": "自动检查更新"
+  },
+  "preferences_checking": "Проверка...",
+  "@preferences_checking": {
+    "description": "检查中"
+  },
+  "preferences_latestVersion": "Последняя версия",
+  "@preferences_latestVersion": {
+    "description": "最新版本"
+  },
+  "preferences_checkFailedRetry": "Ошибка, повторить",
+  "@preferences_checkFailedRetry": {
+    "description": "检查失败"
+  },
+  "preferences_checkForUpdate": "Проверить обновления",
+  "@preferences_checkForUpdate": {
+    "description": "检查更新"
+  },
+  "preferences_newVersionFound": "Найдена версия v{version}",
+  "@preferences_newVersionFound": {
+    "description": "发现新版本"
+  },
+  "preferences_downloadingUpdate": "Загрузка обновления",
+  "@preferences_downloadingUpdate": {
+    "description": "下载中"
+  },
+  "preferences_downloadComplete": "Загрузка завершена",
+  "@preferences_downloadComplete": {
+    "description": "下载完成"
+  },
+  "preferences_installPrompt": "Установщик открыт, следуйте инструкциям",
+  "@preferences_installPrompt": {
+    "description": "安装提示"
+  },
+  "preferences_skippedVersions": "Пропущенные версии",
+  "@preferences_skippedVersions": {
+    "description": "跳过版本"
+  },
+  "preferences_language": "Язык",
+  "@preferences_language": {
+    "description": "语言"
+  },
+  "preferences_languageZhCN": "简体中文",
+  "@preferences_languageZhCN": {
+    "description": "简体中文"
+  },
+  "preferences_languageZhTW": "繁體中文",
+  "@preferences_languageZhTW": {
+    "description": "繁体中文"
+  },
+  "preferences_languageEn": "English",
+  "@preferences_languageEn": {
+    "description": "英文"
+  },
+  "preferences_languageRu": "Русский",
+  "@preferences_languageRu": {
+    "description": "俄语"
+  },
+  "preferences_languageRestartHint": "Перезапустите приложение для применения",
+  "@preferences_languageRestartHint": {
+    "description": "重启提示"
+  },
+  "kb_preparingService": "Подготовка сервиса...",
+  "@kb_preparingService": {
+    "description": "准备服务"
+  },
+  "kb_startingService": "Запуск сервиса...",
+  "@kb_startingService": {
+    "description": "启动服务"
+  },
+  "kb_initializingVectorService": "Инициализация векторного сервиса...",
+  "@kb_initializingVectorService": {
+    "description": "初始化向量"
+  },
+  "kb_serviceStartupFailed": "Ошибка запуска",
+  "@kb_serviceStartupFailed": {
+    "description": "启动失败"
+  },
+  "kb_knowledgeBaseReady": "База знаний готова",
+  "@kb_knowledgeBaseReady": {
+    "description": "已就绪"
+  },
+  "kb_knowledgeBaseNotEnabled": "База знаний отключена",
+  "@kb_knowledgeBaseNotEnabled": {
+    "description": "未启用"
+  },
+  "kb_serviceRunning": "Сервис работает",
+  "@kb_serviceRunning": {
+    "description": "运行中"
+  },
+  "kb_localModelLoaded": "Модель загружена",
+  "@kb_localModelLoaded": {
+    "description": "模型已加载"
+  },
+  "kb_enableKnowledgeBaseVectorization": "Включите для векторизации заметок",
+  "@kb_enableKnowledgeBaseVectorization": {
+    "description": "向量化说明"
+  },
+  "kb_enableToggle": "Вкл/Выкл",
+  "@kb_enableToggle": {
+    "description": "启用开关"
+  },
+  "kb_enableKnowledgeBase": "Включить базу знаний",
+  "@kb_enableKnowledgeBase": {
+    "description": "启用知识库"
+  },
+  "kb_autoVectorIndexing": "Заметки будут автоматически векторизованы",
+  "@kb_autoVectorIndexing": {
+    "description": "自动索引说明"
+  },
+  "kb_embeddingModel": "Embedding модель",
+  "@kb_embeddingModel": {
+    "description": "Embedding模型"
+  },
+  "kb_model": "Модель",
+  "@kb_model": {
+    "description": "模型"
+  },
+  "kb_vectorDimensions": "Размерность",
+  "@kb_vectorDimensions": {
+    "description": "向量维度"
+  },
+  "kb_downloadSource": "Источник",
+  "@kb_downloadSource": {
+    "description": "下载源"
+  },
+  "kb_modelscope": "ModelScope (modelscope.cn)",
+  "@kb_modelscope": {
+    "description": "魔搭社区"
+  },
+  "kb_modelVersion": "Версия:",
+  "@kb_modelVersion": {
+    "description": "模型版本"
+  },
+  "kb_highestPrecision": "~617MB · Макс. точность",
+  "@kb_highestPrecision": {
+    "description": "精度最高"
+  },
+  "kb_balancedRecommended": "~309MB · Баланс",
+  "@kb_balancedRecommended": {
+    "description": "平衡推荐"
+  },
+  "kb_lightweightMode": "~197MB · Лёгкий",
+  "@kb_lightweightMode": {
+    "description": "轻量模式"
+  },
+  "kb_status": "Статус",
+  "@kb_status": {
+    "description": "状态"
+  },
+  "kb_downloaded": "Загружено",
+  "@kb_downloaded": {
+    "description": "已下载"
+  },
+  "kb_notDownloaded": "Не загружено",
+  "@kb_notDownloaded": {
+    "description": "未下载"
+  },
+  "kb_path": "Путь",
+  "@kb_path": {
+    "description": "路径"
+  },
+  "kb_error": "Ошибка: {error}",
+  "@kb_error": {
+    "description": "错误"
+  },
+  "kb_verifyingFile": "Проверка файла...",
+  "@kb_verifyingFile": {
+    "description": "校验中"
+  },
+  "kb_downloading": "Загрузка... {progress}%",
+  "@kb_downloading": {
+    "description": "下载中"
+  },
+  "kb_downloadModel": "Скачать модель",
+  "@kb_downloadModel": {
+    "description": "下载模型"
+  },
+  "kb_selectLocalPath": "Выбрать путь",
+  "@kb_selectLocalPath": {
+    "description": "选择路径"
+  },
+  "kb_indexSettings": "Настройки индекса",
+  "@kb_indexSettings": {
+    "description": "索引设置"
+  },
+  "kb_chunkSize": "Размер блока",
+  "@kb_chunkSize": {
+    "description": "分块大小"
+  },
+  "kb_chunkOverlap": "Перекрытие",
+  "@kb_chunkOverlap": {
+    "description": "分块重叠"
+  },
+  "kb_cacheSize": "Кэш",
+  "@kb_cacheSize": {
+    "description": "缓存大小"
+  },
+  "kb_indexStats": "Статистика",
+  "@kb_indexStats": {
+    "description": "索引统计"
+  },
+  "kb_preparingPythonService": "Подготовка вектор сервиса...",
+  "@kb_preparingPythonService": {
+    "description": "准备Python"
+  },
+  "kb_startingPythonService": "Запуск вектор сервиса...",
+  "@kb_startingPythonService": {
+    "description": "启动Python"
+  },
+  "kb_knowledgeBaseNotEnabledPrompt": "База знаний отключена, включите её выше",
+  "@kb_knowledgeBaseNotEnabledPrompt": {
+    "description": "未启用提示"
+  },
+  "kb_indexedNotes": "Индексировано",
+  "@kb_indexedNotes": {
+    "description": "已索引"
+  },
+  "kb_totalVectors": "Векторов",
+  "@kb_totalVectors": {
+    "description": "总向量"
+  },
+  "kb_lastUpdate": "Последнее обновление",
+  "@kb_lastUpdate": {
+    "description": "最后更新"
+  },
+  "kb_notIndexed": "Не индексировано",
+  "@kb_notIndexed": {
+    "description": "未索引"
+  },
+  "kb_indexingProgress": "Индексация {progress}/{total} заметок...",
+  "@kb_indexingProgress": {
+    "description": "索引进度"
+  },
+  "kb_indexFailedAll": "Ошибка: все {count} заметок не проиндексированы",
+  "@kb_indexFailedAll": {
+    "description": "索引失败"
+  },
+  "kb_indexCompleteWithFailures": "Завершено: {success} успешно, {failed} ошибок",
+  "@kb_indexCompleteWithFailures": {
+    "description": "部分失败"
+  },
+  "kb_indexComplete": "Завершено: {count} успешно",
+  "@kb_indexComplete": {
+    "description": "索引完成"
+  },
+  "kb_collapseErrorDetails": "Скрыть ошибки",
+  "@kb_collapseErrorDetails": {
+    "description": "收起错误"
+  },
+  "kb_viewErrorDetails": "Ошибки ({count})",
+  "@kb_viewErrorDetails": {
+    "description": "查看错误"
+  },
+  "kb_unindexedNotesPrompt": "{count} заметок не индексировано, нажмите \"Перестроить\"",
+  "@kb_unindexedNotesPrompt": {
+    "description": "未索引提示"
+  },
+  "kb_rebuildIndex": "Перестроить",
+  "@kb_rebuildIndex": {
+    "description": "重建索引"
+  },
+  "kb_clearIndex": "Очистить",
+  "@kb_clearIndex": {
+    "description": "清空索引"
+  },
+  "kb_confirmClearIndex": "Подтвердить очистку",
+  "@kb_confirmClearIndex": {
+    "description": "清空索引确认"
+  },
+  "kb_confirmClearIndexContent": "Все заметки будут переиндексированы. Продолжить?",
+  "@kb_confirmClearIndexContent": {
+    "description": "清空内容"
+  },
+  "kb_confirmRebuildIndex": "Подтвердить перестройку",
+  "@kb_confirmRebuildIndex": {
+    "description": "重建索引确认"
+  },
+  "kb_confirmRebuildIndexContent": "{count} заметок будет векторизовано.\nЭто может занять несколько минут.",
+  "@kb_confirmRebuildIndexContent": {
+    "description": "重建内容"
+  },
+  "kb_startRebuild": "Начать",
+  "@kb_startRebuild": {
+    "description": "开始重建"
+  },
+  "kb_rebuildFailed": "Ошибка перестройки",
+  "@kb_rebuildFailed": {
+    "description": "重建失败"
+  },
+  "kb_rebuildFailedPythonService": "вектор сервис не запустился, проверьте настройки",
+  "@kb_rebuildFailedPythonService": {
+    "description": "Python启动失败"
+  },
+  "kb_rebuildFailedNotReady": "База знаний не готова, скачайте модель и включите её",
+  "@kb_rebuildFailedNotReady": {
+    "description": "未就绪"
+  },
+  "kb_rebuildFailedHealthCheck": "вектор сервис не работает, попробуйте позже",
+  "@kb_rebuildFailedHealthCheck": {
+    "description": "健康检查失败"
+  },
+  "assistant_memoryCapability": "Память",
+  "@assistant_memoryCapability": {
+    "description": "记忆能力"
+  },
+  "assistant_aiModelSelection": "Выбор ИИ-модели",
+  "@assistant_aiModelSelection": {
+    "description": "AI模型选择"
+  },
+  "assistant_memoryInjectionControl": "Управление памятью",
+  "@assistant_memoryInjectionControl": {
+    "description": "记忆注入"
+  },
+  "assistant_clearMemory": "Очистить память",
+  "@assistant_clearMemory": {
+    "description": "清空记忆"
+  },
+  "assistant_roleControl": "Роль",
+  "@assistant_roleControl": {
+    "description": "角色控制"
+  },
+  "assistant_enableLongTermMemory": "Включить долгосрочную память",
+  "@assistant_enableLongTermMemory": {
+    "description": "启用长期记忆"
+  },
+  "assistant_memoryDisabledHint": "Запись и использование памяти будет остановлена",
+  "@assistant_memoryDisabledHint": {
+    "description": "禁用提示"
+  },
+  "assistant_configureAIModelFirst": "Настройте ИИ-модель",
+  "@assistant_configureAIModelFirst": {
+    "description": "配置模型提示"
+  },
+  "assistant_configureAIModelsFirst": "Настройте модели в \"ИИ-сервис\"",
+  "@assistant_configureAIModelsFirst": {
+    "description": "配置模型提示2"
+  },
+  "assistant_noAvailableModels": "Нет доступных моделей",
+  "@assistant_noAvailableModels": {
+    "description": "无模型"
+  },
+  "assistant_availableModelsCount": "{count} моделей доступно",
+  "@assistant_availableModelsCount": {
+    "description": "可用模型"
+  },
+  "assistant_profileMemory": "Профиль пользователя",
+  "@assistant_profileMemory": {
+    "description": "档案记忆"
+  },
+  "assistant_profileMemorySubtitle": "Имя, профессия, предпочтения",
+  "@assistant_profileMemorySubtitle": {
+    "description": "档案副标题"
+  },
+  "assistant_factPreferenceMemory": "Факты и предпочтения",
+  "@assistant_factPreferenceMemory": {
+    "description": "事实偏好"
+  },
+  "assistant_factPreferenceSubtitle": "Привычки, предпочтения",
+  "@assistant_factPreferenceSubtitle": {
+    "description": "事实副标题"
+  },
+  "assistant_experienceSummaryMemory": "Опыт",
+  "@assistant_experienceSummaryMemory": {
+    "description": "经验总结"
+  },
+  "assistant_experienceSummarySubtitle": "Стратегии, шаблоны",
+  "@assistant_experienceSummarySubtitle": {
+    "description": "经验副标题"
+  },
+  "assistant_clearProfileMemory": "Очистить профиль ({count})",
+  "@assistant_clearProfileMemory": {
+    "description": "清空档案"
+  },
+  "assistant_clearFactMemory": "Очистить факты ({count})",
+  "@assistant_clearFactMemory": {
+    "description": "清空事实"
+  },
+  "assistant_clearExperienceMemory": "Очистить опыт ({count})",
+  "@assistant_clearExperienceMemory": {
+    "description": "清空经验"
+  },
+  "assistant_clearAllMemory": "Очистить всё ({count})",
+  "@assistant_clearAllMemory": {
+    "description": "清空全部"
+  },
+  "assistant_roleCustomizationInDevelopment": "Настройка роли скоро",
+  "@assistant_roleCustomizationInDevelopment": {
+    "description": "角色自定义开发中"
+  },
+  "assistant_confirmClearMemoryContent": "Очистить {typeName}? Это нельзя отменить.",
+  "@assistant_confirmClearMemoryContent": {
+    "description": "清空记忆确认"
+  },
+  "assistant_clearedMemory": "{typeName} очищено",
+  "@assistant_clearedMemory": {
+    "description": "已清空"
+  },
+  "assistant_confirmClearAllMemoryContent": "Очистить всю память? Это нельзя отменить.",
+  "@assistant_confirmClearAllMemoryContent": {
+    "description": "清空全部确认"
+  },
+  "assistant_clearedAllMemory": "Вся память очищена",
+  "@assistant_clearedAllMemory": {
+    "description": "已清空全部"
+  },
+  "assistant_clearAll": "Очистить всё",
+  "@assistant_clearAll": {
+    "description": "清空全部"
+  },
+  "cli_checkingEnv": "Проверка среды...",
+  "@cli_checkingEnv": {
+    "description": "检查环境"
+  },
+  "cli_envNotMet": "Требования не выполнены",
+  "@cli_envNotMet": {
+    "description": "环境不满足"
+  },
+  "cli_installingCLI": "Установка CLI...",
+  "@cli_installingCLI": {
+    "description": "安装CLI"
+  },
+  "cli_installSuccess": "Установка успешна",
+  "@cli_installSuccess": {
+    "description": "安装成功"
+  },
+  "cli_installFailed": "Ошибка установки",
+  "@cli_installFailed": {
+    "description": "安装失败"
+  },
+  "cli_executingPipInstall": "Выполняется: pip install open-note-cli --upgrade",
+  "@cli_executingPipInstall": {
+    "description": "pip安装"
+  },
+  "cli_installingPleaseWait": "Установка, подождите...",
+  "@cli_installingPleaseWait": {
+    "description": "安装中"
+  },
+  "cli_cliInstalledSuccessfully": "CLI установлен!",
+  "@cli_cliInstalledSuccessfully": {
+    "description": "安装成功消息"
+  },
+  "cli_installComplete": "Установка завершена",
+  "@cli_installComplete": {
+    "description": "安装完成"
+  },
+  "cli_usageMethod": "Использование: opennote --help",
+  "@cli_usageMethod": {
+    "description": "使用方法"
+  },
+  "cli_fallbackInstallMethod": "Альтернативный метод:",
+  "@cli_fallbackInstallMethod": {
+    "description": "降级安装"
+  },
+  "cli_recheck": "Проверить снова",
+  "@cli_recheck": {
+    "description": "重新检查"
+  },
+  "splash_startFailed": "Ошибка запуска",
+  "@splash_startFailed": {
+    "description": "启动失败"
+  },
+  "preferences_followSystem": "Как в системе",
+  "@preferences_followSystem": {
+    "description": "Follow system option"
+  },
+  "home_newNote": "Новая заметка",
+  "@home_newNote": {
+    "description": "New note button tooltip"
+  },
+  "settings_modelCount": "моделей",
+  "@settings_modelCount": {
+    "description": "settings_modelCount"
+  },
+  "common_notConfigured": "Не настроено",
+  "@common_notConfigured": {
+    "description": "common_notConfigured"
+  },
+  "settings_defaultModel": "Модель по умолчанию",
+  "@settings_defaultModel": {
+    "description": "settings_defaultModel"
+  },
+  "settings_autoFollowSystemTheme": "Автоматически следовать системной теме",
+  "@settings_autoFollowSystemTheme": {
+    "description": "settings_autoFollowSystemTheme"
+  },
+  "settings_alwaysUseLightTheme": "Всегда использовать светлую тему",
+  "@settings_alwaysUseLightTheme": {
+    "description": "settings_alwaysUseLightTheme"
+  },
+  "settings_alwaysUseDarkTheme": "Всегда использовать тёмную тему",
+  "@settings_alwaysUseDarkTheme": {
+    "description": "settings_alwaysUseDarkTheme"
+  },
+  "kb_serviceJustStarted": "Сервис запущен, подготовка...",
+  "@kb_serviceJustStarted": {
+    "description": "kb_serviceJustStarted"
+  },
+  "kb_chromaDbInitializing": "Инициализация ChromaDB...",
+  "@kb_chromaDbInitializing": {
+    "description": "kb_chromaDbInitializing"
+  },
+  "kb_loadingEmbeddingModel": "Загрузка модели...",
+  "@kb_loadingEmbeddingModel": {
+    "description": "kb_loadingEmbeddingModel"
+  },
+  "kb_chromaDbInitFailed": "Ошибка инициализации ChromaDB",
+  "@kb_chromaDbInitFailed": {
+    "description": "kb_chromaDbInitFailed"
+  },
+  "kb_modelLoadFailed": "Ошибка загрузки модели",
+  "@kb_modelLoadFailed": {
+    "description": "kb_modelLoadFailed"
+  },
+  "kb_serviceInitError": "Ошибка инициализации",
+  "@kb_serviceInitError": {
+    "description": "kb_serviceInitError"
+  },
+  "kb_vectorServiceNotRunning": "Векторный сервис не запущен",
+  "@kb_vectorServiceNotRunning": {
+    "description": "kb_vectorServiceNotRunning"
+  },
+  "kb_serviceNotStarted": "Сервис не запущен",
+  "@kb_serviceNotStarted": {
+    "description": "kb_serviceNotStarted"
+  },
+  "kb_cannotFetchStatus": "Не удалось получить статус",
+  "@kb_cannotFetchStatus": {
+    "description": "kb_cannotFetchStatus"
+  },
+  "kb_serviceConnectionFailed": "Ошибка подключения",
+  "@kb_serviceConnectionFailed": {
+    "description": "kb_serviceConnectionFailed"
+  },
+  "kb_vectorServicePrepareFailed": "Ошибка подготовки сервиса",
+  "@kb_vectorServicePrepareFailed": {
+    "description": "kb_vectorServicePrepareFailed"
+  },
+  "kb_vectorServicePrepareError": "Ошибка подготовки",
+  "@kb_vectorServicePrepareError": {
+    "description": "kb_vectorServicePrepareError"
+  },
+  "kb_vectorServiceStartFailed": "Ошибка запуска сервиса",
+  "@kb_vectorServiceStartFailed": {
+    "description": "kb_vectorServiceStartFailed"
+  },
+  "kb_vectorServiceError": "Ошибка сервиса",
+  "@kb_vectorServiceError": {
+    "description": "kb_vectorServiceError"
+  },
+  "kb_serviceAlreadyRunning": "Сервис уже запущен",
+  "@kb_serviceAlreadyRunning": {
+    "description": "kb_serviceAlreadyRunning"
+  },
+  "kb_serviceStarted": "Сервис запущен",
+  "@kb_serviceStarted": {
+    "description": "kb_serviceStarted"
+  },
+  "kb_serviceStartFailedPython": "Ошибка запуска, проверьте Python",
+  "@kb_serviceStartFailedPython": {
+    "description": "kb_serviceStartFailedPython"
+  },
+  "kb_directoryNotExist": "Каталог не существует",
+  "@kb_directoryNotExist": {
+    "description": "kb_directoryNotExist"
+  },
+  "kb_missingModelFile": "Отсутствует файл модели: model.onnx",
+  "@kb_missingModelFile": {
+    "description": "kb_missingModelFile"
+  },
+  "kb_missingTokenizer": "Отсутствует tokenizer.json",
+  "@kb_missingTokenizer": {
+    "description": "kb_missingTokenizer"
+  },
+  "kb_modelFileSizeAbnormal": "Размер файла модели аномальный",
+  "@kb_modelFileSizeAbnormal": {
+    "description": "kb_modelFileSizeAbnormal"
+  },
+  "kb_knowledgeBaseNotReady": "База знаний не готова",
+  "@kb_knowledgeBaseNotReady": {
+    "description": "kb_knowledgeBaseNotReady"
+  },
+  "kb_vectorServiceStartFailedIndex": "Ошибка запуска, индексация невозможна",
+  "@kb_vectorServiceStartFailedIndex": {
+    "description": "kb_vectorServiceStartFailedIndex"
+  },
+  "kb_healthCheckFailed": "Проверка не пройдена",
+  "@kb_healthCheckFailed": {
+    "description": "kb_healthCheckFailed"
+  },
+  "cli_pythonNotInstalled": "Python не найден, установите Python 3.10+",
+  "@cli_pythonNotInstalled": {
+    "description": "cli_pythonNotInstalled"
+  },
+  "cli_pipNotInstalled": "pip не найден, установите pip",
+  "@cli_pipNotInstalled": {
+    "description": "cli_pipNotInstalled"
+  },
+  "cli_installProcessError": "Ошибка установки: ",
+  "@cli_installProcessError": {
+    "description": "cli_installProcessError"
+  },
+  "cli_envInstructionsMac": "Установите Python 3.10+ и pip:\n\nЧерез Homebrew:\n  brew install python3\n\nИли скачайте с https://python.org",
+  "@cli_envInstructionsMac": {
+    "description": "cli_envInstructionsMac"
+  },
+  "cli_envInstructionsWindows": "Установите Python 3.10+:\n\nСкачайте с https://python.org\nОтметьте \"Add Python to PATH\" при установке",
+  "@cli_envInstructionsWindows": {
+    "description": "cli_envInstructionsWindows"
+  },
+  "cli_envInstructionsLinux": "Установите Python 3.10+ и pip:\n\nUbuntu/Debian:\n  sudo apt install python3 python3-pip\n\nFedora:\n  sudo dnf install python3 python3-pip",
+  "@cli_envInstructionsLinux": {
+    "description": "cli_envInstructionsLinux"
+  },
+  "cli_envCheckFailed": "Проверка среды не удалась",
+  "@cli_envCheckFailed": {
+    "description": "cli_envCheckFailed"
+  },
+  "cli_envStatus": "Статус среды",
+  "@cli_envStatus": {
+    "description": "cli_envStatus"
+  },
+  "cli_installCLI": "Установить CLI",
+  "@cli_installCLI": {
+    "description": "cli_installCLI"
+  },
+  "cli_usage": "Использование",
+  "@cli_usage": {
+    "description": "cli_usage"
+  },
+  "cli_cliStatus": "Статус CLI",
+  "@cli_cliStatus": {
+    "description": "cli_cliStatus"
+  },
+  "cli_installed": "Установлено",
+  "@cli_installed": {
+    "description": "cli_installed"
+  },
+  "cli_notInstalled": "Не установлено",
+  "@cli_notInstalled": {
+    "description": "cli_notInstalled"
+  },
+  "cli_notDetected": "Не обнаружено",
+  "@cli_notDetected": {
+    "description": "cli_notDetected"
+  },
+  "cli_installDescription": "Нажмите кнопку для автоматической установки OpenNote CLI",
+  "@cli_installDescription": {
+    "description": "cli_installDescription"
+  },
+  "cli_helpText": "opennote --help              # Показать справку\nopennote note list           # Список заметок\nopennote note search <запрос> # Поиск заметок\nopennote mcp start           # Запуск службы MCP",
+  "@cli_helpText": {
+    "description": "cli_helpText"
+  },
+  "ai_copyMessage": "Копировать",
+  "@ai_copyMessage": {
+    "description": "ai_copyMessage"
+  },
+  "ai_messageCopied": "Скопировано",
+  "@ai_messageCopied": {
+    "description": "ai_messageCopied"
+  },
+  "ai_undoMessage": "Отменить",
+  "@ai_undoMessage": {
+    "description": "ai_undoMessage"
+  },
+  "ai_newSession": "Новая сессия",
+  "@ai_newSession": {
+    "description": "ai_newSession"
+  },
+  "kb_switchModelWarning": "Переключение версии модели очистит векторный индекс. После переключения индекс будет перестроен.",
+  "@kb_switchModelWarning": {
+    "description": "kb_switchModelWarning"
+  }
+}

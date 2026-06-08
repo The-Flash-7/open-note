@@ -1,0 +1,13 @@
+input_directory: lib/l10n
+input_file_pattern: .arb
+output_directory: lib/l10n
+output_file_name: strings.g.dart
+locale_handling: true
+flutter_integration: true
+base_locale: zh
+fallback_strategy: base_locale
+translate_var: t
+enum_name: AppLocale
+translation_class_name: Translations
+flat_map: false
+namespaces: false
