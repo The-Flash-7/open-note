@@ -1,6 +1,7 @@
 // Copyright (c) 2026 litongshuai
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
+import 'dart:ffi';
 import 'dart:io';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -51,17 +52,11 @@ class AppInfo {
   }
 
   String _getArchitecture() {
-    try {
-      final arch = Platform.operatingSystemVersion;
-      if (arch.contains('ARM') ||
-          arch.contains('arm64') ||
-          arch.contains('aarch64')) {
-        return Platform.isMacOS ? 'Apple Silicon' : 'aarch64';
-      }
-      return 'x86_64';
-    } catch (_) {
-      return 'x86_64';
+    final abi = Abi.current().toString();
+    if (abi.contains('arm64') || abi.contains('aarch64')) {
+      return Platform.isMacOS ? 'Apple Silicon' : 'aarch64';
     }
+    return 'x86_64';
   }
 
   String get downloadAssetExtension {

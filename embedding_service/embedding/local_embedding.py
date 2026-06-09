@@ -8,14 +8,6 @@ import os
 import sys
 from typing import List, Optional
 
-# 尝试导入 onnxruntime-genai（优先模式）
-_USE_GENAI = False
-try:
-    import onnxruntime_genai as og
-    _USE_GENAI = True
-except ImportError:
-    pass
-
 
 def get_resource_path(relative_path: str) -> str:
     """获取资源文件路径（支持 PyInstaller 打包）"""
@@ -28,16 +20,10 @@ def get_resource_path(relative_path: str) -> str:
 
 class LocalEmbeddingService:
     def __init__(self):
-        # onnxruntime-genai 模式
-        self.og_model = None
-        self.og_tokenizer = None
-        # 标准 onnxruntime 模式（备用）
         self.ort_session: Optional['ort.InferenceSession'] = None
-        # 官方 HuggingFace tokenizer
         self.hf_tokenizer: Optional['HfTokenizer'] = None
         self.model_path: Optional[str] = None
         self.tokenizer_path: Optional[str] = None
-        self._use_genai: bool = _USE_GENAI
 
     def load_model(self, model_dir: str) -> bool:
         """加载 ONNX 模型和 Tokenizer"""
@@ -46,7 +32,6 @@ class LocalEmbeddingService:
             if not model_file:
                 raise Exception(f"找不到 ONNX 模型文件: {model_dir}")
 
-            # 查找 tokenizer.json
             tokenizer_file = os.path.join(model_dir, "tokenizer.json")
             if not os.path.exists(tokenizer_file):
                 parent_dir = os.path.dirname(model_dir)
@@ -59,45 +44,25 @@ class LocalEmbeddingService:
             self.model_path = model_dir
             self.tokenizer_path = tokenizer_file
 
-            # 优先尝试 onnxruntime-genai
-            if self._use_genai:
-                return self._load_genai_model(model_file, tokenizer_file)
-            else:
-                return self._load_ort_model(model_file, tokenizer_file)
+            return self._load_ort_model(model_file, tokenizer_file)
 
         except Exception as e:
             print(f"EmbeddingService: 模型加载失败: {e}")
             return False
-
-    def _load_genai_model(self, model_file: str, tokenizer_file: str) -> bool:
-        """使用 onnxruntime-genai 加载模型"""
-        try:
-            model_dir = os.path.dirname(model_file)
-            self.og_model = og.Model(model_dir)
-            self.og_tokenizer = og.Tokenizer(self.og_model)
-            # 也加载官方 tokenizer 用于编码
-            self.hf_tokenizer = HfTokenizer.from_file(tokenizer_file)
-            print(f"EmbeddingService: 模型已加载 (genai) {model_file}")
-            return True
-        except Exception as e:
-            print(f"EmbeddingService: genai 模式加载失败，回退到标准模式: {e}")
-            self._use_genai = False
-            return self._load_ort_model(model_file, tokenizer_file)
 
     def _load_ort_model(self, model_file: str, tokenizer_file: str) -> bool:
         """使用标准 onnxruntime 加载模型"""
         try:
             providers = ['CPUExecutionProvider']
             self.ort_session = ort.InferenceSession(model_file, providers=providers)
-            # 使用官方 HuggingFace tokenizer
             self.hf_tokenizer = HfTokenizer.from_file(tokenizer_file)
             print(
-                f"EmbeddingService: 模型已加载 (ort) {model_file}, "
+                f"EmbeddingService: 模型已加载 {model_file}, "
                 f"Tokenizer vocab: {self.hf_tokenizer.get_vocab_size()}"
             )
             return True
         except Exception as e:
-            print(f"EmbeddingService: 标准模式加载失败: {e}")
+            print(f"EmbeddingService: 模型加载失败: {e}")
             return False
 
     def _find_model_file(self, model_dir: str) -> Optional[str]:
@@ -123,52 +88,14 @@ class LocalEmbeddingService:
 
     @property
     def is_model_loaded(self) -> bool:
-        """检查模型是否已加载（支持 genai 和 ort 两种模式）"""
-        return self.og_model is not None or self.ort_session is not None
+        """检查模型是否已加载"""
+        return self.ort_session is not None
 
     def generate_embedding(self, text: str) -> List[float]:
         """生成文本的 embedding 向量"""
-        if self._use_genai and self.og_model is not None:
-            return self._generate_embedding_genai(text)
-        elif self.ort_session is not None:
-            return self._generate_embedding_ort(text)
-        else:
+        if self.ort_session is None:
             raise Exception("模型未加载")
 
-    def _generate_embedding_genai(self, text: str) -> List[float]:
-        """使用 onnxruntime-genai 生成 embedding"""
-        input_ids = self.og_tokenizer.encode(text)
-        params = og.GeneratorParams(self.og_model)
-        params.set_inputs(input_ids)
-        generator = og.Generator(self.og_model, params)
-        generator.compute_logits()
-
-        try:
-            hidden_states = generator.get_output("hidden_states")
-        except Exception:
-            try:
-                hidden_states = generator.get_output("last_hidden_state")
-            except Exception:
-                hidden_states = generator.get_output(self.og_model.output_names[0])
-
-        if hasattr(hidden_states, 'to_numpy'):
-            hidden_states = hidden_states.to_numpy()
-        else:
-            hidden_states = np.array(hidden_states)
-
-        if hidden_states.ndim == 3:
-            embedding = np.mean(hidden_states, axis=1)
-        elif hidden_states.ndim == 2:
-            embedding = hidden_states
-        else:
-            embedding = hidden_states.reshape(1, -1)
-
-        embedding = self._l2_normalize(embedding[0])
-        return embedding.flatten().tolist()
-
-    def _generate_embedding_ort(self, text: str) -> List[float]:
-        """使用标准 onnxruntime 生成 embedding"""
-        # 使用官方 tokenizer 编码
         encoded = self.hf_tokenizer.encode(text)
         input_ids = encoded.ids
         attention_mask = encoded.attention_mask
@@ -210,10 +137,6 @@ class LocalEmbeddingService:
 
     def unload_model(self):
         """卸载模型"""
-        if self.og_model is not None:
-            del self.og_model
-            self.og_model = None
-            self.og_tokenizer = None
         if self.ort_session is not None:
             del self.ort_session
             self.ort_session = None

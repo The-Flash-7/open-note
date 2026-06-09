@@ -1,6 +1,3 @@
-// Copyright (c) 2026 litongshuai
-// SPDX-License-Identifier: MIT OR Apache-2.0
-
 ///
 /// Generated file. Do not edit.
 ///
@@ -1656,6 +1653,12 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 
 	/// cli_pipNotInstalled
 	@override String get cli_pipNotInstalled => 'pip not found, please install pip first';
+
+	/// cli_pythonVersionTooLow
+	@override String get cli_pythonVersionTooLow => 'Python version too low, requires Python 3.10+';
+
+	/// cli_pythonVersionMismatch
+	@override String get cli_pythonVersionMismatch => 'Python version incompatible, open-note-cli requires Python 3.10+, please upgrade Python and retry';
 
 	/// cli_installProcessError
 	@override String get cli_installProcessError => 'Installation error: ';

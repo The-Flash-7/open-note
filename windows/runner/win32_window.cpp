@@ -195,13 +195,22 @@ Win32Window::MessageHandler(HWND hwnd,
       SetWindowPos(hwnd, nullptr, newRectSize->left, newRectSize->top, newWidth,
                    newHeight, SWP_NOZORDER | SWP_NOACTIVATE);
 
+      // Force resize child content after DPI change
+      if (child_content_ != nullptr) {
+        RECT clientRect;
+        GetClientRect(hwnd, &clientRect);
+        MoveWindow(child_content_, 0, 0,
+                   clientRect.right - clientRect.left,
+                   clientRect.bottom - clientRect.top, TRUE);
+      }
+
       return 0;
     }
     case WM_SIZE: {
       RECT rect = GetClientArea();
       if (child_content_ != nullptr) {
-        // Size and position the child window.
-        MoveWindow(child_content_, rect.left, rect.top, rect.right - rect.left,
+        // Position child at (0,0) relative to client area to avoid gaps
+        MoveWindow(child_content_, 0, 0, rect.right - rect.left,
                    rect.bottom - rect.top, TRUE);
       }
       return 0;
@@ -243,7 +252,7 @@ void Win32Window::SetChildContent(HWND content) {
   SetParent(content, window_handle_);
   RECT frame = GetClientArea();
 
-  MoveWindow(content, frame.left, frame.top, frame.right - frame.left,
+  MoveWindow(content, 0, 0, frame.right - frame.left,
              frame.bottom - frame.top, true);
 
   SetFocus(child_content_);

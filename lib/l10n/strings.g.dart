@@ -1,15 +1,12 @@
-// Copyright (c) 2026 litongshuai
-// SPDX-License-Identifier: MIT OR Apache-2.0
-
 /// Generated file. Do not edit.
 ///
 /// Source: lib/l10n
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 4
-/// Strings: 2236 (559 per locale)
+/// Strings: 2240 (560 per locale)
 ///
-/// Built on 2026-06-06 at 07:44 UTC
+/// Built on 2026-06-09 at 06:58 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint, unused_import

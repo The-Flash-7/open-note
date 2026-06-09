@@ -160,6 +160,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
       await _yieldFrame();
       await windowManager.show();
+      if (Platform.isWindows) {
+        await windowManager.setSize(Size(1024, 720));
+        await windowManager.center();
+      }
       await windowManager.focus();
 
       final elapsed = DateTime.now().difference(startTime);

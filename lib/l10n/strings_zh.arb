@@ -2160,6 +2160,14 @@
   "@cli_pipNotInstalled": {
     "description": "cli_pipNotInstalled"
   },
+  "cli_pythonVersionTooLow": "Python 版本过低，需要 Python 3.10+",
+  "@cli_pythonVersionTooLow": {
+    "description": "cli_pythonVersionTooLow"
+  },
+  "cli_pythonVersionMismatch": "Python 版本不兼容，open-note-cli 需要 Python 3.10+，请升级 Python 后重试",
+  "@cli_pythonVersionMismatch": {
+    "description": "cli_pythonVersionMismatch"
+  },
   "cli_installProcessError": "安装过程出错: ",
   "@cli_installProcessError": {
     "description": "cli_installProcessError"

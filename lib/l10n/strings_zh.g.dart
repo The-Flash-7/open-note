@@ -1,6 +1,3 @@
-// Copyright (c) 2026 litongshuai
-// SPDX-License-Identifier: MIT OR Apache-2.0
-
 ///
 /// Generated file. Do not edit.
 ///
@@ -2738,6 +2735,16 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	///
 	/// zh: '未找到 pip，请先安装 pip'
 	String get cli_pipNotInstalled => '未找到 pip，请先安装 pip';
+
+	/// cli_pythonVersionTooLow
+	///
+	/// zh: 'Python 版本过低，需要 Python 3.10+'
+	String get cli_pythonVersionTooLow => 'Python 版本过低，需要 Python 3.10+';
+
+	/// cli_pythonVersionMismatch
+	///
+	/// zh: 'Python 版本不兼容，open-note-cli 需要 Python 3.10+，请升级 Python 后重试'
+	String get cli_pythonVersionMismatch => 'Python 版本不兼容，open-note-cli 需要 Python 3.10+，请升级 Python 后重试';
 
 	/// cli_installProcessError
 	///

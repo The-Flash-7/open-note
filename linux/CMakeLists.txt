@@ -126,3 +126,22 @@ if(NOT CMAKE_BUILD_TYPE MATCHES "Debug")
   install(FILES "${AOT_LIBRARY}" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
     COMPONENT Runtime)
 endif()
+
+# Install the application icon and desktop file
+set(LINUX_ICON_PATH "${CMAKE_SOURCE_DIR}/runner/app_icon.png")
+set(LINUX_DESKTOP_FILE "${CMAKE_SOURCE_DIR}/runner/OpenNote.desktop")
+
+# Install icon to the app's data directory
+install(FILES "${LINUX_ICON_PATH}"
+  DESTINATION "${CMAKE_INSTALL_PREFIX}/data"
+  COMPONENT Runtime)
+
+# Install .desktop file and icon to system locations for desktop integration
+install(FILES "${LINUX_ICON_PATH}"
+  DESTINATION "${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/apps"
+  RENAME "OpenNote.png"
+  COMPONENT Runtime)
+
+install(FILES "${LINUX_DESKTOP_FILE}"
+  DESTINATION "${CMAKE_INSTALL_PREFIX}/share/applications"
+  COMPONENT Runtime)

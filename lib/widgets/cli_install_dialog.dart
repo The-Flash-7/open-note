@@ -62,10 +62,14 @@ class _CLIInstallDialogState extends State<CLIInstallDialog> {
     switch (_errorKey) {
       case 'pythonNotInstalled':
         return t.cli_pythonNotInstalled;
+      case 'pythonVersionTooLow':
+        return t.cli_pythonVersionTooLow;
       case 'pipNotInstalled':
         return t.cli_pipNotInstalled;
       case 'envCheckError':
         return t.cli_envCheckFailed;
+      case 'pythonVersionMismatch':
+        return t.cli_pythonVersionMismatch;
       case 'installProcessError':
         return t.cli_installProcessError;
       default:

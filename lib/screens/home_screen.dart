@@ -15,6 +15,7 @@ import '../models/note_preview.dart';
 import '../providers/background_summary_provider.dart';
 import '../providers/theme_provider.dart';
 import '../providers/settings_provider.dart';
+import '../providers/memory_settings_provider.dart';
 import '../providers/category_provider.dart';
 import '../providers/knowledge_base_provider.dart';
 import '../models/note.dart';
@@ -117,6 +118,10 @@ class _HomeScreenState extends State<HomeScreen> with ClipboardListener {
             return OnboardingGuideWidget(
               onComplete: () {
                 Navigator.pop(dialogCtx);
+                // 同步刷新 MemorySettingsProvider 以识别新配置的 AI 模型
+                context.read<MemorySettingsProvider>().loadAvailableProviders(
+                  settingsProvider.providerConfigs,
+                );
                 _initAppServices(notesProvider, bgProvider);
               },
               onSkip: () async {

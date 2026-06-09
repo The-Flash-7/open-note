@@ -159,9 +159,12 @@ flutter_launcher_icons:
   macos:
     generate: true
     image_path: "assets/images/app_icon.png"
+  windows:
+    generate: true
+    image_path: "assets/images/app_icon.png"
 
 hooks:
   user_defines:
     sqlite3:
-      source: system
-      name: sqlite3
+      source: source
+      path: third_party/sqlite3/sqlite3.c

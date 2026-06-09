@@ -25,7 +25,7 @@ void main() async {
   WindowOptions windowOptions = WindowOptions(
     size: Size(1280, 900),
     minimumSize: Size(1024, 768),
-    center: true,
+    center: !Platform.isWindows,
     backgroundColor: Colors.white,
     titleBarStyle: Platform.isMacOS
         ? TitleBarStyle.hidden

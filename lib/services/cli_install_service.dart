@@ -4,6 +4,9 @@
 import 'dart:io';
 
 class CLIInstallService {
+  static const int _minPythonMajor = 3;
+  static const int _minPythonMinor = 10;
+
   static Future<EnvCheckResult> checkEnvironment() async {
     try {
       final pythonCmd = Platform.isWindows ? 'python' : 'python3';
@@ -14,6 +17,15 @@ class CLIInstallService {
         return EnvCheckResult(available: false, errorKey: 'pythonNotInstalled');
       }
 
+      final versionOutput = pythonResult.stdout.toString().trim();
+      if (!_validatePythonVersion(versionOutput)) {
+        return EnvCheckResult(
+          available: false,
+          errorKey: 'pythonVersionTooLow',
+          pythonVersion: versionOutput,
+        );
+      }
+
       final pipResult = await Process.run(pipCmd, ['--version']);
       if (pipResult.exitCode != 0) {
         return EnvCheckResult(available: false, errorKey: 'pipNotInstalled');
@@ -21,7 +33,7 @@ class CLIInstallService {
 
       return EnvCheckResult(
         available: true,
-        pythonVersion: pythonResult.stdout.toString().trim(),
+        pythonVersion: versionOutput,
         pipVersion: pipResult.stdout.toString().trim(),
       );
     } catch (e) {
@@ -33,11 +45,41 @@ class CLIInstallService {
     }
   }
 
+  static bool _validatePythonVersion(String versionOutput) {
+    try {
+      // 解析类似 "Python 3.9.12" 或 "Python 3.10.4" 的输出
+      final parts = versionOutput.split(' ');
+      if (parts.length < 2) return false;
+
+      final versionStr = parts[1];
+      final versionParts = versionStr.split('.');
+      if (versionParts.length < 2) return false;
+
+      final major = int.tryParse(versionParts[0]);
+      final minor = int.tryParse(versionParts[1]);
+
+      if (major == null || minor == null) return false;
+
+      if (major < _minPythonMajor) return false;
+      if (major == _minPythonMajor && minor < _minPythonMinor) return false;
+
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   static Future<bool> isCLIInstalled() async {
     try {
       final cmd = Platform.isWindows ? 'opennote' : 'opennote';
       final result = await Process.run(cmd, ['--version']);
-      return result.exitCode == 0;
+      if (result.exitCode != 0) return false;
+
+      final output = result.stdout.toString().toLowerCase();
+      // 验证输出包含 CLI 标识，避免误判为桌面应用
+      return output.contains('open-note-cli') ||
+          output.contains('opennote-cli') ||
+          (output.contains('opennote') && !output.contains('opennote.exe'));
     } catch (e) {
       return false;
     }
@@ -53,13 +95,29 @@ class CLIInstallService {
         '--upgrade',
       ]);
 
-      return InstallResult(
-        success: result.exitCode == 0,
-        output: result.stdout.toString(),
-        errorKey: result.exitCode != 0
-            ? result.stderr.toString().replaceAll('\n', '')
-            : null,
-      );
+      final stderr = result.stderr.toString();
+      final exitCode = result.exitCode;
+
+      if (exitCode != 0) {
+        // 检测是否为 Python 版本不匹配错误
+        if (stderr.contains('requires a different Python') ||
+            stderr.contains('requires-python') ||
+            stderr.contains('version')) {
+          return InstallResult(
+            success: false,
+            output: result.stdout.toString(),
+            errorKey: 'pythonVersionMismatch',
+          );
+        }
+
+        return InstallResult(
+          success: false,
+          output: result.stdout.toString(),
+          errorKey: 'installProcessError',
+        );
+      }
+
+      return InstallResult(success: true, output: result.stdout.toString());
     } catch (e) {
       return InstallResult(
         success: false,

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=OpenNote
+Comment=一款跨平台的智能笔记Agent应用
+Exec=OpenNote
+Icon=OpenNote
+Terminal=false
+Type=Application
+Categories=Utility;
+MimeType=text/plain;
