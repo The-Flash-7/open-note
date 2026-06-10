@@ -137,11 +137,14 @@ install(FILES "${LINUX_ICON_PATH}"
   COMPONENT Runtime)
 
 # Install .desktop file and icon to system locations for desktop integration
-install(FILES "${LINUX_ICON_PATH}"
-  DESTINATION "${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/apps"
-  RENAME "OpenNote.png"
-  COMPONENT Runtime)
+# Only install to system directories in non-Debug builds
+if(NOT CMAKE_BUILD_TYPE MATCHES "Debug")
+  install(FILES "${LINUX_ICON_PATH}"
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/apps"
+    RENAME "OpenNote.png"
+    COMPONENT Runtime)
 
-install(FILES "${LINUX_DESKTOP_FILE}"
-  DESTINATION "${CMAKE_INSTALL_PREFIX}/share/applications"
-  COMPONENT Runtime)
+  install(FILES "${LINUX_DESKTOP_FILE}"
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/share/applications"
+    COMPONENT Runtime)
+endif()

@@ -257,8 +257,16 @@ class _KnowledgeBaseTabState extends State<KnowledgeBaseTab>
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.refresh, size: 20),
-                  onPressed: () => provider.refreshEmbeddingServiceStatus(),
+                  icon: provider.isRestartingService
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(Icons.refresh, size: 20),
+                  onPressed: provider.isRestartingService
+                      ? null
+                      : () => provider.restartPythonService(),
                   tooltip: t.common_retry,
                 ),
               ],
@@ -628,7 +636,10 @@ class _KnowledgeBaseTabState extends State<KnowledgeBaseTab>
                 Text(
                   provider.isVerifying
                       ? t.kb_verifyingFile
-                      : '${t.kb_downloading}... ${(config.downloadProgress * 100).toStringAsFixed(1)}%',
+                      : t.kb_downloading(
+                          progress: (config.downloadProgress * 100)
+                              .toStringAsFixed(1),
+                        ),
                   style: TextStyle(
                     fontSize: 12,
                     color: DesignTokens.primary500,

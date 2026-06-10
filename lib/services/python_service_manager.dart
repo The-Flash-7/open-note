@@ -301,12 +301,16 @@ class PythonServiceManager {
       });
 
       // 可选：监听标准输出用于调试
-      _pythonProcess!.stdout.transform(utf8.decoder).listen((data) {
-        debugPrint('PythonService[stdout]: $data');
-      });
-      _pythonProcess!.stderr.transform(utf8.decoder).listen((data) {
-        debugPrint('PythonService[stderr]: $data');
-      });
+      _pythonProcess!.stdout
+          .transform(const Utf8Codec(allowMalformed: true).decoder)
+          .listen((data) {
+            debugPrint('PythonService[stdout]: $data');
+          });
+      _pythonProcess!.stderr
+          .transform(const Utf8Codec(allowMalformed: true).decoder)
+          .listen((data) {
+            debugPrint('PythonService[stderr]: $data');
+          });
 
       // 等待服务就绪
       final ready = await _waitForReady(timeout);
@@ -465,6 +469,31 @@ class PythonServiceManager {
       return false;
     } catch (e) {
       debugPrint('PythonService: 切换模型失败: $e');
+      return false;
+    }
+  }
+
+  /// 请求 Python 服务内部重启（进程不终止，仅重新加载模型和数据库）
+  /// 注意：此方法要求服务进程已在运行，如果未运行请先调用 start()
+  Future<bool> restartService() async {
+    if (!_isRunning) {
+      debugPrint('PythonService: 服务未运行，无法重启');
+      return false;
+    }
+    try {
+      final response = await http
+          .post(Uri.parse('$_baseUrl/api/service/restart'))
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        debugPrint('PythonService: 重启请求已发送，等待服务重新就绪...');
+        // 等待服务重新就绪（重启可能需要更长时间）
+        return await _waitForReady(const Duration(seconds: 60));
+      }
+      debugPrint('PythonService: 重启请求失败 HTTP ${response.statusCode}');
+      return false;
+    } catch (e) {
+      debugPrint('PythonService: 重启服务失败: $e');
       return false;
     }
   }

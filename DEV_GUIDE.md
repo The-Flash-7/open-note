@@ -65,6 +65,11 @@ flutter build linux    # Linux (binary)
 
 ## Embedding 服务打包说明
 
+### Windows下的依赖特别说明
+chromadb>=0.5.0
+hnswlib>=0.8.0
+numpy=1.26.4
+
 ### PyInstaller 打包产物
 
 | 平台 | 产物文件 | 大小 |

@@ -43,6 +43,8 @@ $PYTHON_CMD -m PyInstaller --onefile \
   --add-data "embedding:embedding" \
   --hidden-import numpy \
   --hidden-import onnxruntime \
+  --hidden-import tqdm \
+  --hidden-import hnswlib \
   --hidden-import chromadb \
   --collect-all chromadb \
   main.py || { echo "错误: 打包失败"; exit 1; }

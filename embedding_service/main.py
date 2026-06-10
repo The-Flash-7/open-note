@@ -86,6 +86,38 @@ async def service_identity():
         "app_id": "net.zsdn.opennote"
     }
 
+@app.post("/api/service/restart")
+async def restart_service():
+    """重启服务（重新初始化 ChromaDB 和模型，不终止进程）"""
+    global _service_state, _service_message, _chroma_db_status
+    global _embedding_model_status, _error_detail, _service_start_time
+    
+    print("EmbeddingService: 收到重启请求")
+    
+    # 卸载当前模型
+    try:
+        embedding_svc = get_embedding_service()
+        embedding_svc.unload_model()
+        print("EmbeddingService: 已卸载当前模型")
+    except Exception as e:
+        print(f"EmbeddingService: 卸载模型时异常: {e}")
+    
+    # 重置状态为启动中
+    _service_state = ServiceState.STARTING
+    _service_message = "服务正在重启..."
+    _chroma_db_status = ComponentStatus.PENDING
+    _embedding_model_status = ComponentStatus.PENDING
+    _error_detail = ""
+    _service_start_time = datetime.now()
+    
+    # 后台重新初始化（使用原始启动参数）
+    asyncio.create_task(initialize_services(_model_dir_global, _data_dir_global))
+    
+    return {
+        "status": "restarting",
+        "message": "服务重启已启动，请稍后通过 /api/service/status 检查状态"
+    }
+
 async def initialize_services(model_dir: str | None, data_dir: str):
     """Initialize ChromaDB and model in background after server starts"""
     global _service_state, _service_message, _chroma_db_status
@@ -98,16 +130,23 @@ async def initialize_services(model_dir: str | None, data_dir: str):
     
     try:
         print("EmbeddingService: 正在初始化 ChromaDB...")
+        print(f"EmbeddingService: 数据目录路径: {data_dir}")
+        print(f"EmbeddingService: 数据目录绝对路径: {os.path.abspath(data_dir)}")
         os.makedirs(data_dir, exist_ok=True)
+        print(f"EmbeddingService: 数据目录已创建/存在，可写性: {os.access(data_dir, os.W_OK)}")
         init_chroma(data_dir)
         _chroma_db_status = ComponentStatus.INITIALIZED
         print(f"ChromaDB: 数据目录 {data_dir}")
     except Exception as e:
+        import traceback
         _service_state = ServiceState.ERROR_DB_INIT
         _service_message = "数据库初始化失败"
         _chroma_db_status = ComponentStatus.FAILED
         _error_detail = f"ChromaDB init error: {str(e)}"
         print(f"EmbeddingService: ChromaDB 初始化失败: {e}")
+        print(f"EmbeddingService: 数据目录路径: {data_dir}")
+        print(f"EmbeddingService: 完整堆栈跟踪:")
+        print(traceback.format_exc())
         return
     
     # Phase 2: Load embedding model (if configured)

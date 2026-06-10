@@ -89,6 +89,7 @@ class KnowledgeBaseProvider extends ChangeNotifier {
   // Python 服务初始化状态
   bool _isPreparingService = false;
   bool _isStartingService = false;
+  bool _isRestartingService = false;
   String? _serviceError;
 
   // Embedding 服务详细状态（从 /api/service/status 获取）
@@ -229,6 +230,7 @@ class KnowledgeBaseProvider extends ChangeNotifier {
   // 初始化状态 getters
   bool get isPreparingService => _isPreparingService;
   bool get isStartingService => _isStartingService;
+  bool get isRestartingService => _isRestartingService;
   bool get isServiceInitializing => _isPreparingService || _isStartingService;
   String? get serviceError => _serviceError;
 
@@ -801,6 +803,50 @@ class KnowledgeBaseProvider extends ChangeNotifier {
     _pythonService.stopSync();
     _isPythonServiceRunning = false;
     debugPrint('KnowledgeBase: Python 服务已停止（同步）');
+  }
+
+  /// 智能重启/启动向量服务
+  /// - 如果服务未启动 → 直接启动
+  /// - 如果服务已启动但报错 → 调用 Python 服务的 /api/service/restart 接口
+  Future<void> restartPythonService() async {
+    if (!_config.isEnabled || _config.modelPath.isEmpty) return;
+
+    // 设置重启中状态（UI 显示 loading）
+    _isRestartingService = true;
+    _embeddingServiceErrorDetail = null;
+    notifyListeners();
+
+    try {
+      bool success;
+
+      // 检查服务进程是否已在运行
+      if (!_isPythonServiceRunning) {
+        // 服务未启动 → 直接启动
+        debugPrint('KnowledgeBase: 向量服务未运行，正在启动...');
+        success = await startPythonService(modelPath: _config.modelPath);
+      } else {
+        // 服务已启动但可能处于错误状态 → 调用内部重启接口
+        debugPrint('KnowledgeBase: 向量服务正在运行，请求内部重启...');
+        success = await _pythonService.restartService();
+
+        if (success) {
+          // 重启成功后刷新状态
+          await refreshEmbeddingServiceStatus();
+        }
+      }
+
+      if (!success) {
+        _embeddingServiceState = EmbeddingServiceState.errorGeneral;
+        _embeddingServiceMessage = _tr('serviceStartupFailed', '服务启动失败');
+      }
+    } catch (e) {
+      _embeddingServiceState = EmbeddingServiceState.errorGeneral;
+      _embeddingServiceMessage =
+          '${_tr('serviceConnectionFailed', '服务连接失败')}: $e';
+    } finally {
+      _isRestartingService = false;
+      notifyListeners();
+    }
   }
 
   @override
