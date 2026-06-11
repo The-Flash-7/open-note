@@ -67,11 +67,7 @@ class ReActEngine {
 
     try {
       // 初始化 relevantNotes 为向量预检索结果
-      debugPrint('[ReAct] 用户消息: $userMessage');
       final initialResults = await _vectorStore.search(userMessage, topK: 3);
-      debugPrint(
-        '[ReAct] 向量预检索结果: ${initialResults.length} 条, IDs: ${initialResults.map((r) => r.noteId).join(", ")}',
-      );
       for (final r in initialResults) {
         final note = await OpenNoteTools.getNoteById(r.noteId);
         if (note != null) relevantNotes.add(note);
@@ -89,13 +85,6 @@ class ReActEngine {
         cancellationToken?.throwIfCancelled();
 
         onStepUpdate('thinking', '', '第 ${i + 1} 步推理中...');
-        debugPrint('[ReAct] === 第 ${i + 1} 轮推理 ===');
-        debugPrint(
-          '[ReAct] 当前参考笔记 (${relevantNotes.length}条): ${relevantNotes.map((n) => "${n.id}(${n.title})").join(", ")}',
-        );
-        debugPrint(
-          '[ReAct] 丢弃集合: ${discardSet.isEmpty ? "无" : discardSet.join(", ")}',
-        );
 
         // 1. Reasoning：AI 决定下一步
         final thought = await _generateThought(
@@ -143,8 +132,6 @@ class ReActEngine {
           continue;
         }
 
-        debugPrint('[ReAct] 📞 调用工具: $toolName');
-        debugPrint('[ReAct]    参数: ${jsonEncode(toolArgs)}');
         onStepUpdate('tool_call', toolName, '正在调用...', args: toolArgs);
 
         final toolCall = ToolCall(tool: toolName, args: toolArgs);
@@ -186,17 +173,6 @@ class ReActEngine {
         // 工具执行完成后检查取消，丢弃结果
         cancellationToken?.throwIfCancelled();
 
-        if (success) {
-          debugPrint('[ReAct] ✅ 工具执行成功: $toolName');
-          debugPrint(
-            '[ReAct]    返回笔记: ${result!.referencedNotes.length} 条, IDs: ${result.referencedNotes.map((n) => n.id).join(", ")}',
-          );
-        } else {
-          debugPrint(
-            '[ReAct] ❌ 工具执行失败: $toolName, 原因: ${result?.message ?? "未知错误"}',
-          );
-        }
-
         // 记录步骤
         final step = ReActStep(
           thought: thought['thought'] as String? ?? '',
@@ -209,7 +185,6 @@ class ReActEngine {
         // AI 评价过滤逻辑
         final aiRelevantIds =
             (thought['relevant_note_ids'] as List?)?.cast<String>() ?? [];
-        debugPrint('[ReAct] 📝 AI 选择的笔记IDs: ${jsonEncode(aiRelevantIds)}');
 
         if (result?.referencedNotes.isNotEmpty == true) {
           // 1. 过滤 existing relevantNotes：AI 没选的加入 discardSet
@@ -238,15 +213,7 @@ class ReActEngine {
             }
           }
 
-          debugPrint(
-            '[ReAct] 🔄 笔记过滤: 保留 ${retainedNotes.length} 条, 丢弃 ${relevantNotes.length - retainedNotes.length} 条',
-          );
-          debugPrint('[ReAct] 🔄 新增笔记: ${filteredNewNotes.length} 条');
-
           relevantNotes = retainedNotes;
-          debugPrint(
-            '[ReAct] 🔄 过滤后参考笔记: ${relevantNotes.length} 条, IDs: ${relevantNotes.map((n) => "${n.id}(${n.title})").join(", ")}',
-          );
         }
 
         // 下轮开始前：动态更新参考笔记上下文
@@ -293,7 +260,6 @@ class ReActEngine {
         replyLanguage: null,
       );
     } on OperationCancelledException {
-      debugPrint('[ReAct] 操作已被用户取消');
       return ReActResult(
         steps: steps,
         finalAnswer: '操作已被用户中断',
@@ -483,8 +449,6 @@ class ReActEngine {
       previousSteps: previousSteps,
     );
 
-    debugPrint('[ReAct] >> AI 提示词:\n$prompt');
-
     try {
       // 使用流式调用以获取 thinking 内容
       String thinkingContent = '';
@@ -503,11 +467,8 @@ class ReActEngine {
         }
       }
 
-      debugPrint('[ReAct] << AI 原始响应:\n$responseBuffer');
-
       // 解析 JSON 响应
       final decision = _parseThoughtResponse(responseBuffer);
-      debugPrint('[ReAct] << AI 解析后决策: ${jsonEncode(decision)}');
       return decision;
     } catch (e) {
       debugPrint('生成思考失败: $e');
@@ -638,8 +599,6 @@ $notesContext
 请用简洁、专业、自然的语气回复用户。如果引用了笔记内容，请在回复中适当引用原文片段。如果找不到相关信息，请坦诚告知用户。
 ''';
 
-    debugPrint('[ReAct] >> 最终回答提示词:\n$prompt');
-
     try {
       String response = '';
       await for (final chunk in _aiService.callAIStream(
@@ -651,7 +610,6 @@ $notesContext
           response += chunk.content!;
         }
       }
-      debugPrint('[ReAct] << 最终答案:\n$response');
       return response;
     } on OperationCancelledException {
       debugPrint('[ReAct] 最终回答生成被取消');

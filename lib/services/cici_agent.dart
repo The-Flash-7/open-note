@@ -111,13 +111,6 @@ class CiciAgent {
       return AgentResponse.fromError('AI 服务未配置，请前往设置中配置 AI 提供商');
     }
 
-    debugPrint('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n');
-    debugPrint('=== CiciAgent.chatStream (ReAct) 开始 ===');
-    debugPrint('用户消息: $message');
-    if (currentNote != null) {
-      debugPrint('当前打开的笔记: ${currentNote.id} - ${currentNote.title}');
-    }
-
     try {
       _history.add(ChatMessage.user(message));
       final recentHistory = _buildRecentHistory(_history, maxMessages: 20);
