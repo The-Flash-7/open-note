@@ -201,7 +201,7 @@ class _CiciPanelState extends State<CiciPanel>
 
   void _handleClearedFromRemote() {
     final notesProvider = context.read<NotesProvider>();
-    notesProvider.ciciAgent.clearHistory();
+    notesProvider.ciciAgent?.clearHistory();
     _clearChatState();
   }
 
@@ -242,7 +242,7 @@ class _CiciPanelState extends State<CiciPanel>
 
     // Clear from agent history
     final notesProvider = context.read<NotesProvider>();
-    notesProvider.ciciAgent.clearHistoryFromIndex(lastUserIndex);
+    notesProvider.ciciAgent?.clearHistoryFromIndex(lastUserIndex);
 
     // Restore content to input
     _inputController.text = revokedMessage.content;
@@ -942,7 +942,7 @@ class _CiciPanelState extends State<CiciPanel>
     await _persistenceService.clearAllMessages();
 
     // 清空 Agent 的内存历史
-    agent.clearHistory();
+    agent?.clearHistory();
 
     if (mounted) {
       _clearChatState();
@@ -952,13 +952,38 @@ class _CiciPanelState extends State<CiciPanel>
   Future<void> _handleUserMessage(String message) async {
     if (message.trim().isEmpty || _isProcessing) return;
 
+    final notesProvider = context.read<NotesProvider>();
+
+    // 检查 AI 服务是否已配置
+    if (!notesProvider.hasAIConfig) {
+      setState(() {
+        _normalMessages.add(
+          ChatMessage.system(_t?.empty_aiServiceErrorTitle ?? 'AI 服务暂时不可用'),
+        );
+        _normalMessages.add(
+          ChatMessage.assistant(_t?.empty_aiServiceErrorDesc ?? '请稍后重试或检查AI配置'),
+        );
+      });
+      return;
+    }
+
     _isReactInProgress = true;
 
     // 重置 CancellationToken
     _cancellationToken = CancellationToken();
 
-    final notesProvider = context.read<NotesProvider>();
     final agent = notesProvider.ciciAgent;
+    if (agent == null) {
+      setState(() {
+        _normalMessages.add(
+          ChatMessage.system(_t?.empty_aiServiceErrorTitle ?? 'AI 服务暂时不可用'),
+        );
+        _normalMessages.add(
+          ChatMessage.assistant(_t?.empty_aiServiceErrorDesc ?? '请稍后重试或检查AI配置'),
+        );
+      });
+      return;
+    }
 
     // 首次对话时同步历史消息到 Agent（仅此一次）
     if (!_historySyncedToAgent) {
@@ -1305,7 +1330,7 @@ class _CiciPanelState extends State<CiciPanel>
             );
             _normalMessages[_currentToolLogIndex] = updatedMsg;
             final notesProvider = context.read<NotesProvider>();
-            notesProvider.ciciAgent.saveMessageToPersistence(updatedMsg);
+            notesProvider.ciciAgent?.saveMessageToPersistence(updatedMsg);
           }
         } else {
           // _currentToolLogIndex == -1，创建新消息并固化
@@ -1314,7 +1339,7 @@ class _CiciPanelState extends State<CiciPanel>
           ).copyWith(isFrozen: true);
           _normalMessages.add(toolMsg);
           final notesProvider = context.read<NotesProvider>();
-          notesProvider.ciciAgent.saveMessageToPersistence(toolMsg);
+          notesProvider.ciciAgent?.saveMessageToPersistence(toolMsg);
         }
 
         _currentToolLogIndex = -1;
@@ -1351,9 +1376,9 @@ class _CiciPanelState extends State<CiciPanel>
 
     // 同步中断消息和工具日志到历史记录
     final notesProvider = context.read<NotesProvider>();
-    notesProvider.ciciAgent.addSystemMessage('操作已被用户中断');
+    notesProvider.ciciAgent?.addSystemMessage('操作已被用户中断');
     if (_toolLogEntries.isNotEmpty) {
-      notesProvider.ciciAgent.addToolExecution(List.from(_toolLogEntries));
+      notesProvider.ciciAgent?.addToolExecution(List.from(_toolLogEntries));
     }
 
     // 重置 token 供下次使用

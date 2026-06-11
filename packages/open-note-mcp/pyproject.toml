@@ -1,6 +1,6 @@
 [project]
 name = "open-note-mcp"
-version = "0.3.1"
+version = "0.3.2"
 description = "OpenNote MCP Server - Model Context Protocol 服务"
 readme = "README.md"
 license = {text = "MIT OR Apache-2.0"}
@@ -10,7 +10,7 @@ authors = [
 ]
 urls = {Homepage = "https://github.com/The-Flash-7/open-note"}
 dependencies = [
-    "open-note-core>=0.3.1",
+    "open-note-core>=0.3.2",
     "mcp>=1.0.0",
 ]
 

@@ -37,7 +37,7 @@ def version_check_callback(
 ):
     """每次执行命令前检查版本更新"""
     if version:
-        print(f"opennote {__version__}")
+        print(f"open-note-cli {__version__}")
         raise typer.Exit()
     
     try:

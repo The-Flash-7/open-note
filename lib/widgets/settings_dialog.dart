@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../l10n/strings.g.dart';
 import '../providers/settings_provider.dart';
+import '../providers/memory_settings_provider.dart';
 import '../providers/theme_provider.dart';
 import '../models/ai_provider_config.dart';
 import '../utils/ai_provider_templates.dart';
@@ -1321,6 +1322,10 @@ class _SettingsDialogState extends State<SettingsDialog> {
                           true,
                         );
                         if (!ctx.mounted) return;
+                        // 同步刷新 MemorySettingsProvider 的可用模型列表
+                        ctx
+                            .read<MemorySettingsProvider>()
+                            .loadAvailableProviders(provider.providerConfigs);
                         Navigator.pop(ctx);
                       },
                 child: testing
@@ -1488,6 +1493,10 @@ class _SettingsDialogState extends State<SettingsDialog> {
 
                         await provider.updateProvider(config);
                         if (!ctx.mounted) return;
+                        // 同步刷新 MemorySettingsProvider 的可用模型列表
+                        ctx
+                            .read<MemorySettingsProvider>()
+                            .loadAvailableProviders(provider.providerConfigs);
                         Navigator.pop(ctx);
                       },
                 child: testing
@@ -1609,6 +1618,10 @@ class _SettingsDialogState extends State<SettingsDialog> {
 
                         await provider.updateProvider(updatedConfig);
                         if (!ctx.mounted) return;
+                        // 同步刷新 MemorySettingsProvider 的可用模型列表
+                        ctx
+                            .read<MemorySettingsProvider>()
+                            .loadAvailableProviders(provider.providerConfigs);
                         Navigator.pop(ctx);
                       },
                 child: testing

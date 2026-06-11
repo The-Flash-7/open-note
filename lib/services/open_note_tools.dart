@@ -32,7 +32,7 @@ class OpenNoteTools {
 
   static void initialize({
     required NotesProvider notesProvider,
-    required AIService aiService,
+    AIService? aiService,
     required VectorStore vectorStore,
   }) {
     _notesProvider = notesProvider;
@@ -41,7 +41,7 @@ class OpenNoteTools {
   }
 
   static bool get _isInitialized =>
-      _notesProvider != null && _aiService != null;
+      _notesProvider != null && _vectorStore != null;
 
   /// 综合搜索笔记
   static Future<List<Note>> searchNotes({

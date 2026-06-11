@@ -216,7 +216,9 @@ class _HomeScreenState extends State<HomeScreen> with ClipboardListener {
 
       // 服务启动成功后，延迟同步最新索引统计（确保 Python 服务完全就绪）
       Future.delayed(const Duration(seconds: 2), () {
-        kbProvider.refreshIndexStats(notesProvider);
+        if (notesProvider.hasAIConfig) {
+          kbProvider.refreshIndexStats(notesProvider);
+        }
       });
 
       debugPrint('Python 服务已启动并配置到 NotesProvider');

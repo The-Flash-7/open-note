@@ -1,6 +1,6 @@
 [project]
 name = "open-note-core"
-version = "0.3.1"
+version = "0.3.2"
 description = "OpenNote 核心库 - 数据模型和 SQLite 存储层"
 readme = "README.md"
 license = {text = "MIT OR Apache-2.0"}

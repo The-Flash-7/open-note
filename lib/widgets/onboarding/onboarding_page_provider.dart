@@ -59,8 +59,8 @@ class OnboardingPageProvider extends StatelessWidget {
     final templates = AIProviderTemplates.templates;
 
     return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 6,
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 160,
         crossAxisSpacing: DesignTokens.space8,
         mainAxisSpacing: DesignTokens.space8,
         childAspectRatio: 1.2,

@@ -51,6 +51,7 @@ class NotesProvider extends ChangeNotifier {
   late final SkillRegistry _skillRegistry;
   late final SkillExecutor _skillExecutor;
   late final CiciAgent _ciciAgent;
+  bool _coreServicesInitialized = false;
   bool _agentInitialized = false;
   String? _knowledgeBaseModelPath;
   CategoryProvider? _pendingCategoryProvider;
@@ -142,36 +143,24 @@ class NotesProvider extends ChangeNotifier {
     _chunkOverlap = chunkOverlap;
   }
 
-  void _initializeAgent() {
-    if (_aiService == null || !_aiService!.hasConfig()) return;
+  void _initializeCoreServices() {
+    if (_coreServicesInitialized) return;
 
     _embeddingService = EmbeddingService();
-
-    // 注意：这里不立即配置 EmbeddingService
-    // 等待 setKnowledgeBaseModelPath 或显式调用 configureForAPI 后再配置
-
     _vectorStore = VectorStore();
 
     _skillRegistry = SkillRegistry();
     _skillRegistry.register(NoteSearchSkill());
     _skillRegistry.register(NoteVectorSearchSkill(vectorStore: _vectorStore));
-    _skillRegistry.register(NoteCreateSkill(aiService: _aiService));
     _skillRegistry.register(NoteEditInfoSkill());
     _skillRegistry.register(NoteDeleteSkill());
     _skillRegistry.register(NoteReadSkill());
-    _skillRegistry.register(NoteQASkill(aiService: _aiService));
-    _skillRegistry.register(NoteSummarizeSkill(aiService: _aiService));
     _skillRegistry.register(NoteListRecentSkill());
     _skillRegistry.register(NoteListByCategorySkill());
-    _skillRegistry.register(NoteExtractKeywordsSkill(aiService: _aiService));
-    _skillRegistry.register(NoteRewriteSkill(aiService: _aiService));
-    _skillRegistry.register(NoteMergeSkill(aiService: _aiService));
-
     _skillRegistry.register(NoteSearchByTitleSkill());
     _skillRegistry.register(NoteListCategoriesSkill());
     _skillRegistry.register(NoteListTagsSkill());
     _skillRegistry.register(NoteGetFormatSkill());
-    _skillRegistry.register(NoteCreateFromUrlSkill(aiService: _aiService));
     _skillRegistry.register(NoteEditContentSkill());
     _skillRegistry.register(NoteOpenSkill());
 
@@ -179,9 +168,31 @@ class NotesProvider extends ChangeNotifier {
 
     OpenNoteTools.initialize(
       notesProvider: this,
-      aiService: _aiService!,
+      aiService: _aiService,
       vectorStore: _vectorStore,
     );
+
+    _coreServicesInitialized = true;
+  }
+
+  void _initializeAgent() {
+    if (_aiService == null || !_aiService!.hasConfig()) {
+      // 即使没有 AI 配置，也要初始化核心服务
+      _initializeCoreServices();
+      return;
+    }
+
+    // 确保核心服务已初始化
+    _initializeCoreServices();
+
+    // 注册 AI 依赖的 skill
+    _skillRegistry.register(NoteCreateSkill(aiService: _aiService));
+    _skillRegistry.register(NoteQASkill(aiService: _aiService));
+    _skillRegistry.register(NoteSummarizeSkill(aiService: _aiService));
+    _skillRegistry.register(NoteExtractKeywordsSkill(aiService: _aiService));
+    _skillRegistry.register(NoteRewriteSkill(aiService: _aiService));
+    _skillRegistry.register(NoteMergeSkill(aiService: _aiService));
+    _skillRegistry.register(NoteCreateFromUrlSkill(aiService: _aiService));
 
     _ciciAgent = CiciAgent(
       aiService: _aiService!,
@@ -200,11 +211,11 @@ class NotesProvider extends ChangeNotifier {
     }
   }
 
-  CiciAgent get ciciAgent {
+  CiciAgent? get ciciAgent {
     if (!_agentInitialized) {
       _initializeAgent();
     }
-    return _ciciAgent;
+    return _agentInitialized ? _ciciAgent : null;
   }
 
   VectorStore get vectorStore => _vectorStore;
@@ -216,6 +227,7 @@ class NotesProvider extends ChangeNotifier {
   String? get currentEditingNoteId => _currentEditingNoteId;
 
   bool _hasAIConfig() => _aiService != null && _aiService!.hasConfig();
+  bool get hasAIConfig => _hasAIConfig();
 
   bool canGenerateSummary(String noteId) {
     return !_isGeneratingSummary || _currentSummaryNoteId != noteId;
@@ -455,6 +467,7 @@ class NotesProvider extends ChangeNotifier {
 
       // 如果知识库已启用且向量服务可用，自动为新笔记建索引
       if (_knowledgeBaseModelPath != null &&
+          _coreServicesInitialized &&
           _vectorStore.isAvailable &&
           content.isNotEmpty) {
         unawaited(_indexNoteInBackground(noteId, title, format));
@@ -542,6 +555,7 @@ class NotesProvider extends ChangeNotifier {
 
       // 如果知识库已启用且向量服务可用，自动更新该笔记的索引
       if (_knowledgeBaseModelPath != null &&
+          _coreServicesInitialized &&
           _vectorStore.isAvailable &&
           updatedNote.content.isNotEmpty) {
         unawaited(
@@ -644,7 +658,9 @@ class NotesProvider extends ChangeNotifier {
       _previews.removeWhere((p) => p.id == id);
       _fullNotesCache.remove(id);
       _trashNotes.removeWhere((n) => n.id == id);
-      await _vectorStore.removeNote(id);
+      if (_coreServicesInitialized) {
+        await _vectorStore.removeNote(id);
+      }
       _applyFilters();
       notifyListeners();
     } catch (e) {
@@ -656,7 +672,9 @@ class NotesProvider extends ChangeNotifier {
     try {
       for (final note in _trashNotes) {
         await _noteService.hardDeleteNote(note.id);
-        await _vectorStore.removeNote(note.id);
+        if (_coreServicesInitialized) {
+          await _vectorStore.removeNote(note.id);
+        }
       }
       _trashNotes.clear();
       _applyFilters();
@@ -676,7 +694,9 @@ class NotesProvider extends ChangeNotifier {
 
       for (final note in expiredNotes) {
         await _noteService.hardDeleteNote(note.id);
-        await _vectorStore.removeNote(note.id);
+        if (_coreServicesInitialized) {
+          await _vectorStore.removeNote(note.id);
+        }
       }
 
       if (expiredNotes.isNotEmpty) {

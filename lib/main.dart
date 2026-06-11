@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:windows_single_instance/windows_single_instance.dart';
 
 import 'services/python_service_manager.dart';
 import 'widgets/splash_screen.dart';
@@ -16,17 +17,25 @@ import 'l10n/strings.g.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // 单实例检查（仅 Windows 生效，其他平台自动跳过）
+  await WindowsSingleInstance.ensureSingleInstance(
+    [],
+    'open_note_app',
+    bringWindowToFront: true,
+  );
+
   await AppInfo.init();
 
   LocaleSettings.useDeviceLocale();
 
   await windowManager.ensureInitialized();
+  await windowManager.setHasShadow(false);
 
   WindowOptions windowOptions = WindowOptions(
     size: Size(1280, 900),
     minimumSize: Size(1080, 800),
     center: !Platform.isWindows,
-    backgroundColor: Colors.white,
+    // backgroundColor: Colors.white,
     titleBarStyle: Platform.isMacOS
         ? TitleBarStyle.hidden
         : TitleBarStyle.normal,

@@ -1,6 +1,6 @@
 [project]
 name = "open-note-cli"
-version = "0.3.1"
+version = "0.3.2"
 description = "OpenNote CLI - 跨平台笔记管理命令行工具"
 readme = "README.md"
 license = {text = "MIT OR Apache-2.0"}
@@ -10,7 +10,7 @@ authors = [
 ]
 urls = {Homepage = "https://github.com/The-Flash-7/open-note"}
 dependencies = [
-    "open-note-core>=0.3.1",
+    "open-note-core>=0.3.2",
     "typer>=0.9.0",
     "rich>=13.0.0",
 ]

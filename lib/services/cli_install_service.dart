@@ -71,15 +71,22 @@ class CLIInstallService {
 
   static Future<bool> isCLIInstalled() async {
     try {
-      final cmd = Platform.isWindows ? 'opennote' : 'opennote';
-      final result = await Process.run(cmd, ['--version']);
+      // Windows 使用 cmd /c 确保 PATH 解析正确，避免匹配到桌面应用 exe
+      final cmd = Platform.isWindows ? 'cmd' : 'opennote';
+      final args = Platform.isWindows
+          ? ['/c', 'opennote', '--version']
+          : ['--version'];
+
+      final result = await Process.run(
+        cmd,
+        args,
+        workingDirectory: Directory.systemTemp.path,
+      );
       if (result.exitCode != 0) return false;
 
       final output = result.stdout.toString().toLowerCase();
-      // 验证输出包含 CLI 标识，避免误判为桌面应用
       return output.contains('open-note-cli') ||
-          output.contains('opennote-cli') ||
-          (output.contains('opennote') && !output.contains('opennote.exe'));
+          output.contains('opennote-cli');
     } catch (e) {
       return false;
     }
