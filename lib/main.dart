@@ -33,7 +33,7 @@ void main() async {
 
   WindowOptions windowOptions = WindowOptions(
     size: Size(1280, 900),
-    minimumSize: Size(900, 800),
+    minimumSize: Size(1080, 720),
     center: !Platform.isWindows,
     // backgroundColor: Colors.white,
     titleBarStyle: Platform.isMacOS
