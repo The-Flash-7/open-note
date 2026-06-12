@@ -1,0 +1,17 @@
+flutter_app:
+  command: OpenNote
+  arch: x64
+  parent: /usr/local/lib
+  nonInteractive: false
+
+control:
+  Package: open-note
+  Version: 1.0.0
+  Architecture: amd64
+  Priority: optional
+  Depends: libgtk-3-0, libkeybinder-3.0-0, libsqlite3-0, libstdc++6, libc6
+  Maintainer: litongshuai
+  Description: A cross-platform intelligent note-taking Agent application.
+
+options:
+  exec_out_dir: debian/packages

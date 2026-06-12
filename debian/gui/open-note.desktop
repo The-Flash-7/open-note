@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=OpenNote
+GenericName=OpenNote
+Comment=A cross-platform intelligent note-taking Agent application
+Exec=OpenNote
+Icon=open-note
+Terminal=false
+Type=Application
+Categories=Utility;Office;
+Keywords=note;markdown;agent;ai;

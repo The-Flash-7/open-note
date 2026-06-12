@@ -29,7 +29,9 @@ void main() async {
   LocaleSettings.useDeviceLocale();
 
   await windowManager.ensureInitialized();
-  await windowManager.setHasShadow(false);
+  if (Platform.isMacOS || Platform.isWindows) {
+    await windowManager.setHasShadow(false);
+  }
 
   WindowOptions windowOptions = WindowOptions(
     size: Size(1280, 900),
