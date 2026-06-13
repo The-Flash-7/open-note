@@ -23,10 +23,14 @@ class PythonServiceManager {
   bool _isPrepared = false;
   String _baseUrl = 'http://127.0.0.1:8765';
   String? _servicePath;
+  ServiceCheckResult? _lastServiceCheckResult;
 
   bool get isRunning => _isRunning;
   bool get isPrepared => _isPrepared;
   String get baseUrl => _baseUrl;
+  ServiceCheckResult? get lastServiceCheckResult => _lastServiceCheckResult;
+
+  int get _currentPort => Uri.tryParse(_baseUrl)?.port ?? 8765;
 
   static const String _serviceIdentity = 'open-note-embedding-service';
   static const String _appId = 'net.zsdn.opennote';
@@ -118,7 +122,6 @@ class PythonServiceManager {
     }
   }
 
-  /// 检查端口上是否已有我们的服务在运行
   Future<ServiceCheckResult> checkExistingService(int port) async {
     int? pid;
     try {
@@ -130,33 +133,59 @@ class PythonServiceManager {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
         final service = data['service'] as String?;
         final appId = data['app_id'] as String?;
-
-        // 获取进程 PID
         pid = await _getProcessIdByPort(port);
 
         if (service == _serviceIdentity && appId == _appId) {
           debugPrint('PythonService: 检测到已有服务在运行 (端口 $port, PID: $pid)');
-          return ServiceCheckResult(
+          final result = ServiceCheckResult(
             isRunning: true,
             isOurService: true,
             pid: pid,
+            port: port,
           );
-        } else {
-          debugPrint(
-            'PythonService: 端口 $port 被其他服务占用 (service: $service, PID: $pid)',
-          );
-          return ServiceCheckResult(
-            isRunning: true,
-            isOurService: false,
-            pid: pid,
-          );
+          _lastServiceCheckResult = result;
+          return result;
         }
+
+        debugPrint(
+          'PythonService: 端口 $port 被其他服务占用 (service: $service, PID: $pid)',
+        );
+        final result = ServiceCheckResult(
+          isRunning: true,
+          isOurService: false,
+          pid: pid,
+          port: port,
+        );
+        _lastServiceCheckResult = result;
+        return result;
       }
     } catch (e) {
-      // 端口未被占用或服务未响应
+      debugPrint('PythonService: 端口 $port 服务探测失败: $e');
     }
 
-    return ServiceCheckResult(isRunning: false, isOurService: false, pid: pid);
+    final result = ServiceCheckResult(
+      isRunning: false,
+      isOurService: false,
+      pid: pid,
+      port: port,
+    );
+    _lastServiceCheckResult = result;
+    return result;
+  }
+
+  Future<bool> refreshRunningState({int? port}) async {
+    final servicePort = port ?? _currentPort;
+    final existingService = await checkExistingService(servicePort);
+    if (existingService.isOurService) {
+      _baseUrl = 'http://127.0.0.1:$servicePort';
+      _isRunning = true;
+      _pythonPid = existingService.pid;
+      return true;
+    }
+
+    _isRunning = false;
+    _pythonPid = null;
+    return false;
   }
 
   /// 获取占用指定端口的进程 PID
@@ -190,41 +219,25 @@ class PythonServiceManager {
     return null;
   }
 
-  /// 终止占用端口的进程
+  Future<void> _killPid(int pid) async {
+    if (Platform.isWindows) {
+      await Process.run('taskkill', ['/F', '/T', '/PID', pid.toString()]);
+    } else {
+      Process.killPid(pid, ProcessSignal.sigterm);
+    }
+    debugPrint('PythonService: 已终止进程 $pid');
+  }
+
   Future<void> killProcessOnPort(int port) async {
     try {
-      if (Platform.isMacOS || Platform.isLinux) {
-        // macOS/Linux: 使用 lsof 查找并终止进程
-        final result = await Process.run('lsof', ['-ti', ':$port']);
-        if (result.exitCode == 0 && result.stdout.toString().isNotEmpty) {
-          final pids = result.stdout.toString().trim().split('\n');
-          for (final pid in pids) {
-            if (pid.isNotEmpty) {
-              await Process.run('kill', ['-9', pid.trim()]);
-              debugPrint('PythonService: 已终止进程 $pid');
-            }
-          }
-          // 等待端口释放
-          await Future.delayed(const Duration(milliseconds: 500));
-        }
-      } else if (Platform.isWindows) {
-        // Windows: 使用 netstat 和 taskkill
-        final result = await Process.run('netstat', ['-ano']);
-        if (result.exitCode == 0) {
-          final lines = result.stdout.toString().split('\n');
-          for (final line in lines) {
-            if (line.contains(':$port') && line.contains('LISTENING')) {
-              final parts = line.trim().split(RegExp(r'\s+'));
-              if (parts.length >= 5) {
-                final pid = parts[4];
-                await Process.run('taskkill', ['/F', '/PID', pid]);
-                debugPrint('PythonService: 已终止进程 $pid');
-              }
-            }
-          }
-          await Future.delayed(const Duration(milliseconds: 500));
-        }
+      final existingService = await checkExistingService(port);
+      if (!existingService.isOurService || existingService.pid == null) {
+        debugPrint('PythonService: 端口 $port 不是 OpenNote 服务，跳过终止');
+        return;
       }
+
+      await _killPid(existingService.pid!);
+      await Future.delayed(const Duration(milliseconds: 500));
     } catch (e) {
       debugPrint('PythonService: 终止端口 $port 进程失败: $e');
     }
@@ -236,8 +249,9 @@ class PythonServiceManager {
     int port = 8765,
     Duration timeout = const Duration(seconds: 60),
   }) async {
-    if (_isRunning) {
-      debugPrint('PythonService: 服务已在运行');
+    final running = await refreshRunningState(port: port);
+    if (running) {
+      debugPrint('PythonService: 服务已真实运行');
       return true;
     }
 
@@ -270,8 +284,8 @@ class PythonServiceManager {
           _pythonPid = existingService.pid; // 记录 PID 以便后续停止
           return true;
         } else {
-          debugPrint('PythonService: 端口 $port 被其他服务占用，正在终止...');
-          await killProcessOnPort(port);
+          debugPrint('PythonService: 端口 $port 被其他服务占用，无法启动');
+          return false;
         }
       }
 
@@ -333,47 +347,77 @@ class PythonServiceManager {
   /// 停止 Python 服务（同步方法，用于 dispose）
   void stopSync() {
     debugPrint(
-      '🚨 stopSync: _isRunning=$_isRunning, _pythonProcess=${_pythonProcess != null}, _pythonPid=$_pythonPid',
+      'PythonService: stopSync _isRunning=$_isRunning, _pythonProcess=${_pythonProcess != null}, _pythonPid=$_pythonPid',
     );
-    if (!_isRunning) {
-      debugPrint('🚨 stopSync: _isRunning=false，直接返回');
-      return;
-    }
 
     try {
-      debugPrint('🚨 stopSync: 正在停止服务...');
-      // 方式 1：如果有 Process 对象，通过它 kill
-      if (_pythonProcess != null) {
+      final processPid = _pythonProcess?.pid;
+      if (Platform.isWindows && processPid != null) {
+        Process.runSync('taskkill', [
+          '/F',
+          '/T',
+          '/PID',
+          processPid.toString(),
+        ]);
+      } else if (_pythonProcess != null) {
         _pythonProcess!.kill();
-        _pythonProcess = null;
       }
+      _pythonProcess = null;
 
-      // 方式 2：如果有 PID（复用服务的情况），通过 PID kill
       if (_pythonPid != null) {
-        debugPrint('🚨 stopSync: 通过 PID $_pythonPid 终止进程');
-        Process.killPid(_pythonPid!, ProcessSignal.sigterm);
+        if (Platform.isWindows) {
+          Process.runSync('taskkill', [
+            '/F',
+            '/T',
+            '/PID',
+            _pythonPid.toString(),
+          ]);
+        } else {
+          Process.killPid(_pythonPid!, ProcessSignal.sigterm);
+        }
         _pythonPid = null;
       }
 
       _isRunning = false;
-      debugPrint('🚨 stopSync: 服务已停止');
+      debugPrint('PythonService: 服务已停止');
     } catch (e) {
-      debugPrint('🚨 stopSync: 停止失败: $e');
+      debugPrint('PythonService: stopSync 停止失败: $e');
     }
   }
 
   /// 停止 Python 服务（异步方法）
   Future<void> stop() async {
-    if (!_isRunning || _pythonProcess == null) return;
-
     try {
       debugPrint('PythonService: 正在停止服务...');
-      _pythonProcess!.kill();
+
+      final processPid = _pythonProcess?.pid;
+      if (Platform.isWindows && processPid != null) {
+        await Process.run('taskkill', [
+          '/F',
+          '/T',
+          '/PID',
+          processPid.toString(),
+        ]);
+      } else if (_pythonProcess != null) {
+        _pythonProcess!.kill();
+      }
       _pythonProcess = null;
+
+      final existingService = await checkExistingService(_currentPort);
+      final pid = existingService.pid ?? _pythonPid;
+      if (existingService.isOurService && pid != null) {
+        await _killPid(pid);
+      }
+
+      _pythonPid = null;
       _isRunning = false;
+      await Future.delayed(const Duration(milliseconds: 500));
+      await refreshRunningState();
       debugPrint('PythonService: 服务已停止');
     } catch (e) {
       debugPrint('PythonService: 停止失败: $e');
+      _isRunning = false;
+      _pythonPid = null;
     }
   }
 
@@ -428,7 +472,8 @@ class PythonServiceManager {
 
   /// 获取服务详细状态
   Future<EmbeddingServiceStatus?> fetchServiceStatus() async {
-    if (!_isRunning) return null;
+    final running = await refreshRunningState();
+    if (!running) return null;
 
     try {
       final response = await http
@@ -448,7 +493,8 @@ class PythonServiceManager {
 
   /// 热切换模型（无需重启服务），切换前会清空向量索引
   Future<bool> switchModel(String modelDir) async {
-    if (!_isRunning) return false;
+    final running = await refreshRunningState();
+    if (!running) return false;
     try {
       final response = await http
           .post(
@@ -476,7 +522,8 @@ class PythonServiceManager {
   /// 请求 Python 服务内部重启（进程不终止，仅重新加载模型和数据库）
   /// 注意：此方法要求服务进程已在运行，如果未运行请先调用 start()
   Future<bool> restartService() async {
-    if (!_isRunning) {
+    final running = await refreshRunningState();
+    if (!running) {
       debugPrint('PythonService: 服务未运行，无法重启');
       return false;
     }
@@ -500,7 +547,8 @@ class PythonServiceManager {
 
   /// 检查服务健康状态（旧接口，保留兼容）
   Future<Map<String, dynamic>?> getEmbeddingStatus() async {
-    if (!_isRunning) return null;
+    final running = await refreshRunningState();
+    if (!running) return null;
 
     try {
       final response = await http
@@ -527,10 +575,14 @@ class ServiceCheckResult {
   final bool isRunning;
   final bool isOurService;
   final int? pid;
+  final int? port;
+
+  bool get isPortOccupiedByOtherService => isRunning && !isOurService;
 
   ServiceCheckResult({
     required this.isRunning,
     required this.isOurService,
     this.pid,
+    this.port,
   });
 }

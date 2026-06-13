@@ -2076,6 +2076,11 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// zh: '启动服务中...'
 	String get kb_startingService => '启动服务中...';
 
+	/// 停止服务
+	///
+	/// zh: '停止服务中...'
+	String get kb_stoppingService => '停止服务中...';
+
 	/// 初始化向量
 	///
 	/// zh: '正在初始化向量服务，请稍候...'
@@ -2085,6 +2090,16 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	///
 	/// zh: '服务启动失败'
 	String get kb_serviceStartupFailed => '服务启动失败';
+
+	/// 端口被占用提示
+	///
+	/// zh: '端口 {port: int} 已被其他程序占用'
+	String kb_portOccupied({required int port}) => '端口 ${port} 已被其他程序占用';
+
+	/// 端口被占用详情
+	///
+	/// zh: '请关闭占用该端口的程序后重试。进程 PID：{pid: String}'
+	String kb_portOccupiedDetail({required String pid}) => '请关闭占用该端口的程序后重试。进程 PID：${pid}';
 
 	/// 已就绪
 	///

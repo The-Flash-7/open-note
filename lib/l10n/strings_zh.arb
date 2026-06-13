@@ -1632,6 +1632,10 @@
   "@kb_startingService": {
     "description": "启动服务"
   },
+  "kb_stoppingService": "停止服务中...",
+  "@kb_stoppingService": {
+    "description": "停止服务"
+  },
   "kb_initializingVectorService": "正在初始化向量服务，请稍候...",
   "@kb_initializingVectorService": {
     "description": "初始化向量"
@@ -1639,6 +1643,24 @@
   "kb_serviceStartupFailed": "服务启动失败",
   "@kb_serviceStartupFailed": {
     "description": "启动失败"
+  },
+  "kb_portOccupied": "端口 {port} 已被其他程序占用",
+  "@kb_portOccupied": {
+    "description": "端口被占用提示",
+    "placeholders": {
+      "port": {
+        "type": "int"
+      }
+    }
+  },
+  "kb_portOccupiedDetail": "请关闭占用该端口的程序后重试。进程 PID：{pid}",
+  "@kb_portOccupiedDetail": {
+    "description": "端口被占用详情",
+    "placeholders": {
+      "pid": {
+        "type": "String"
+      }
+    }
   },
   "kb_knowledgeBaseReady": "知识库已就绪",
   "@kb_knowledgeBaseReady": {

@@ -1632,6 +1632,10 @@
   "@kb_startingService": {
     "description": "启动服务"
   },
+  "kb_stoppingService": "Остановка сервиса...",
+  "@kb_stoppingService": {
+    "description": "停止服务"
+  },
   "kb_initializingVectorService": "Инициализация векторного сервиса...",
   "@kb_initializingVectorService": {
     "description": "初始化向量"
@@ -1639,6 +1643,24 @@
   "kb_serviceStartupFailed": "Ошибка запуска",
   "@kb_serviceStartupFailed": {
     "description": "启动失败"
+  },
+  "kb_portOccupied": "Порт {port} уже используется другим приложением",
+  "@kb_portOccupied": {
+    "description": "端口被占用提示",
+    "placeholders": {
+      "port": {
+        "type": "int"
+      }
+    }
+  },
+  "kb_portOccupiedDetail": "Закройте приложение, использующее этот порт, и повторите попытку. PID процесса: {pid}",
+  "@kb_portOccupiedDetail": {
+    "description": "端口被占用详情",
+    "placeholders": {
+      "pid": {
+        "type": "String"
+      }
+    }
   },
   "kb_knowledgeBaseReady": "База знаний готова",
   "@kb_knowledgeBaseReady": {

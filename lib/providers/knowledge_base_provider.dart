@@ -89,6 +89,7 @@ class KnowledgeBaseProvider extends ChangeNotifier {
   // Python 服务初始化状态
   bool _isPreparingService = false;
   bool _isStartingService = false;
+  bool _isStoppingService = false;
   bool _isRestartingService = false;
   String? _serviceError;
 
@@ -150,11 +151,34 @@ class KnowledgeBaseProvider extends ChangeNotifier {
     }
   }
 
+  Future<bool> _refreshPythonServiceRunning() async {
+    final running = await _pythonService.refreshRunningState();
+    _isPythonServiceRunning = running;
+    return running;
+  }
+
+  bool _applyPortOccupiedErrorIfNeeded() {
+    final result = _pythonService.lastServiceCheckResult;
+    if (result?.isPortOccupiedByOtherService != true) return false;
+
+    final port = result?.port ?? 8765;
+    final pid = result?.pid?.toString() ?? _tr('unknown', '未知');
+    _embeddingServiceState = EmbeddingServiceState.errorGeneral;
+    _embeddingServiceMessage =
+        _t?.kb_portOccupied(port: port) ?? '端口 $port 已被其他程序占用';
+    _embeddingServiceErrorDetail =
+        _t?.kb_portOccupiedDetail(pid: pid) ?? '请关闭占用该端口的程序后重试。进程 PID：$pid';
+    return true;
+  }
+
   // 状态轮询
   Future<void> refreshEmbeddingServiceStatus() async {
-    if (!_isPythonServiceRunning) {
-      _embeddingServiceState = EmbeddingServiceState.unreachable;
-      _embeddingServiceMessage = _tr('serviceNotStarted', '服务未启动');
+    final running = await _refreshPythonServiceRunning();
+    if (!running) {
+      if (!_applyPortOccupiedErrorIfNeeded()) {
+        _embeddingServiceState = EmbeddingServiceState.unreachable;
+        _embeddingServiceMessage = _tr('serviceNotStarted', '服务未启动');
+      }
       notifyListeners();
       return;
     }
@@ -230,8 +254,10 @@ class KnowledgeBaseProvider extends ChangeNotifier {
   // 初始化状态 getters
   bool get isPreparingService => _isPreparingService;
   bool get isStartingService => _isStartingService;
+  bool get isStoppingService => _isStoppingService;
   bool get isRestartingService => _isRestartingService;
-  bool get isServiceInitializing => _isPreparingService || _isStartingService;
+  bool get isServiceInitializing =>
+      _isPreparingService || _isStartingService || _isStoppingService;
   String? get serviceError => _serviceError;
 
   Future<void> loadConfig() async {
@@ -268,16 +294,17 @@ class KnowledgeBaseProvider extends ChangeNotifier {
   Future<void> toggleEnabled(bool enabled) async {
     await _configService.setKnowledgeBaseEnabled(enabled);
     _config = _config.copyWith(isEnabled: enabled);
+    final running = await _refreshPythonServiceRunning();
     notifyListeners();
 
-    if (enabled && isReady && !isPythonServiceRunning) {
+    if (enabled && isReady && !running) {
       // 启用：自动启动向量服务
       debugPrint('知识库已启用，自动启动向量服务...');
       await startPythonService(modelPath: _config.modelPath);
-    } else if (!enabled && isPythonServiceRunning) {
+    } else if (!enabled) {
       // 关闭：停止向量服务
       debugPrint('知识库已关闭，停止向量服务...');
-      stopPythonService();
+      await stopPythonService();
     }
   }
 
@@ -296,11 +323,10 @@ class KnowledgeBaseProvider extends ChangeNotifier {
     );
 
     if (isIntact) {
+      final running = await _refreshPythonServiceRunning();
       // ★ 检查是否真的需要切换模型（路径相同则无需操作）
       final isSameModel =
-          _config.isEnabled &&
-          _isPythonServiceRunning &&
-          _config.modelPath == modelDir;
+          _config.isEnabled && running && _config.modelPath == modelDir;
 
       // 更新配置并持久化
       await _configService.setModelVersion(version);
@@ -315,7 +341,7 @@ class KnowledgeBaseProvider extends ChangeNotifier {
       await _configService.setLastError(null);
 
       if (_config.isEnabled) {
-        if (!_isPythonServiceRunning) {
+        if (!running) {
           // 服务未启动 → 启动向量服务
           debugPrint('知识库已启用但服务未运行，启动向量服务...');
           await startPythonService(modelPath: modelDir);
@@ -600,7 +626,8 @@ class KnowledgeBaseProvider extends ChangeNotifier {
     required String modelPath,
     void Function(bool success, String message)? onResult,
   }) async {
-    if (_isPythonServiceRunning) {
+    final running = await _refreshPythonServiceRunning();
+    if (running) {
       onResult?.call(true, _tr('serviceAlreadyRunning', '服务已在运行'));
       return true;
     }
@@ -646,11 +673,16 @@ class KnowledgeBaseProvider extends ChangeNotifier {
         startEmbeddingServiceStatusPolling();
         onResult?.call(true, _tr('serviceStarted', '服务已启动'));
       } else {
-        _serviceError = _tr('vectorServiceStartFailed', '向量服务启动失败，请检查模型配置');
+        final portOccupied = _applyPortOccupiedErrorIfNeeded();
+        _serviceError = portOccupied
+            ? _embeddingServiceMessage
+            : _tr('vectorServiceStartFailed', '向量服务启动失败，请检查模型配置');
         debugPrint('KnowledgeBase: Python 服务启动失败');
         onResult?.call(
           false,
-          _tr('serviceStartFailedPython', '服务启动失败，请检查 Python 环境和依赖'),
+          portOccupied
+              ? _embeddingServiceMessage
+              : _tr('serviceStartFailedPython', '服务启动失败，请检查 Python 环境和依赖'),
         );
       }
 
@@ -679,7 +711,8 @@ class KnowledgeBaseProvider extends ChangeNotifier {
 
     try {
       // 确保 Python 服务已启动
-      if (!_pythonService.isRunning) {
+      final running = await _refreshPythonServiceRunning();
+      if (!running) {
         debugPrint('KnowledgeBase: Python 服务未运行，正在启动...');
         final serviceStarted = await _pythonService.start(
           modelDir: _config.modelPath,
@@ -783,25 +816,31 @@ class KnowledgeBaseProvider extends ChangeNotifier {
   }
 
   Future<void> stopPythonService() async {
-    if (!_isPythonServiceRunning) return;
-
-    stopEmbeddingServiceStatusPolling();
-    await _pythonService.stop();
-    _isPythonServiceRunning = false;
-    debugPrint('KnowledgeBase: Python 服务已停止');
+    _isStoppingService = true;
     notifyListeners();
+
+    try {
+      stopEmbeddingServiceStatusPolling();
+      await _pythonService.stop();
+      _isPythonServiceRunning = await _pythonService.refreshRunningState();
+      debugPrint('KnowledgeBase: Python 服务已停止');
+    } finally {
+      _isStoppingService = false;
+      notifyListeners();
+    }
   }
 
   /// 同步停止 Python 服务（用于 dispose）
   void stopPythonServiceSync() {
     debugPrint(
-      '🚨 KnowledgeBase.stopPythonServiceSync: _isPythonServiceRunning=$_isPythonServiceRunning',
+      'KnowledgeBase.stopPythonServiceSync: _isPythonServiceRunning=$_isPythonServiceRunning',
     );
-    if (!_isPythonServiceRunning) return;
 
+    _isStoppingService = true;
     stopEmbeddingServiceStatusPolling();
     _pythonService.stopSync();
     _isPythonServiceRunning = false;
+    _isStoppingService = false;
     debugPrint('KnowledgeBase: Python 服务已停止（同步）');
   }
 
@@ -819,8 +858,8 @@ class KnowledgeBaseProvider extends ChangeNotifier {
     try {
       bool success;
 
-      // 检查服务进程是否已在运行
-      if (!_isPythonServiceRunning) {
+      final running = await _refreshPythonServiceRunning();
+      if (!running) {
         // 服务未启动 → 直接启动
         debugPrint('KnowledgeBase: 向量服务未运行，正在启动...');
         success = await startPythonService(modelPath: _config.modelPath);

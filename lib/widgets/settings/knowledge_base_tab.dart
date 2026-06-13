@@ -56,9 +56,7 @@ class _KnowledgeBaseTabState extends State<KnowledgeBaseTab>
     final notesProvider = context.read<NotesProvider>();
 
     // 每次打开页面刷新嵌入服务状态
-    if (kbProvider.isPythonServiceRunning) {
-      kbProvider.refreshEmbeddingServiceStatus();
-    }
+    kbProvider.refreshEmbeddingServiceStatus();
 
     // 仅在知识库完全就绪且 Python 服务运行时同步
     if (kbProvider.isFullyReady) {
@@ -127,16 +125,14 @@ class _KnowledgeBaseTabState extends State<KnowledgeBaseTab>
     // True readiness = config enabled + model downloaded + service running + fully ready
     final isFullyReady = provider.isFullyReady;
 
-    // Case 1: Service is still initializing (preparing or starting)
+    // Case 1: Service is preparing, starting or stopping
     if (provider.isServiceInitializing) {
-      return _buildInitializingCard(
-        isDark,
-        provider.isPreparingService
-            ? t.kb_preparingService
-            : t.kb_startingService,
-        t.kb_startingService,
-        null,
-      );
+      final statusText = provider.isPreparingService
+          ? t.kb_preparingService
+          : provider.isStoppingService
+          ? t.kb_stoppingService
+          : t.kb_startingService;
+      return _buildInitializingCard(isDark, statusText, statusText, null);
     }
 
     // Case 2: Python service is running but polling hasn't gotten first result yet

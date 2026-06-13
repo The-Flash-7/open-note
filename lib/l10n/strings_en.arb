@@ -1632,6 +1632,10 @@
   "@kb_startingService": {
     "description": "启动服务"
   },
+  "kb_stoppingService": "Stopping service...",
+  "@kb_stoppingService": {
+    "description": "停止服务"
+  },
   "kb_initializingVectorService": "Initializing vector service, please wait...",
   "@kb_initializingVectorService": {
     "description": "初始化向量"
@@ -1639,6 +1643,24 @@
   "kb_serviceStartupFailed": "Service startup failed",
   "@kb_serviceStartupFailed": {
     "description": "启动失败"
+  },
+  "kb_portOccupied": "Port {port} is already in use by another application",
+  "@kb_portOccupied": {
+    "description": "端口被占用提示",
+    "placeholders": {
+      "port": {
+        "type": "int"
+      }
+    }
+  },
+  "kb_portOccupiedDetail": "Close the application using this port and try again. Process PID: {pid}",
+  "@kb_portOccupiedDetail": {
+    "description": "端口被占用详情",
+    "placeholders": {
+      "pid": {
+        "type": "String"
+      }
+    }
   },
   "kb_knowledgeBaseReady": "Knowledge base is ready",
   "@kb_knowledgeBaseReady": {

@@ -1258,11 +1258,20 @@ class TranslationsZhTw extends Translations with BaseTranslations<AppLocale, Tra
 	/// 启动服务
 	@override String get kb_startingService => '啟動服務中...';
 
+	/// 停止服务
+	@override String get kb_stoppingService => '停止服務中...';
+
 	/// 初始化向量
 	@override String get kb_initializingVectorService => '正在初始化向量服務，請稍候...';
 
 	/// 启动失败
 	@override String get kb_serviceStartupFailed => '服務啟動失敗';
+
+	/// 端口被占用提示
+	@override String kb_portOccupied({required int port}) => '連接埠 ${port} 已被其他程式占用';
+
+	/// 端口被占用详情
+	@override String kb_portOccupiedDetail({required String pid}) => '請關閉占用該連接埠的程式後重試。處理程序 PID：${pid}';
 
 	/// 已就绪
 	@override String get kb_knowledgeBaseReady => '知識庫已就緒';

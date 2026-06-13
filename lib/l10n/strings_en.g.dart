@@ -1258,11 +1258,20 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 	/// 启动服务
 	@override String get kb_startingService => 'Starting service...';
 
+	/// 停止服务
+	@override String get kb_stoppingService => 'Stopping service...';
+
 	/// 初始化向量
 	@override String get kb_initializingVectorService => 'Initializing vector service, please wait...';
 
 	/// 启动失败
 	@override String get kb_serviceStartupFailed => 'Service startup failed';
+
+	/// 端口被占用提示
+	@override String kb_portOccupied({required int port}) => 'Port ${port} is already in use by another application';
+
+	/// 端口被占用详情
+	@override String kb_portOccupiedDetail({required String pid}) => 'Close the application using this port and try again. Process PID: ${pid}';
 
 	/// 已就绪
 	@override String get kb_knowledgeBaseReady => 'Knowledge base is ready';

@@ -1258,11 +1258,20 @@ class TranslationsRu extends Translations with BaseTranslations<AppLocale, Trans
 	/// 启动服务
 	@override String get kb_startingService => 'Запуск сервиса...';
 
+	/// 停止服务
+	@override String get kb_stoppingService => 'Остановка сервиса...';
+
 	/// 初始化向量
 	@override String get kb_initializingVectorService => 'Инициализация векторного сервиса...';
 
 	/// 启动失败
 	@override String get kb_serviceStartupFailed => 'Ошибка запуска';
+
+	/// 端口被占用提示
+	@override String kb_portOccupied({required int port}) => 'Порт ${port} уже используется другим приложением';
+
+	/// 端口被占用详情
+	@override String kb_portOccupiedDetail({required String pid}) => 'Закройте приложение, использующее этот порт, и повторите попытку. PID процесса: ${pid}';
 
 	/// 已就绪
 	@override String get kb_knowledgeBaseReady => 'База знаний готова';
