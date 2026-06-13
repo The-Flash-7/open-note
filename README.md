@@ -146,7 +146,10 @@
 
 ### 系统要求
 
-- **macOS** 12.0+ / **Windows** 10+ / **Linux** (Ubuntu 20.04+)
+- arm64: **macOS** 12.0+
+- x86_64: **macOS** 11+ / **Windows** 10+ / **Linux** (Ubuntu 20.04+)
+
+注：intel 架构的 macOS 系统版本低于 11 ，Q4量化嵌入模型无法使用。
 
 ### 安装
 
