@@ -50,17 +50,18 @@ class _KnowledgeBaseTabState extends State<KnowledgeBaseTab>
     context.read<KnowledgeBaseProvider>().setTranslations(t);
   }
 
-  void _syncIndexStats() {
+  Future<void> _syncIndexStats() async {
     if (!mounted) return;
     final kbProvider = context.read<KnowledgeBaseProvider>();
     final notesProvider = context.read<NotesProvider>();
 
     // 每次打开页面刷新嵌入服务状态
-    kbProvider.refreshEmbeddingServiceStatus();
+    await kbProvider.refreshEmbeddingServiceStatus();
+    if (!mounted) return;
 
     // 仅在知识库完全就绪且 Python 服务运行时同步
     if (kbProvider.isFullyReady) {
-      kbProvider.refreshIndexStats(notesProvider);
+      await kbProvider.refreshIndexStats(notesProvider);
     }
   }
 
@@ -958,11 +959,9 @@ class _KnowledgeBaseTabState extends State<KnowledgeBaseTab>
                 children: [
                   OutlinedButton.icon(
                     onPressed:
-                        provider.isModelDownloaded &&
-                            provider.isEnabled &&
+                        provider.isFullyReady &&
                             !provider.isRebuildingIndex &&
-                            !provider.isServiceInitializing &&
-                            provider.serviceError == null
+                            !provider.isServiceInitializing
                         ? () => _confirmRebuildIndex(
                             context,
                             provider,
@@ -976,9 +975,9 @@ class _KnowledgeBaseTabState extends State<KnowledgeBaseTab>
                   OutlinedButton.icon(
                     onPressed:
                         config.totalVectors > 0 &&
+                            provider.isFullyReady &&
                             !provider.isRebuildingIndex &&
-                            !provider.isServiceInitializing &&
-                            provider.serviceError == null
+                            !provider.isServiceInitializing
                         ? () => _confirmClearIndex(
                             context,
                             provider,

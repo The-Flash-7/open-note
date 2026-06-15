@@ -1225,6 +1225,15 @@ class TranslationsRu extends Translations with BaseTranslations<AppLocale, Trans
 	/// 下载中
 	@override String get preferences_downloadingUpdate => 'Загрузка обновления';
 
+	/// 停止下载更新
+	@override String get preferences_cancelDownload => 'Остановить загрузку';
+
+	/// 下载已取消
+	@override String get preferences_downloadCancelled => 'Загрузка отменена';
+
+	/// 已下载大小
+	@override String preferences_downloadedSize({required String size}) => 'Загружено ${size}';
+
 	/// 下载完成
 	@override String get preferences_downloadComplete => 'Загрузка завершена';
 

@@ -1588,6 +1588,23 @@
   "@preferences_downloadingUpdate": {
     "description": "下载中"
   },
+  "preferences_cancelDownload": "停止下載",
+  "@preferences_cancelDownload": {
+    "description": "停止下载更新"
+  },
+  "preferences_downloadCancelled": "下載已取消",
+  "@preferences_downloadCancelled": {
+    "description": "下载已取消"
+  },
+  "preferences_downloadedSize": "已下載 {size}",
+  "@preferences_downloadedSize": {
+    "description": "已下载大小",
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
   "preferences_downloadComplete": "下載完成",
   "@preferences_downloadComplete": {
     "description": "下载完成"

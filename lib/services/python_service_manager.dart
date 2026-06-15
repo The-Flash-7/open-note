@@ -326,10 +326,10 @@ class PythonServiceManager {
             debugPrint('PythonService[stderr]: $data');
           });
 
-      // 等待服务就绪
-      final ready = await _waitForReady(timeout);
-      if (ready) {
-        debugPrint('PythonService: 服务已启动 ($baseUrl)');
+      // 等待 HTTP 服务可访问，组件初始化状态由状态轮询继续跟踪
+      final started = await _waitForHttpReady(timeout);
+      if (started) {
+        debugPrint('PythonService: HTTP 服务已启动 ($baseUrl)');
       } else {
         debugPrint('PythonService: 服务启动超时');
         _isRunning = false;
@@ -421,52 +421,31 @@ class PythonServiceManager {
     }
   }
 
-  /// 等待服务就绪（通过轮询 /api/service/status 直到 state == ready）
-  Future<bool> _waitForReady(Duration timeout) async {
+  Future<bool> _waitForHttpReady(Duration timeout) async {
     final startTime = DateTime.now();
     int attempt = 0;
     while (DateTime.now().difference(startTime) < timeout) {
       attempt++;
       try {
         final response = await http
-            .get(Uri.parse('$_baseUrl/api/service/status'))
+            .get(Uri.parse('$_baseUrl/health'))
             .timeout(const Duration(seconds: 2));
 
         if (response.statusCode == 200) {
-          final data = jsonDecode(response.body) as Map<String, dynamic>;
-          final state = data['state'] as String? ?? '';
           final elapsed = DateTime.now().difference(startTime).inMilliseconds;
-
-          if (state == 'ready') {
-            debugPrint('PythonService: 服务就绪 (第 $attempt 次, ${elapsed}ms)');
-            return true;
-          } else {
-            // Service is still initializing, log progress
-            if (attempt <= 3 || attempt % 10 == 0) {
-              final message = data['message'] as String? ?? '';
-              debugPrint(
-                'PythonService: 等待中... state=$state, message=$message',
-              );
-            }
-
-            // If error state, return false immediately
-            if (state.startsWith('error_')) {
-              final message = data['message'] as String? ?? '未知错误';
-              debugPrint('PythonService: 服务初始化失败: $message');
-              return false;
-            }
-          }
+          debugPrint('PythonService: HTTP 服务可访问 (第 $attempt 次, ${elapsed}ms)');
+          return true;
         }
       } catch (e) {
-        if (attempt <= 3) {
-          debugPrint('PythonService: 状态检查等待中... (第 $attempt 次)');
+        if (attempt <= 3 || attempt % 10 == 0) {
+          debugPrint('PythonService: 等待 HTTP 服务启动... (第 $attempt 次): $e');
         }
       }
 
       await Future.delayed(const Duration(milliseconds: 500));
     }
     final elapsed = DateTime.now().difference(startTime).inMilliseconds;
-    debugPrint('PythonService: 服务就绪超时 (${elapsed}ms, 共 $attempt 次尝试)');
+    debugPrint('PythonService: HTTP 服务启动超时 (${elapsed}ms, 共 $attempt 次尝试)');
     return false;
   }
 
@@ -533,9 +512,9 @@ class PythonServiceManager {
           .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
-        debugPrint('PythonService: 重启请求已发送，等待服务重新就绪...');
-        // 等待服务重新就绪（重启可能需要更长时间）
-        return await _waitForReady(const Duration(seconds: 60));
+        debugPrint('PythonService: 重启请求已发送，等待状态轮询更新...');
+        await Future.delayed(const Duration(milliseconds: 500));
+        return true;
       }
       debugPrint('PythonService: 重启请求失败 HTTP ${response.statusCode}');
       return false;

@@ -1225,6 +1225,15 @@ class TranslationsZhTw extends Translations with BaseTranslations<AppLocale, Tra
 	/// 下载中
 	@override String get preferences_downloadingUpdate => '正在下載更新';
 
+	/// 停止下载更新
+	@override String get preferences_cancelDownload => '停止下載';
+
+	/// 下载已取消
+	@override String get preferences_downloadCancelled => '下載已取消';
+
+	/// 已下载大小
+	@override String preferences_downloadedSize({required String size}) => '已下載 ${size}';
+
 	/// 下载完成
 	@override String get preferences_downloadComplete => '下載完成';
 

@@ -1588,6 +1588,23 @@
   "@preferences_downloadingUpdate": {
     "description": "下载中"
   },
+  "preferences_cancelDownload": "Остановить загрузку",
+  "@preferences_cancelDownload": {
+    "description": "停止下载更新"
+  },
+  "preferences_downloadCancelled": "Загрузка отменена",
+  "@preferences_downloadCancelled": {
+    "description": "下载已取消"
+  },
+  "preferences_downloadedSize": "Загружено {size}",
+  "@preferences_downloadedSize": {
+    "description": "已下载大小",
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
   "preferences_downloadComplete": "Загрузка завершена",
   "@preferences_downloadComplete": {
     "description": "下载完成"

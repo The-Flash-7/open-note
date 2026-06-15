@@ -281,21 +281,40 @@ class _PreferencesTabState extends State<PreferencesTab> {
           ),
           const SizedBox(height: 12),
           LinearProgressIndicator(
-            value: provider.downloadProgress,
+            value: provider.hasKnownDownloadSize
+                ? provider.downloadProgress
+                : null,
             backgroundColor: isDark
                 ? DesignTokens.darkBorder
                 : DesignTokens.gray200,
             valueColor: AlwaysStoppedAnimation<Color>(DesignTokens.primary500),
           ),
           const SizedBox(height: 8),
-          Text(
-            '${(provider.downloadProgress * 100).toStringAsFixed(1)}%  ·  ${_formatSpeed(provider.downloadSpeed)}',
-            style: TextStyle(
-              fontSize: 13,
-              color: isDark
-                  ? DesignTokens.darkTextSecondary
-                  : DesignTokens.gray500,
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  provider.hasKnownDownloadSize
+                      ? '${(provider.downloadProgress * 100).toStringAsFixed(1)}%  ·  ${_formatSpeed(provider.downloadSpeed)}'
+                      : '${t.preferences_downloadedSize(size: _formatBytes(provider.downloadedBytes))}  ·  ${_formatSpeed(provider.downloadSpeed)}',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: isDark
+                        ? DesignTokens.darkTextSecondary
+                        : DesignTokens.gray500,
+                  ),
+                ),
+              ),
+              if (provider.isDownloading)
+                TextButton.icon(
+                  onPressed: provider.cancelDownload,
+                  icon: const Icon(Icons.close, size: 16),
+                  label: Text(t.preferences_cancelDownload),
+                  style: TextButton.styleFrom(
+                    foregroundColor: DesignTokens.error500,
+                  ),
+                ),
+            ],
           ),
           if (provider.state == UpdateState.downloadComplete) ...[
             const SizedBox(height: 12),
@@ -386,6 +405,13 @@ class _PreferencesTabState extends State<PreferencesTab> {
       return '${speedMbps.toStringAsFixed(1)} MB/s';
     }
     return '${(speedMbps * 1024).toStringAsFixed(0)} KB/s';
+  }
+
+  String _formatBytes(int bytes) {
+    final mb = bytes / 1024 / 1024;
+    if (mb >= 1) return '${mb.toStringAsFixed(1)} MB';
+    final kb = bytes / 1024;
+    return '${kb.toStringAsFixed(0)} KB';
   }
 }
 

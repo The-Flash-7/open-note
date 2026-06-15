@@ -191,6 +191,9 @@ class KnowledgeBaseProvider extends ChangeNotifier {
         _embeddingServiceComponents = status.components;
         _embeddingServiceErrorDetail = status.errorDetail;
         _embeddingServiceUptimeSeconds = status.uptimeSeconds;
+        if (status.state == EmbeddingServiceState.ready) {
+          _serviceError = null;
+        }
       } else {
         _embeddingServiceState = EmbeddingServiceState.unreachable;
         _embeddingServiceMessage = _tr('cannotFetchStatus', '无法获取服务状态');

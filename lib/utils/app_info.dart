@@ -59,10 +59,19 @@ class AppInfo {
     return 'x86_64';
   }
 
+  bool get isArm64 => arch == 'Apple Silicon' || arch == 'aarch64';
+
   String get downloadAssetExtension {
     if (Platform.isMacOS) return 'dmg';
     if (Platform.isWindows) return 'exe';
     if (Platform.isLinux) return 'deb';
     return 'dmg';
+  }
+
+  List<String> get downloadAssetKeywords {
+    if (Platform.isMacOS) return ['mac', isArm64 ? 'arm64' : 'x86_64'];
+    if (Platform.isWindows) return ['windows', 'x86_64'];
+    if (Platform.isLinux) return [isArm64 ? 'arm64' : 'x86_64'];
+    return const [];
   }
 }

@@ -1225,6 +1225,15 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 	/// 下载中
 	@override String get preferences_downloadingUpdate => 'Downloading update';
 
+	/// 停止下载更新
+	@override String get preferences_cancelDownload => 'Stop Download';
+
+	/// 下载已取消
+	@override String get preferences_downloadCancelled => 'Download cancelled';
+
+	/// 已下载大小
+	@override String preferences_downloadedSize({required String size}) => 'Downloaded ${size}';
+
 	/// 下载完成
 	@override String get preferences_downloadComplete => 'Download complete';
 

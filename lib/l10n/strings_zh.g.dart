@@ -2021,6 +2021,21 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// zh: '正在下载更新'
 	String get preferences_downloadingUpdate => '正在下载更新';
 
+	/// 停止下载更新
+	///
+	/// zh: '停止下载'
+	String get preferences_cancelDownload => '停止下载';
+
+	/// 下载已取消
+	///
+	/// zh: '下载已取消'
+	String get preferences_downloadCancelled => '下载已取消';
+
+	/// 已下载大小
+	///
+	/// zh: '已下载 {size: String}'
+	String preferences_downloadedSize({required String size}) => '已下载 ${size}';
+
 	/// 下载完成
 	///
 	/// zh: '下载完成'

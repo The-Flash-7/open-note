@@ -5,7 +5,7 @@ flutter_app:
   nonInteractive: false
 
 control:
-  Package: open-note
+  Package: OpenNote
   Version: 1.0.0
   Architecture: amd64
   Priority: optional

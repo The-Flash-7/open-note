@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/strings.g.dart';
 import '../../providers/update_provider.dart';
@@ -19,6 +20,7 @@ class _UpdateNotificationState extends State<UpdateNotification>
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _fadeAnimation;
+  int _lastNotificationNonce = 0;
 
   @override
   void initState() {
@@ -35,7 +37,6 @@ class _UpdateNotificationState extends State<UpdateNotification>
       begin: 0.0,
       end: 1.0,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-    _controller.forward();
   }
 
   @override
@@ -58,9 +59,9 @@ class _UpdateNotificationState extends State<UpdateNotification>
     }
   }
 
-  void _update() {
+  void _update() async {
     context.read<UpdateProvider>().downloadUpdate();
-    _dismiss();
+    await _controller.reverse();
   }
 
   @override
@@ -71,6 +72,11 @@ class _UpdateNotificationState extends State<UpdateNotification>
         if (provider.state != UpdateState.updateAvailable ||
             provider.latestRelease == null) {
           return const SizedBox.shrink();
+        }
+
+        if (_lastNotificationNonce != provider.notificationNonce) {
+          _lastNotificationNonce = provider.notificationNonce;
+          _controller.forward(from: 0);
         }
 
         final release = provider.latestRelease!;
@@ -169,17 +175,57 @@ class _UpdateNotificationState extends State<UpdateNotification>
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: SingleChildScrollView(
-                              child: Text(
-                                release.releaseNotes
-                                    .split('\n')
-                                    .take(8)
-                                    .join('\n'),
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: isDark
-                                      ? DesignTokens.darkTextSecondary
-                                      : DesignTokens.gray500,
-                                  height: 1.5,
+                              child: MarkdownBody(
+                                data: release.releaseNotes,
+                                selectable: true,
+                                styleSheet: MarkdownStyleSheet(
+                                  p: TextStyle(
+                                    fontSize: 13,
+                                    color: isDark
+                                        ? DesignTokens.darkTextSecondary
+                                        : DesignTokens.gray500,
+                                    height: 1.5,
+                                  ),
+                                  h1: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: isDark
+                                        ? DesignTokens.darkTextPrimary
+                                        : DesignTokens.gray900,
+                                  ),
+                                  h2: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                    color: isDark
+                                        ? DesignTokens.darkTextPrimary
+                                        : DesignTokens.gray900,
+                                  ),
+                                  h3: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: isDark
+                                        ? DesignTokens.darkTextPrimary
+                                        : DesignTokens.gray900,
+                                  ),
+                                  listBullet: TextStyle(
+                                    fontSize: 13,
+                                    color: isDark
+                                        ? DesignTokens.darkTextSecondary
+                                        : DesignTokens.gray500,
+                                  ),
+                                  a: TextStyle(
+                                    color: DesignTokens.primary500,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  code: TextStyle(
+                                    fontSize: 12,
+                                    color: isDark
+                                        ? DesignTokens.darkTextPrimary
+                                        : DesignTokens.gray900,
+                                    backgroundColor: isDark
+                                        ? Colors.black.withValues(alpha: 0.3)
+                                        : DesignTokens.gray100,
+                                  ),
                                 ),
                               ),
                             ),
