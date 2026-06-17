@@ -1,0 +1,116 @@
+name: 🐞 Bug 报告
+description: 报告桌面软件中遇到的问题或异常行为
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您花时间报告这个问题。请尽可能填写以下信息，帮助开发者快速定位并修复。
+
+  - type: input
+    id: version
+    attributes:
+      label: 软件版本
+      description: 例如 v1.0.0 或具体 Commit Hash
+      placeholder: 请填写您使用的版本号
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: 操作系统
+      description: 您使用的操作系统及版本
+      options:
+        - Windows 10
+        - Windows 11
+        - macOS (Intel)
+        - macOS (Apple Silicon / M 系芯片)
+        - Linux (请在下文补充发行版)
+        - 其他（请注明）
+    validations:
+      required: true
+
+  - type: input
+    id: os_version
+    attributes:
+      label: 操作系统详细版本
+      description: 例如 Windows 11 22H2、macOS Sequoia 15.1、Ubuntu 24.04
+      placeholder: 请填写完整版本号
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install_method
+    attributes:
+      label: 安装方式
+      options:
+        - 官方安装包 (.dmg/.exe/.deb)
+        - 包管理器 (pip)
+        - 源码编译
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 请详细描述如何触发该问题，步骤越清晰越好
+      placeholder: |
+        1. 打开软件
+        2. 点击“设置” -> “首选项”
+        3. 语言选择“繁体中文”
+        4. 软件界面文字语言没有变化
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期行为
+      description: 您认为正常情况下应该发生什么？
+      placeholder: 软件界面文字语言应该变成繁体中文
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为
+      description: 实际发生了什么？
+      placeholder: 软件界面文字语言没有变化没反应
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志或错误信息
+      description: 如有控制台输出、日志文件或崩溃报告，请粘贴在此处（建议使用代码块）
+      render: shell
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 截图或录屏
+      description: 有助于理解问题，如果可以请附上图片或视频链接（可直接拖拽图片到此处）
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 其他环境信息
+      description: 例如CPU型号、内存大小等
+      placeholder: 您的任何补充信息
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 确认事项
+      description: 提交前请确认您已阅读并同意
+      options:
+        - label: 我已搜索过现有 Issues，未发现相同问题
+          required: true
+        - label: 我已尝试更新到最新版本，问题依旧存在
+          required: true

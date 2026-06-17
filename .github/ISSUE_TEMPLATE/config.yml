@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 使用帮助与讨论
+    url: https://github.com/The-Flash-7/open-note/discussions
+    about: 如果遇到软件使用上的问题，请先在 Discussions 中提问，而不是直接报 Bug。
+  - name: 📖 官方文档与常见问题
+    url: https://docs.opennote.zsdn.net
+    about: 查找使用教程、常见问题解答。
