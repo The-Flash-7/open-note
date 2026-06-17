@@ -7,90 +7,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-macos:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      - name: Install Python Dependencies
-        run: |
-          pip install -r embedding_service/requirements.txt
-          pip install pyinstaller
-
-      - name: Build Python Service
-        run: |
-          chmod +x scripts/build_embedding_service_macos.sh
-          ./scripts/build_embedding_service_macos.sh
-
-      - name: Install Flutter Dependencies
-        run: flutter pub get
-
-      - name: Build macOS App
-        run: flutter build macos --release
-
-      - name: Create DMG
-        run: |
-          mkdir -p build/dmg
-          cp -r build/macos/Build/Products/Release/*.app build/dmg/
-          hdiutil create -volname "OpenNote" -srcfolder build/dmg -ov -format UDZO build/OpenNote-macos.dmg
-
-      - name: Upload macOS Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: OpenNote-macos
-          path: build/OpenNote-macos.dmg
-
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      - name: Install Python Dependencies
-        run: |
-          pip install -r embedding_service/requirements.txt
-          pip install pyinstaller
-
-      - name: Build Python Service
-        run: .\scripts\build_embedding_service_windows.bat
-
-      - name: Install Flutter Dependencies
-        run: flutter pub get
-
-      - name: Build Windows App
-        run: flutter build windows --release
-
-      - name: Create Installer
-        run: |
-          New-Item -ItemType Directory -Force -Path build\installer
-          Copy-Item -Recurse build\windows\x64\runner\Release\* build\installer\
-          Compress-Archive -Path build\installer\* -DestinationPath build\OpenNote-windows.zip -Force
-
-      - name: Upload Windows Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: OpenNote-windows
-          path: build/OpenNote-windows.zip
-
   build-linux:
     runs-on: ubuntu-latest
     steps:
@@ -114,7 +30,7 @@ jobs:
       - name: Install Python Dependencies
         run: |
           pip install -r embedding_service/requirements.txt
-          pip install pyinstaller
+          pip install pyinstaller>=6.0
 
       - name: Build Python Service
         run: |
@@ -124,38 +40,33 @@ jobs:
       - name: Install Flutter Dependencies
         run: flutter pub get
 
+      - name: Install flutter_build_debian
+        run: |
+          dart pub global activate flutter_build_debian
+
       - name: Build Linux App
         run: flutter build linux --release
 
-      - name: Create Archive
-        run: |
-          mkdir -p build/linux-archive
-          cp -r build/linux/x64/release/bundle/* build/linux-archive/
-          tar -czf build/OpenNote-linux.tar.gz -C build/linux-archive .
+      - name: Build Debian Package
+        run: flutter_build_debian
+
+      - name: Rename Debian Package
+        run: bash debian/rename_deb.sh
 
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
         with:
           name: OpenNote-linux
-          path: build/OpenNote-linux.tar.gz
+
+          path: debian/packages/*.deb
 
   release:
-    needs: [build-macos, build-windows, build-linux]
+    needs: build-linux
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     permissions:
       contents: write
     steps:
-      - name: Download macOS Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: OpenNote-macos
-
-      - name: Download Windows Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: OpenNote-windows
-
       - name: Download Linux Artifact
         uses: actions/download-artifact@v4
         with:
@@ -165,7 +76,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            OpenNote-macos.dmg
-            OpenNote-windows.zip
-            OpenNote-linux.tar.gz
+            OpenNote*.deb
           generate_release_notes: true
