@@ -1645,13 +1645,19 @@ class _EditorScreenState extends State<EditorScreen> {
             keywords: displayKeywords,
             isGenerating: isGenerating,
             initiallyExpanded: false,
+            isViewMode: _isPreview,
             onRegenerate:
                 !_isPreview && hasSummary && settingsProvider.hasActiveProvider
                 ? () => _regenerateSummary()
                 : null,
             onGenerate:
-                !_isPreview && !hasSummary && settingsProvider.hasActiveProvider
-                ? () => _regenerateSummary()
+                !hasSummary && settingsProvider.hasActiveProvider
+                ? () {
+                    if (_isPreview) {
+                      setState(() => _isPreview = false);
+                    }
+                    _regenerateSummary();
+                  }
                 : null,
             onNavigateToSettings:
                 !_isPreview &&

@@ -300,14 +300,25 @@ class KnowledgeBaseProvider extends ChangeNotifier {
     final running = await _refreshPythonServiceRunning();
     notifyListeners();
 
-    if (enabled && isReady && !running) {
-      // 启用：自动启动向量服务
-      debugPrint('知识库已启用，自动启动向量服务...');
-      await startPythonService(modelPath: _config.modelPath);
-    } else if (!enabled) {
-      // 关闭：停止向量服务
-      debugPrint('知识库已关闭，停止向量服务...');
-      await stopPythonService();
+    if (enabled && isReady && running) {
+      debugPrint('知识库已启用，服务已运行，正在加载模型...');
+      final success = await _pythonService.switchModel(_config.modelPath);
+      if (success) {
+        debugPrint('KnowledgeBase: 模型加载成功');
+        startEmbeddingServiceStatusPolling();
+      } else {
+        _serviceError = '模型加载失败';
+        debugPrint('KnowledgeBase: 模型加载失败');
+      }
+    } else if (!enabled && running) {
+      debugPrint('知识库已关闭，正在卸载模型...');
+      final success = await _pythonService.unloadModel();
+      if (success) {
+        debugPrint('KnowledgeBase: 模型已卸载');
+        await refreshEmbeddingServiceStatus();
+      } else {
+        debugPrint('KnowledgeBase: 模型卸载失败');
+      }
     }
   }
 
@@ -640,29 +651,6 @@ class KnowledgeBaseProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // SHA256 校验太耗时了，还占CPU时间，导致主线程卡住，刚启动软件时会忙碌，点击组件无响应，不校验了，有问题直接启动向量时报错
-      // debugPrint('KnowledgeBase: 正在校验模型完整性...');
-      // final isIntact = await EmbeddingModelDownloader.verifyModelIntegrity(
-      //   _config.modelVersion,
-      // );
-
-      // if (!isIntact) {
-      //   _serviceError = '模型文件已损坏，请重新下载';
-      //   debugPrint('KnowledgeBase: 模型文件校验失败');
-      //   _config = _config.copyWith(
-      //     isModelDownloaded: false,
-      //     lastError: '模型文件校验失败',
-      //   );
-      //   await _configService.setModelDownloaded(false);
-      //   await _configService.setLastError('模型文件校验失败');
-      //   notifyListeners();
-      //   onResult?.call(false, '模型文件已损坏，请重新下载');
-      //   return false;
-      // }
-
-      // debugPrint('KnowledgeBase: 模型文件校验通过，正在启动 Python Embedding 服务...');
-
-      // 传递 modelDir 参数
       final success = await _pythonService.start(
         modelDir: modelPath,
         timeout: const Duration(seconds: 30),
@@ -672,7 +660,6 @@ class KnowledgeBaseProvider extends ChangeNotifier {
 
       if (success) {
         debugPrint('KnowledgeBase: Python 服务已启动 (${_pythonService.baseUrl})');
-        // 启动状态轮询，跟踪详细初始化进度
         startEmbeddingServiceStatusPolling();
         onResult?.call(true, _tr('serviceStarted', '服务已启动'));
       } else {
@@ -693,6 +680,48 @@ class KnowledgeBaseProvider extends ChangeNotifier {
     } catch (e) {
       _serviceError = '${_tr('vectorServiceError', '向量服务异常')}: $e';
       rethrow;
+    } finally {
+      _isStartingService = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> startPythonServiceBasic() async {
+    final running = await _refreshPythonServiceRunning();
+    if (running) {
+      debugPrint('KnowledgeBase: Python 服务已在运行，跳过启动');
+      return true;
+    }
+
+    _isStartingService = true;
+    _serviceError = null;
+    notifyListeners();
+
+    try {
+      debugPrint('KnowledgeBase: 正在启动基础服务（不加载模型）...');
+      
+      final success = await _pythonService.start(
+        timeout: const Duration(seconds: 30),
+      );
+
+      _isPythonServiceRunning = success;
+
+      if (success) {
+        debugPrint('KnowledgeBase: Python 基础服务已启动 (${_pythonService.baseUrl})');
+        startEmbeddingServiceStatusPolling();
+      } else {
+        final portOccupied = _applyPortOccupiedErrorIfNeeded();
+        _serviceError = portOccupied
+            ? _embeddingServiceMessage
+            : _tr('vectorServiceStartFailed', '向量服务启动失败');
+        debugPrint('KnowledgeBase: Python 基础服务启动失败');
+      }
+
+      return success;
+    } catch (e) {
+      _serviceError = '${_tr('vectorServiceError', '向量服务异常')}: $e';
+      debugPrint('KnowledgeBase: 基础服务启动异常: $e');
+      return false;
     } finally {
       _isStartingService = false;
       notifyListeners();

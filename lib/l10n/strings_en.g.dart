@@ -862,6 +862,9 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 	/// 点击生成
 	@override String get ai_clickToGenerate => 'Click to generate AI summary';
 
+	/// 进入编辑模式并生成摘要
+	@override String get ai_switchToEditAndGenerate => 'Switch to edit mode & generate summary';
+
 	/// 取消收藏
 	@override String get card_unfavoriteTooltip => 'Unfavorite';
 

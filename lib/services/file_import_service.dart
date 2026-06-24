@@ -2,9 +2,11 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:html/dom.dart' as html_dom;
+import 'package:http/http.dart' as http;
 import '../models/note.dart';
 
 class ImportResult {
@@ -22,6 +24,8 @@ class ImportResult {
 }
 
 class FileImportService {
+  static const String _pythonServiceUrl = 'http://127.0.0.1:8765';
+  
   static const Map<String, String> _languageMap = {
     '.py': 'python',
     '.js': 'javascript',
@@ -96,6 +100,13 @@ class FileImportService {
     final format = detectFormat(filePath);
     final title = _extractTitle(filePath);
 
+    if (format == NoteFormat.plainText && 
+        (extension.toLowerCase() == '.pdf' || 
+         extension.toLowerCase() == '.docx' || 
+         extension.toLowerCase() == '.pptx')) {
+      return await _parseWithPythonService(file, title);
+    }
+
     switch (format) {
       case NoteFormat.plainText:
         return await _importTxt(file, title);
@@ -115,6 +126,10 @@ class FileImportService {
     final extension = _getFileExtension(filePath).toLowerCase();
 
     if (extension == '.txt') {
+      return NoteFormat.plainText;
+    }
+
+    if (extension == '.pdf' || extension == '.docx' || extension == '.pptx') {
       return NoteFormat.plainText;
     }
 
@@ -248,5 +263,43 @@ class FileImportService {
       content: content,
       format: NoteFormat.markdown,
     );
+  }
+
+  Future<ImportResult?> _parseWithPythonService(File file, String title) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$_pythonServiceUrl/api/document/parse'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'file_path': file.path}),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        
+        if (data['success'] == true && data['text'] != null) {
+          final text = data['text'] as String;
+          
+          if (text.isEmpty) {
+            debugPrint('Document parsing returned empty text: ${file.path}');
+            return null;
+          }
+          
+          return ImportResult(
+            title: title,
+            content: text,
+            format: NoteFormat.plainText,
+          );
+        } else {
+          debugPrint('Document parsing failed: ${data['error']}');
+          return null;
+        }
+      } else {
+        debugPrint('Python service returned ${response.statusCode}: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      debugPrint('Failed to call Python service for document parsing: $e');
+      return null;
+    }
   }
 }

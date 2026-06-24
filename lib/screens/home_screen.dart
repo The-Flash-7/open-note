@@ -1454,6 +1454,9 @@ class _HomeScreenState extends State<HomeScreen> with ClipboardListener {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: [
+          'pdf',
+          'docx',
+          'pptx',
           'txt',
           'md',
           'markdown',

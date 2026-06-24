@@ -862,6 +862,9 @@ class TranslationsRu extends Translations with BaseTranslations<AppLocale, Trans
 	/// 点击生成
 	@override String get ai_clickToGenerate => 'Нажмите для создания резюме';
 
+	/// 进入编辑模式并生成摘要
+	@override String get ai_switchToEditAndGenerate => 'Переключиться в режим редактирования и создать сводку';
+
 	/// 取消收藏
 	@override String get card_unfavoriteTooltip => 'Убрать из избранного';
 

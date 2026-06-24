@@ -318,6 +318,9 @@ class _NewNoteDialogState extends State<NewNoteDialog> {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: [
+          'pdf',
+          'docx',
+          'pptx',
           'txt',
           'md',
           'markdown',

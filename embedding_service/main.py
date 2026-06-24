@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from embedding.embedding_router import router as embedding_router, init_chroma, get_embedding_service
+from document.document_router import router as document_router
 
 app = FastAPI(title="OpenNote Python Service")
 
@@ -23,6 +24,7 @@ app.add_middleware(
 )
 
 app.include_router(embedding_router)
+app.include_router(document_router)
 
 # --- Service State Management ---
 class ServiceState:

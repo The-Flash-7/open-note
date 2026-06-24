@@ -1416,6 +1416,11 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// zh: '点击生成AI摘要'
 	String get ai_clickToGenerate => '点击生成AI摘要';
 
+	/// 进入编辑模式并生成摘要
+	///
+	/// zh: '进入编辑模式并生成摘要'
+	String get ai_switchToEditAndGenerate => '进入编辑模式并生成摘要';
+
 	/// 取消收藏
 	///
 	/// zh: '取消收藏'

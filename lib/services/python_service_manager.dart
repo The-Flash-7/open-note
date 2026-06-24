@@ -498,6 +498,32 @@ class PythonServiceManager {
     }
   }
 
+  Future<bool> unloadModel() async {
+    final running = await refreshRunningState();
+    if (!running) {
+      debugPrint('PythonService: 服务未运行，无需卸载模型');
+      return false;
+    }
+    try {
+      final response = await http
+          .post(Uri.parse('$_baseUrl/api/model/unload'))
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final success = data['success'] == true;
+        final message = data['message'] as String? ?? '';
+        debugPrint('PythonService: 模型卸载${success ? "成功" : "失败"}: $message');
+        return success;
+      }
+      debugPrint('PythonService: 模型卸载 HTTP ${response.statusCode}');
+      return false;
+    } catch (e) {
+      debugPrint('PythonService: 卸载模型失败: $e');
+      return false;
+    }
+  }
+
   /// 请求 Python 服务内部重启（进程不终止，仅重新加载模型和数据库）
   /// 注意：此方法要求服务进程已在运行，如果未运行请先调用 start()
   Future<bool> restartService() async {

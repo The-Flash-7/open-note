@@ -862,6 +862,9 @@ class TranslationsZhTw extends Translations with BaseTranslations<AppLocale, Tra
 	/// 点击生成
 	@override String get ai_clickToGenerate => '點擊產生AI摘要';
 
+	/// 进入编辑模式并生成摘要
+	@override String get ai_switchToEditAndGenerate => '進入編輯模式並產生摘要';
+
 	/// 取消收藏
 	@override String get card_unfavoriteTooltip => '取消收藏';
 

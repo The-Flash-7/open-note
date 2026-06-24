@@ -16,6 +16,7 @@ class AISummaryPanel extends StatefulWidget {
   final VoidCallback? onTap;
   final bool initiallyExpanded;
   final VoidCallback? onNavigateToSettings;
+  final bool isViewMode;
 
   const AISummaryPanel({
     super.key,
@@ -27,6 +28,7 @@ class AISummaryPanel extends StatefulWidget {
     this.onTap,
     this.initiallyExpanded = false,
     this.onNavigateToSettings,
+    this.isViewMode = false,
   });
 
   @override
@@ -165,7 +167,9 @@ class _AISummaryPanelState extends State<AISummaryPanel> {
                     Icon(Icons.auto_awesome, size: 14),
                     SizedBox(width: DesignTokens.space1),
                     Text(
-                      t.ai_generateSummary,
+                      widget.isViewMode
+                          ? t.ai_switchToEditAndGenerate
+                          : t.ai_generateSummary,
                       style: TextStyle(
                         fontSize: DesignTokens.fontSizeSmall,
                         fontWeight: DesignTokens.fontWeightMedium,

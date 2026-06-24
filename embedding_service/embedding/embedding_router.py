@@ -335,3 +335,17 @@ async def get_embedding_status():
         "vocab_size": vocab_size,
         "chroma_status": chroma_status
     }
+
+@router.post("/model/unload")
+async def unload_model():
+    """卸载模型（保留 ChromaDB 数据库）"""
+    global _embedding_model_status
+    try:
+        embedding_svc = get_embedding_service()
+        embedding_svc.unload_model()
+        _embedding_model_status = "pending"
+        
+        return ModelSwitchResponse(success=True, message="模型已卸载")
+    except Exception as e:
+        _embedding_model_status = "failed"
+        return ModelSwitchResponse(success=False, message=str(e))
