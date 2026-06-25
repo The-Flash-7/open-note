@@ -134,7 +134,11 @@ class _SplashScreenState extends State<SplashScreen> {
       _knowledgeBaseProvider = KnowledgeBaseProvider();
       await _knowledgeBaseProvider!.loadConfig();
       
-      Future.delayed(Duration.zero, () => _knowledgeBaseProvider!.startPythonServiceBasic());
+      final kbEnabled = _knowledgeBaseProvider!.isEnabled;
+      Future.delayed(const Duration(seconds: 2), () => _knowledgeBaseProvider!.startPythonServiceBasic(
+        kbEnabled: kbEnabled,
+        notesProvider: _notesProvider,
+      ));
       
       await _yieldFrame();
       _backgroundSummaryProvider = BackgroundSummaryProvider();

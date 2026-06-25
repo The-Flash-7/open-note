@@ -67,6 +67,10 @@ class VectorStore {
       debugPrint('VectorStore: 富文本笔记纯文本提取完成，长度: ${contentToIndex.length}');
     }
 
+    // 清理 HTML 标签和 LaTeX 公式（适用于所有格式）
+    contentToIndex = _cleanTextForIndexing(contentToIndex);
+    debugPrint('VectorStore: 文本清理完成，长度: ${contentToIndex.length}');
+
     if (contentToIndex.isEmpty) {
       debugPrint('VectorStore: 笔记内容为空，跳过索引');
       return;
@@ -289,6 +293,149 @@ class VectorStore {
       debugPrint('VectorStore: 富文本提取失败，返回原文: $e');
       return jsonContent;
     }
+  }
+
+  /// 清理文本内容，移除 HTML 标签和 LaTeX 公式，保留纯文本
+  String _cleanTextForIndexing(String content) {
+    // 1. 清理 LaTeX 公式：保留公式内的文本，转换常见符号
+    content = _cleanLatexFormulas(content);
+    
+    // 2. 清理 HTML 标签：保留链接 URL 和图片 alt 属性
+    content = _cleanHtmlTags(content);
+    
+    return content.trim();
+  }
+
+  /// 清理 LaTeX 公式，保留纯文本
+  String _cleanLatexFormulas(String content) {
+    // 处理行内公式 \(...\) 和独立公式 \[...\]
+    content = content.replaceAllMapped(
+      RegExp(r'\\[\(\[].*?\\[\)\]]', multiLine: true),
+      (match) {
+        String formula = match.group(0) ?? '';
+        // 移除公式标记
+        formula = formula.replaceAll('\\(', '').replaceAll('\\)', '');
+        formula = formula.replaceAll('\\[', '').replaceAll('\\]', '');
+        
+        // 转换希腊字母
+        formula = formula.replaceAll('\\alpha', 'α');
+        formula = formula.replaceAll('\\beta', 'β');
+        formula = formula.replaceAll('\\gamma', 'γ');
+        formula = formula.replaceAll('\\delta', 'δ');
+        formula = formula.replaceAll('\\epsilon', 'ε');
+        formula = formula.replaceAll('\\zeta', 'ζ');
+        formula = formula.replaceAll('\\eta', 'η');
+        formula = formula.replaceAll('\\theta', 'θ');
+        formula = formula.replaceAll('\\iota', 'ι');
+        formula = formula.replaceAll('\\kappa', 'κ');
+        formula = formula.replaceAll('\\lambda', 'λ');
+        formula = formula.replaceAll('\\mu', 'μ');
+        formula = formula.replaceAll('\\nu', 'ν');
+        formula = formula.replaceAll('\\xi', 'ξ');
+        formula = formula.replaceAll('\\omicron', 'ο');
+        formula = formula.replaceAll('\\pi', 'π');
+        formula = formula.replaceAll('\\rho', 'ρ');
+        formula = formula.replaceAll('\\sigma', 'σ');
+        formula = formula.replaceAll('\\tau', 'τ');
+        formula = formula.replaceAll('\\upsilon', 'υ');
+        formula = formula.replaceAll('\\phi', 'φ');
+        formula = formula.replaceAll('\\chi', 'χ');
+        formula = formula.replaceAll('\\psi', 'ψ');
+        formula = formula.replaceAll('\\omega', 'ω');
+        
+        // 转换数学运算符
+        formula = formula.replaceAll('\\forall', '∀');
+        formula = formula.replaceAll('\\exists', '∃');
+        formula = formula.replaceAll('\\in', '∈');
+        formula = formula.replaceAll('\\notin', '∉');
+        formula = formula.replaceAll('\\subset', '⊂');
+        formula = formula.replaceAll('\\supset', '⊃');
+        formula = formula.replaceAll('\\subseteq', '⊆');
+        formula = formula.replaceAll('\\supseteq', '⊇');
+        formula = formula.replaceAll('\\cup', '∪');
+        formula = formula.replaceAll('\\cap', '∩');
+        formula = formula.replaceAll('\\emptyset', '∅');
+        formula = formula.replaceAll('\\sum', '∑');
+        formula = formula.replaceAll('\\prod', '∏');
+        formula = formula.replaceAll('\\int', '∫');
+        formula = formula.replaceAll('\\oint', '∮');
+        formula = formula.replaceAll('\\partial', '∂');
+        formula = formula.replaceAll('\\nabla', '∇');
+        formula = formula.replaceAll('\\sqrt', '√');
+        formula = formula.replaceAll('\\times', '×');
+        formula = formula.replaceAll('\\div', '÷');
+        formula = formula.replaceAll('\\pm', '±');
+        formula = formula.replaceAll('\\mp', '∓');
+        formula = formula.replaceAll('\\cdot', '·');
+        formula = formula.replaceAll('\\ast', '∗');
+        formula = formula.replaceAll('\\circ', '∘');
+        formula = formula.replaceAll('\\bullet', '•');
+        
+        // 转换关系符号
+        formula = formula.replaceAll('\\leq', '≤');
+        formula = formula.replaceAll('\\geq', '≥');
+        formula = formula.replaceAll('\\neq', '≠');
+        formula = formula.replaceAll('\\approx', '≈');
+        formula = formula.replaceAll('\\equiv', '≡');
+        formula = formula.replaceAll('\\sim', '∼');
+        formula = formula.replaceAll('\\propto', '∝');
+        formula = formula.replaceAll('\\parallel', '∥');
+        formula = formula.replaceAll('\\perp', '⊥');
+        
+        // 转换箭头符号
+        formula = formula.replaceAll('\\rightarrow', '→');
+        formula = formula.replaceAll('\\leftarrow', '←');
+        formula = formula.replaceAll('\\uparrow', '↑');
+        formula = formula.replaceAll('\\downarrow', '↓');
+        formula = formula.replaceAll('\\Rightarrow', '⇒');
+        formula = formula.replaceAll('\\Leftarrow', '⇐');
+        formula = formula.replaceAll('\\Uparrow', '⇑');
+        formula = formula.replaceAll('\\Downarrow', '⇓');
+        formula = formula.replaceAll('\\leftrightarrow', '↔');
+        formula = formula.replaceAll('\\Leftrightarrow', '⇔');
+        
+        // 转换其他符号
+        formula = formula.replaceAll('\\infty', '∞');
+        formula = formula.replaceAll('\\angle', '∠');
+        formula = formula.replaceAll('\\degree', '°');
+        formula = formula.replaceAll('\\prime', '′');
+        formula = formula.replaceAll('\\doubleprime', '″');
+        
+        // 移除其他 LaTeX 命令，保留变量名
+        formula = formula.replaceAll('\\mathbf{', '');
+        formula = formula.replaceAll('\\text{', '');
+        formula = formula.replaceAll('\\mathrm{', '');
+        formula = formula.replaceAll('\\mathit{', '');
+        formula = formula.replaceAll('\\mathcal{', '');
+        formula = formula.replaceAll('\\mathbb{', '');
+        formula = formula.replaceAll('{', '').replaceAll('}', '');
+        formula = formula.replaceAll('\\', '');
+        
+        return formula;
+      },
+    );
+    
+    return content;
+  }
+
+  /// 清理 HTML 标签，保留链接 URL 和图片 alt 属性
+  String _cleanHtmlTags(String content) {
+    // 1. 处理 <a> 标签：保留文本和 URL
+    content = content.replaceAllMapped(
+      RegExp(r'<a\s+[^>]*href="([^"]*)"[^>]*>(.*?)</a>', multiLine: true, caseSensitive: false),
+      (match) => '${match.group(2)} (${match.group(1)})',
+    );
+    
+    // 2. 处理 <img> 标签：保留 alt 属性
+    content = content.replaceAllMapped(
+      RegExp(r'<img\s+[^>]*alt="([^"]*)"[^>]*/?>', multiLine: true, caseSensitive: false),
+      (match) => match.group(1) ?? '',
+    );
+    
+    // 3. 移除其他 HTML 标签
+    content = content.replaceAll(RegExp(r'<[^>]+>', multiLine: true), '');
+    
+    return content;
   }
 
   void dispose() {

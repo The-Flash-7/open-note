@@ -1,12 +1,25 @@
 # Copyright (c) 2026 litongshuai
 # SPDX-License-Identifier: MIT OR Apache-2.0
 
-import numpy as np
-import onnxruntime as ort
-from tokenizers import Tokenizer as HfTokenizer
 import os
 import sys
 from typing import List, Optional
+
+numpy = None
+onnxruntime = None
+Tokenizer = None
+
+def _lazy_import_embedding_deps():
+    """延迟导入 numpy、onnxruntime、tokenizers，优化启动时间"""
+    global numpy, onnxruntime, Tokenizer
+    if numpy is None:
+        import numpy as _numpy
+        import onnxruntime as _onnxruntime
+        from tokenizers import Tokenizer as _Tokenizer
+        numpy = _numpy
+        onnxruntime = _onnxruntime
+        Tokenizer = _Tokenizer
+    return numpy, onnxruntime, Tokenizer
 
 
 def get_resource_path(relative_path: str) -> str:
@@ -14,19 +27,21 @@ def get_resource_path(relative_path: str) -> str:
     if getattr(sys, 'frozen', False):
         base_path = os.path.dirname(sys.executable)
     else:
-        base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file)))
     return os.path.join(base_path, relative_path)
 
 
 class LocalEmbeddingService:
     def __init__(self):
-        self.ort_session: Optional['ort.InferenceSession'] = None
-        self.hf_tokenizer: Optional['HfTokenizer'] = None
+        self.ort_session = None
+        self.hf_tokenizer = None
         self.model_path: Optional[str] = None
         self.tokenizer_path: Optional[str] = None
 
     def load_model(self, model_dir: str) -> bool:
         """加载 ONNX 模型和 Tokenizer"""
+        _lazy_import_embedding_deps()
+        
         try:
             model_file = self._find_model_file(model_dir)
             if not model_file:
@@ -54,8 +69,8 @@ class LocalEmbeddingService:
         """使用标准 onnxruntime 加载模型"""
         try:
             providers = ['CPUExecutionProvider']
-            self.ort_session = ort.InferenceSession(model_file, providers=providers)
-            self.hf_tokenizer = HfTokenizer.from_file(tokenizer_file)
+            self.ort_session = onnxruntime.InferenceSession(model_file, providers=providers)
+            self.hf_tokenizer = Tokenizer.from_file(tokenizer_file)
             print(
                 f"EmbeddingService: 模型已加载 {model_file}, "
                 f"Tokenizer vocab: {self.hf_tokenizer.get_vocab_size()}"
@@ -100,8 +115,8 @@ class LocalEmbeddingService:
         input_ids = encoded.ids
         attention_mask = encoded.attention_mask
 
-        input_ids_np = np.array([input_ids], dtype=np.int64)
-        attention_mask_np = np.array([attention_mask], dtype=np.int64)
+        input_ids_np = numpy.array([input_ids], dtype=numpy.int64)
+        attention_mask_np = numpy.array([attention_mask], dtype=numpy.int64)
 
         ort_inputs = {
             'input_ids': input_ids_np,
@@ -116,21 +131,21 @@ class LocalEmbeddingService:
 
         return embedding.flatten().tolist()
 
-    def _mean_pooling(self, token_embeddings: np.ndarray, attention_mask: List[int]) -> np.ndarray:
+    def _mean_pooling(self, token_embeddings, attention_mask: List[int]):
         """对 token embeddings 取平均"""
-        mask = np.array(attention_mask)[np.newaxis, :, np.newaxis]
-        mask_sum = np.sum(mask, axis=1, keepdims=True)
+        mask = numpy.array(attention_mask)[numpy.newaxis, :, numpy.newaxis]
+        mask_sum = numpy.sum(mask, axis=1, keepdims=True)
 
         if mask_sum[0, 0, 0] > 0:
-            pooled = np.sum(token_embeddings * mask, axis=1) / mask_sum
+            pooled = numpy.sum(token_embeddings * mask, axis=1) / mask_sum
         else:
-            pooled = np.mean(token_embeddings, axis=1)
+            pooled = numpy.mean(token_embeddings, axis=1)
 
         return pooled[0]
 
-    def _l2_normalize(self, vector: np.ndarray) -> np.ndarray:
+    def _l2_normalize(self, vector):
         """L2 归一化"""
-        norm = np.linalg.norm(vector)
+        norm = numpy.linalg.norm(vector)
         if norm > 0:
             return vector / norm
         return vector

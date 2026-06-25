@@ -248,6 +248,7 @@ class PythonServiceManager {
     String? modelDir,
     int port = 8765,
     Duration timeout = const Duration(seconds: 60),
+    bool kbEnabled = false,
   }) async {
     final running = await refreshRunningState(port: port);
     if (running) {
@@ -281,7 +282,7 @@ class PythonServiceManager {
           );
           _baseUrl = 'http://127.0.0.1:$port';
           _isRunning = true;
-          _pythonPid = existingService.pid; // 记录 PID 以便后续停止
+          _pythonPid = existingService.pid;
           return true;
         } else {
           debugPrint('PythonService: 端口 $port 被其他服务占用，无法启动');
@@ -292,7 +293,11 @@ class PythonServiceManager {
       final appDir = await getApplicationSupportDirectory();
       final chromaDataDir = '${appDir.path}/chroma_db';
 
-      final args = ['--port', port.toString(), '--data-dir', chromaDataDir];
+      final args = [
+        '--port', port.toString(),
+        '--data-dir', chromaDataDir,
+        '--kb-enabled', kbEnabled.toString(),
+      ];
       if (modelDir != null && modelDir.isNotEmpty) {
         args.addAll(['--model-dir', modelDir]);
       }
@@ -449,14 +454,14 @@ class PythonServiceManager {
     return false;
   }
 
-  /// 获取服务详细状态
+  /// 获取知识库服务详细状态
   Future<EmbeddingServiceStatus?> fetchServiceStatus() async {
     final running = await refreshRunningState();
     if (!running) return null;
 
     try {
       final response = await http
-          .get(Uri.parse('$_baseUrl/api/service/status'))
+          .get(Uri.parse('$_baseUrl/api/embedding/status'))
           .timeout(const Duration(seconds: 5));
 
       if (response.statusCode == 200) {
@@ -464,7 +469,7 @@ class PythonServiceManager {
         return EmbeddingServiceStatus.fromJson(data);
       }
     } catch (e) {
-      debugPrint('PythonService: 获取状态失败: $e');
+      debugPrint('PythonService: 获取知识库状态失败: $e');
     }
 
     return null;
@@ -520,6 +525,70 @@ class PythonServiceManager {
       return false;
     } catch (e) {
       debugPrint('PythonService: 卸载模型失败: $e');
+      return false;
+    }
+  }
+
+  /// 启动知识库服务：创建实例、初始化 ChromaDB、加载模型
+  Future<bool> startKnowledgeBase({
+    String? modelDir,
+    String? dataDir,
+  }) async {
+    final running = await refreshRunningState();
+    if (!running) {
+      debugPrint('PythonService: 服务未运行，无法启动知识库');
+      return false;
+    }
+    try {
+      final response = await http
+          .post(
+            Uri.parse('$_baseUrl/api/knowledge-base/start'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              'model_dir': modelDir,
+              'data_dir': dataDir,
+            }),
+          )
+          .timeout(const Duration(seconds: 60));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final kbStarted = data['kb_started'] == true;
+        final message = data['message'] as String? ?? '';
+        debugPrint('PythonService: 知识库启动${kbStarted ? "成功" : "失败"}: $message');
+        return kbStarted;
+      }
+      debugPrint('PythonService: 知识库启动 HTTP ${response.statusCode}');
+      return false;
+    } catch (e) {
+      debugPrint('PythonService: 启动知识库失败: $e');
+      return false;
+    }
+  }
+
+  /// 停止知识库服务：卸载模型、断开连接、清空实例
+  Future<bool> stopKnowledgeBase() async {
+    final running = await refreshRunningState();
+    if (!running) {
+      debugPrint('PythonService: 服务未运行，无需停止知识库');
+      return false;
+    }
+    try {
+      final response = await http
+          .post(Uri.parse('$_baseUrl/api/knowledge-base/stop'))
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final kbStarted = data['kb_started'] == false;
+        final message = data['message'] as String? ?? '';
+        debugPrint('PythonService: 知识库停止${kbStarted ? "成功" : "失败"}: $message');
+        return kbStarted;
+      }
+      debugPrint('PythonService: 知识库停止 HTTP ${response.statusCode}');
+      return false;
+    } catch (e) {
+      debugPrint('PythonService: 停止知识库失败: $e');
       return false;
     }
   }

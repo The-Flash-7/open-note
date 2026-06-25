@@ -34,26 +34,29 @@ class EmbeddingServiceStatus {
     );
   }
 
-  static EmbeddingServiceState _parseState(String state) {
-    switch (state) {
-      case 'starting':
-        return EmbeddingServiceState.starting;
-      case 'initializing_db':
-        return EmbeddingServiceState.initializingDb;
-      case 'loading_model':
-        return EmbeddingServiceState.loadingModel;
-      case 'ready':
-        return EmbeddingServiceState.ready;
-      case 'error_db_init':
-        return EmbeddingServiceState.errorDbInit;
-      case 'error_model_load':
-        return EmbeddingServiceState.errorModelLoad;
-      case 'error_general':
-        return EmbeddingServiceState.errorGeneral;
-      default:
-        return EmbeddingServiceState.unreachable;
-    }
+static EmbeddingServiceState _parseState(String state) {
+  switch (state) {
+    case 'starting':
+      return EmbeddingServiceState.starting;
+    case 'initializing_db':
+      return EmbeddingServiceState.initializingDb;
+    case 'loading_model':
+      return EmbeddingServiceState.loadingModel;
+    case 'ready':
+      return EmbeddingServiceState.ready;
+    case 'basic':
+    case 'basic_ready':
+      return EmbeddingServiceState.basicReady;
+    case 'error_db_init':
+      return EmbeddingServiceState.errorDbInit;
+    case 'error_model_load':
+      return EmbeddingServiceState.errorModelLoad;
+    case 'error_general':
+      return EmbeddingServiceState.errorGeneral;
+    default:
+      return EmbeddingServiceState.unreachable;
   }
+}
 
   bool get isReady => state == EmbeddingServiceState.ready;
   bool get isInitializing =>
@@ -71,31 +74,34 @@ enum EmbeddingServiceState {
   initializingDb,
   loadingModel,
   ready,
+  basicReady,  // 基础服务就绪，知识库服务未启动
   errorDbInit,
   errorModelLoad,
   errorGeneral,
   unreachable;
 
-  String get label {
-    switch (this) {
-      case EmbeddingServiceState.starting:
-        return '服务刚启动';
-      case EmbeddingServiceState.initializingDb:
-        return '正在初始化数据库';
-      case EmbeddingServiceState.loadingModel:
-        return '正在加载 AI 模型';
-      case EmbeddingServiceState.ready:
-        return '服务已就绪';
-      case EmbeddingServiceState.errorDbInit:
-        return '数据库初始化失败';
-      case EmbeddingServiceState.errorModelLoad:
-        return '模型加载失败';
-      case EmbeddingServiceState.errorGeneral:
-        return '服务异常';
-      case EmbeddingServiceState.unreachable:
-        return '服务不可达';
-    }
+String get label {
+  switch (this) {
+    case EmbeddingServiceState.starting:
+      return '服务刚启动';
+    case EmbeddingServiceState.initializingDb:
+      return '正在初始化数据库';
+    case EmbeddingServiceState.loadingModel:
+      return '正在加载 AI 模型';
+    case EmbeddingServiceState.ready:
+      return '服务已就绪';
+    case EmbeddingServiceState.basicReady:
+      return '基础服务已就绪';
+    case EmbeddingServiceState.errorDbInit:
+      return '数据库初始化失败';
+    case EmbeddingServiceState.errorModelLoad:
+      return '模型加载失败';
+    case EmbeddingServiceState.errorGeneral:
+      return '服务异常';
+    case EmbeddingServiceState.unreachable:
+      return '服务不可达';
   }
+}
 }
 
 enum ComponentStatus {

@@ -55,11 +55,11 @@ class _KnowledgeBaseTabState extends State<KnowledgeBaseTab>
     final kbProvider = context.read<KnowledgeBaseProvider>();
     final notesProvider = context.read<NotesProvider>();
 
-    // 每次打开页面刷新嵌入服务状态
-    await kbProvider.refreshEmbeddingServiceStatus();
-    if (!mounted) return;
+    if (kbProvider.isEnabled) {
+      await kbProvider.refreshEmbeddingServiceStatus();
+      if (!mounted) return;
+    }
 
-    // 仅在知识库完全就绪且 Python 服务运行时同步
     if (kbProvider.isFullyReady) {
       await kbProvider.refreshIndexStats(notesProvider);
     }
@@ -125,6 +125,108 @@ class _KnowledgeBaseTabState extends State<KnowledgeBaseTab>
   ) {
     // True readiness = config enabled + model downloaded + service running + fully ready
     final isFullyReady = provider.isFullyReady;
+
+    // Case 0: Knowledge base disabled - show "not enabled" prompt immediately
+    if (!provider.isEnabled) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isDark
+              ? DesignTokens.darkErrorBackground.withValues(alpha: 0.3)
+              : DesignTokens.errorBackground,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              Icons.info_outline,
+              color: DesignTokens.error,
+              size: 24,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    t.kb_knowledgeBaseNotEnabled,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: isDark
+                          ? DesignTokens.darkTextPrimary
+                          : DesignTokens.gray900,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    t.kb_enableKnowledgeBaseVectorization,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: isDark
+                          ? DesignTokens.darkTextSecondary
+                          : DesignTokens.gray500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Case 0.5: Knowledge base enabled but service is basicReady - show "service not started"
+    if (provider.isEnabled &&
+        provider.embeddingServiceState == EmbeddingServiceState.basicReady &&
+        !provider.isServiceInitializing) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isDark
+              ? DesignTokens.darkErrorBackground.withValues(alpha: 0.3)
+              : DesignTokens.errorBackground,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              Icons.warning_amber_outlined,
+              color: DesignTokens.warning500,
+              size: 24,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '知识库服务未启动',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: isDark
+                          ? DesignTokens.darkTextPrimary
+                          : DesignTokens.gray900,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '请开启知识库或重启服务',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: isDark
+                          ? DesignTokens.darkTextSecondary
+                          : DesignTokens.gray500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
     // Case 1: Service is preparing, starting or stopping
     if (provider.isServiceInitializing) {
@@ -780,6 +882,24 @@ class _KnowledgeBaseTabState extends State<KnowledgeBaseTab>
       builder: (context, notesProvider, _) {
         final totalNotes = notesProvider.allPreviews.length;
 
+        // UI 优先原则：知识库未启用 → 显示"知识库未启用"
+        if (!provider.isEnabled) {
+          return _SectionCard(
+            key: _statsCardKey,
+            title: t.kb_indexStats,
+            isDark: isDark,
+            child: Text(
+              t.kb_knowledgeBaseNotEnabledPrompt,
+              style: TextStyle(
+                fontSize: 13,
+                color: isDark
+                    ? DesignTokens.darkTextSecondary
+                    : DesignTokens.gray500,
+              ),
+            ),
+          );
+        }
+
         // 服务正在初始化
         if (provider.isServiceInitializing) {
           return _SectionCard(
@@ -854,24 +974,6 @@ class _KnowledgeBaseTabState extends State<KnowledgeBaseTab>
                     ),
                   ),
                 ],
-              ),
-            ),
-          );
-        }
-
-        // 知识库未启用
-        if (!provider.isEnabled) {
-          return _SectionCard(
-            key: _statsCardKey,
-            title: t.kb_indexStats,
-            isDark: isDark,
-            child: Text(
-              t.kb_knowledgeBaseNotEnabledPrompt,
-              style: TextStyle(
-                fontSize: 13,
-                color: isDark
-                    ? DesignTokens.darkTextSecondary
-                    : DesignTokens.gray500,
               ),
             ),
           );

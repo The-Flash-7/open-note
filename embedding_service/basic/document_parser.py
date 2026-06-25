@@ -21,7 +21,7 @@ class DocumentParser:
     @staticmethod
     def parse_pdf(file_path: str) -> Tuple[Optional[str], Optional[str]]:
         try:
-            from pypdf import PdfReader
+            from pypdf import PdfReader  # 延迟导入
             
             reader = PdfReader(file_path)
             text_content = []
@@ -52,7 +52,7 @@ class DocumentParser:
     @staticmethod
     def parse_docx(file_path: str) -> Tuple[Optional[str], Optional[str]]:
         try:
-            from docx import Document
+            from docx import Document  # 延迟导入
             
             doc = Document(file_path)
             text_content = []
@@ -91,7 +91,7 @@ class DocumentParser:
     @staticmethod
     def parse_pptx(file_path: str) -> Tuple[Optional[str], Optional[str]]:
         try:
-            from pptx import Presentation
+            from pptx import Presentation  # 延迟导入
             
             prs = Presentation(file_path)
             text_content = []

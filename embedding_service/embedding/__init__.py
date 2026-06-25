@@ -1,6 +1,5 @@
 # Copyright (c) 2026 litongshuai
 # SPDX-License-Identifier: MIT OR Apache-2.0
 
-from .local_embedding import LocalEmbeddingService
-
-__all__ = ['LocalEmbeddingService']
+from .embedding_router import router as embedding_router
+from .embedding_router import init_chroma, get_embedding_service

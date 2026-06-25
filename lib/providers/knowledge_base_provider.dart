@@ -4,6 +4,7 @@
 import 'package:flutter/foundation.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import '../models/knowledge_base_config.dart';
 import '../models/note.dart';
 import '../services/config_service.dart';
@@ -130,26 +131,28 @@ class KnowledgeBaseProvider extends ChangeNotifier {
       _embeddingServiceState == EmbeddingServiceState.errorModelLoad ||
       _embeddingServiceState == EmbeddingServiceState.errorGeneral;
 
-  String get embeddingServiceStatusDisplayText {
-    switch (_embeddingServiceState) {
-      case EmbeddingServiceState.starting:
-        return _tr('serviceJustStarted', '服务刚启动，准备初始化...');
-      case EmbeddingServiceState.initializingDb:
-        return _tr('chromaDbInitializing', '正在初始化 ChromaDB 数据库...');
-      case EmbeddingServiceState.loadingModel:
-        return _tr('loadingEmbeddingModel', '正在加载 Embedding AI 模型...');
-      case EmbeddingServiceState.ready:
-        return _tr('knowledgeBaseReady', '知识库已就绪');
-      case EmbeddingServiceState.errorDbInit:
-        return '${_tr('chromaDbInitFailed', 'ChromaDB 初始化失败')}: $_embeddingServiceErrorDetail';
-      case EmbeddingServiceState.errorModelLoad:
-        return '${_tr('modelLoadFailed', '嵌入模型加载失败')}: $_embeddingServiceErrorDetail';
-      case EmbeddingServiceState.errorGeneral:
-        return '${_tr('serviceInitError', '服务初始化异常')}: $_embeddingServiceErrorDetail';
-      case EmbeddingServiceState.unreachable:
-        return _tr('vectorServiceNotRunning', '向量服务未运行');
-    }
+String get embeddingServiceStatusDisplayText {
+  switch (_embeddingServiceState) {
+    case EmbeddingServiceState.starting:
+      return _tr('serviceJustStarted', '服务刚启动，准备初始化...');
+    case EmbeddingServiceState.initializingDb:
+      return _tr('chromaDbInitializing', '正在初始化 ChromaDB 数据库...');
+    case EmbeddingServiceState.loadingModel:
+      return _tr('loadingEmbeddingModel', '正在加载 Embedding AI 模型...');
+    case EmbeddingServiceState.ready:
+      return _tr('knowledgeBaseReady', '知识库已就绪');
+    case EmbeddingServiceState.basicReady:
+      return _tr('basicServiceReady', '基础服务已就绪，知识库服务未启动');
+    case EmbeddingServiceState.errorDbInit:
+      return '${_tr('chromaDbInitFailed', 'ChromaDB 初始化失败')}: $_embeddingServiceErrorDetail';
+    case EmbeddingServiceState.errorModelLoad:
+      return '${_tr('modelLoadFailed', '嵌入模型加载失败')}: $_embeddingServiceErrorDetail';
+    case EmbeddingServiceState.errorGeneral:
+      return '${_tr('serviceInitError', '服务初始化异常')}: $_embeddingServiceErrorDetail';
+    case EmbeddingServiceState.unreachable:
+      return _tr('vectorServiceNotRunning', '向量服务未运行');
   }
+}
 
   Future<bool> _refreshPythonServiceRunning() async {
     final running = await _pythonService.refreshRunningState();
@@ -211,21 +214,21 @@ class KnowledgeBaseProvider extends ChangeNotifier {
     _pollingLoop();
   }
 
-  Future<void> _pollingLoop() async {
-    while (_pollingActive) {
-      await refreshEmbeddingServiceStatus();
+Future<void> _pollingLoop() async {
+  while (_pollingActive && isEnabled) {
+    await refreshEmbeddingServiceStatus();
 
-      // If ready or error, stop polling
-      if (_embeddingServiceState == EmbeddingServiceState.ready ||
-          hasEmbeddingServiceError) {
-        _pollingActive = false;
-        notifyListeners();
-        return;
-      }
-
-      await Future.delayed(const Duration(milliseconds: 500));
+    if (_embeddingServiceState == EmbeddingServiceState.ready ||
+        _embeddingServiceState == EmbeddingServiceState.basicReady ||
+        hasEmbeddingServiceError) {
+      _pollingActive = false;
+      notifyListeners();
+      return;
     }
+
+    await Future.delayed(const Duration(milliseconds: 500));
   }
+}
 
   void stopEmbeddingServiceStatusPolling() {
     _pollingActive = false;
@@ -301,23 +304,36 @@ class KnowledgeBaseProvider extends ChangeNotifier {
     notifyListeners();
 
     if (enabled && isReady && running) {
-      debugPrint('知识库已启用，服务已运行，正在加载模型...');
-      final success = await _pythonService.switchModel(_config.modelPath);
+      debugPrint('知识库已启用，启动知识库服务...');
+      
+      // 开启知识库：调用 /api/knowledge-base/start
+      final appDir = await getApplicationSupportDirectory();
+      final chromaDataDir = '${appDir.path}/chroma_db';
+      
+      final success = await _pythonService.startKnowledgeBase(
+        modelDir: _config.modelPath,
+        dataDir: chromaDataDir,
+      );
+      
       if (success) {
-        debugPrint('KnowledgeBase: 模型加载成功');
+        debugPrint('KnowledgeBase: 知识库服务已启动');
         startEmbeddingServiceStatusPolling();
       } else {
-        _serviceError = '模型加载失败';
-        debugPrint('KnowledgeBase: 模型加载失败');
+        _serviceError = '知识库服务启动失败';
+        debugPrint('KnowledgeBase: 知识库服务启动失败');
       }
-    } else if (!enabled && running) {
-      debugPrint('知识库已关闭，正在卸载模型...');
-      final success = await _pythonService.unloadModel();
-      if (success) {
-        debugPrint('KnowledgeBase: 模型已卸载');
-        await refreshEmbeddingServiceStatus();
-      } else {
-        debugPrint('KnowledgeBase: 模型卸载失败');
+    } else if (!enabled) {
+      debugPrint('知识库已关闭，停止知识库服务...');
+      stopEmbeddingServiceStatusPolling();
+      
+      if (running) {
+        // 关闭知识库：调用 /api/knowledge-base/stop
+        final success = await _pythonService.stopKnowledgeBase();
+        if (success) {
+          debugPrint('KnowledgeBase: 知识库服务已停止');
+        } else {
+          debugPrint('KnowledgeBase: 知识库服务停止失败');
+        }
       }
     }
   }
@@ -686,10 +702,36 @@ class KnowledgeBaseProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> startPythonServiceBasic() async {
+  Future<bool> startPythonServiceBasic({
+    bool kbEnabled = false,
+    NotesProvider? notesProvider,
+  }) async {
     final running = await _refreshPythonServiceRunning();
     if (running) {
       debugPrint('KnowledgeBase: Python 服务已在运行，跳过启动');
+      
+      // 如果知识库已开启，调用 /api/knowledge-base/start
+      if (kbEnabled && _config.modelPath.isNotEmpty) {
+        final appDir = await getApplicationSupportDirectory();
+        final chromaDataDir = '${appDir.path}/chroma_db';
+        
+        final kbSuccess = await _pythonService.startKnowledgeBase(
+          modelDir: _config.modelPath,
+          dataDir: chromaDataDir,
+        );
+        
+        if (kbSuccess) {
+          startEmbeddingServiceStatusPolling();
+          if (notesProvider != null) {
+            notesProvider.setKnowledgeBaseModelPath(
+              _config.modelPath,
+              serviceUrl: _pythonService.baseUrl,
+            );
+            notesProvider.setChunkConfig(_config.chunkSize, _config.chunkOverlap);
+            debugPrint('KnowledgeBase: 知识库服务已配置到 NotesProvider');
+          }
+        }
+      }
       return true;
     }
 
@@ -702,13 +744,38 @@ class KnowledgeBaseProvider extends ChangeNotifier {
       
       final success = await _pythonService.start(
         timeout: const Duration(seconds: 30),
+        kbEnabled: false,  // 不传递 kbEnabled，基础服务不初始化
       );
 
       _isPythonServiceRunning = success;
 
       if (success) {
         debugPrint('KnowledgeBase: Python 基础服务已启动 (${_pythonService.baseUrl})');
-        startEmbeddingServiceStatusPolling();
+        
+        // 如果知识库已开启，调用 /api/knowledge-base/start
+        if (kbEnabled && _config.modelPath.isNotEmpty) {
+          final appDir = await getApplicationSupportDirectory();
+          final chromaDataDir = '${appDir.path}/chroma_db';
+          
+          final kbSuccess = await _pythonService.startKnowledgeBase(
+            modelDir: _config.modelPath,
+            dataDir: chromaDataDir,
+          );
+          
+          if (kbSuccess) {
+            startEmbeddingServiceStatusPolling();
+            if (notesProvider != null) {
+              notesProvider.setKnowledgeBaseModelPath(
+                _config.modelPath,
+                serviceUrl: _pythonService.baseUrl,
+              );
+              notesProvider.setChunkConfig(_config.chunkSize, _config.chunkOverlap);
+              debugPrint('KnowledgeBase: 知识库服务已配置到 NotesProvider');
+            }
+          } else {
+            debugPrint('KnowledgeBase: 知识库服务启动失败');
+          }
+        }
       } else {
         final portOccupied = _applyPortOccupiedErrorIfNeeded();
         _serviceError = portOccupied

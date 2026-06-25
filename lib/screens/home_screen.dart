@@ -188,42 +188,9 @@ class _HomeScreenState extends State<HomeScreen> with ClipboardListener {
       },
     );
 
-    // 如果知识库已启用且准备成功，启动服务
-    if (prepared && kbProvider.isReady && !kbProvider.isPythonServiceRunning) {
-      await _startPythonService(kbProvider);
-    }
-  }
-
-  Future<void> _startPythonService(KnowledgeBaseProvider kbProvider) async {
-    final notesProvider = context.read<NotesProvider>();
-
-    // 通过 KnowledgeBaseProvider 启动服务，确保 _isPythonServiceRunning 被正确设置
-    final success = await kbProvider.startPythonService(
-      modelPath: kbProvider.config.modelPath,
-    );
-
-    if (success) {
-      notesProvider.setKnowledgeBaseModelPath(
-        kbProvider.config.modelPath,
-        serviceUrl: kbProvider.pythonServiceUrl,
-      );
-
-      // 同步分块配置到 NotesProvider
-      notesProvider.setChunkConfig(
-        kbProvider.config.chunkSize,
-        kbProvider.config.chunkOverlap,
-      );
-
-      // 服务启动成功后，延迟同步最新索引统计（确保 Python 服务完全就绪）
-      Future.delayed(const Duration(seconds: 2), () {
-        if (notesProvider.hasAIConfig) {
-          kbProvider.refreshIndexStats(notesProvider);
-        }
-      });
-
-      debugPrint('Python 服务已启动并配置到 NotesProvider');
-    } else {
-      debugPrint('Python 服务启动失败');
+    // 服务启动已在 splash_screen.dart 中完成，此处只检查服务状态
+    if (prepared && kbProvider.isPythonServiceRunning && kbProvider.isReady) {
+      debugPrint('HomeScreen: Python 服务已运行，跳过启动');
     }
   }
 
