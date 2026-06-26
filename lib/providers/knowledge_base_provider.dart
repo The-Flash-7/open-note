@@ -710,8 +710,8 @@ Future<void> _pollingLoop() async {
     if (running) {
       debugPrint('KnowledgeBase: Python 服务已在运行，跳过启动');
       
-      // 如果知识库已开启，调用 /api/knowledge-base/start
-      if (kbEnabled && _config.modelPath.isNotEmpty) {
+      // 检查当前配置（可能用户已切换开关）
+      if (_config.isEnabled && _config.modelPath.isNotEmpty) {
         final appDir = await getApplicationSupportDirectory();
         final chromaDataDir = '${appDir.path}/chroma_db';
         
@@ -744,7 +744,7 @@ Future<void> _pollingLoop() async {
       
       final success = await _pythonService.start(
         timeout: const Duration(seconds: 30),
-        kbEnabled: false,  // 不传递 kbEnabled，基础服务不初始化
+        kbEnabled: false,
       );
 
       _isPythonServiceRunning = success;
@@ -752,8 +752,8 @@ Future<void> _pollingLoop() async {
       if (success) {
         debugPrint('KnowledgeBase: Python 基础服务已启动 (${_pythonService.baseUrl})');
         
-        // 如果知识库已开启，调用 /api/knowledge-base/start
-        if (kbEnabled && _config.modelPath.isNotEmpty) {
+        // 检查当前配置（可能用户已切换开关）
+        if (_config.isEnabled && _config.modelPath.isNotEmpty) {
           final appDir = await getApplicationSupportDirectory();
           final chromaDataDir = '${appDir.path}/chroma_db';
           
