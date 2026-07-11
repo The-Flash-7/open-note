@@ -841,6 +841,9 @@ class TranslationsRu extends Translations with BaseTranslations<AppLocale, Trans
 	/// 生成摘要
 	@override String get ai_generateSummary => 'Создать резюме';
 
+	/// Переключиться на режим редактирования и создать резюме
+	@override String get ai_switchToEditAndGenerate => 'Переключиться на редактирование и создание';
+
 	/// 重新生成
 	@override String get ai_regenerate => 'Пересоздать';
 
@@ -861,9 +864,6 @@ class TranslationsRu extends Translations with BaseTranslations<AppLocale, Trans
 
 	/// 点击生成
 	@override String get ai_clickToGenerate => 'Нажмите для создания резюме';
-
-	/// 进入编辑模式并生成摘要
-	@override String get ai_switchToEditAndGenerate => 'Переключиться в режим редактирования и создать сводку';
 
 	/// 取消收藏
 	@override String get card_unfavoriteTooltip => 'Убрать из избранного';
@@ -1731,4 +1731,25 @@ class TranslationsRu extends Translations with BaseTranslations<AppLocale, Trans
 
 	/// kb_switchModelWarning
 	@override String get kb_switchModelWarning => 'Переключение версии модели очистит векторный индекс. После переключения индекс будет перестроен.';
+
+	/// Кнопка экспорта
+	@override String get export_title => 'Экспорт';
+
+	/// Формат экспорта: Текстовый файл
+	@override String get export_format_txt => 'Текстовый файл';
+
+	/// Формат экспорта: Markdown файл
+	@override String get export_format_md => 'Markdown файл';
+
+	/// Формат экспорта: PDF документ
+	@override String get export_format_pdf => 'PDF документ';
+
+	/// Сообщение об успешном экспорте
+	@override String get export_success => 'Экспорт успешен';
+
+	/// Сообщение о неудачном экспорте
+	@override String get export_failed => 'Экспорт не удался';
+
+	/// Заголовок диалога выбора формата экспорта
+	@override String get export_select_format => 'Выберите формат экспорта';
 }

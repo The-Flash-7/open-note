@@ -1076,6 +1076,10 @@
   "@ai_generateSummary": {
     "description": "生成摘要"
   },
+  "ai_switchToEditAndGenerate": "Switch to Edit & Generate",
+  "@ai_switchToEditAndGenerate": {
+    "description": "Switch to edit mode and generate summary in view mode"
+  },
   "ai_regenerate": "Regenerate",
   "@ai_regenerate": {
     "description": "重新生成"
@@ -2282,5 +2286,33 @@
   "kb_switchModelWarning": "Switching model version will clear the vector index. The index will be rebuilt after switching.",
   "@kb_switchModelWarning": {
     "description": "kb_switchModelWarning"
+  },
+  "export_title": "Export",
+  "@export_title": {
+    "description": "Export button"
+  },
+  "export_format_txt": "Text File",
+  "@export_format_txt": {
+    "description": "Export format: Text File"
+  },
+  "export_format_md": "Markdown File",
+  "@export_format_md": {
+    "description": "Export format: Markdown File"
+  },
+  "export_format_pdf": "PDF Document",
+  "@export_format_pdf": {
+    "description": "Export format: PDF Document"
+  },
+  "export_success": "Export successful",
+  "@export_success": {
+    "description": "Export success message"
+  },
+  "export_failed": "Export failed",
+  "@export_failed": {
+    "description": "Export failed message"
+  },
+  "export_select_format": "Select Export Format",
+  "@export_select_format": {
+    "description": "Select export format dialog title"
   }
 }

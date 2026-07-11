@@ -6,6 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   clipboard_watcher
   desktop_drop
   hotkey_manager_linux
+  printing
   screen_retriever_linux
   url_launcher_linux
   window_manager

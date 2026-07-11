@@ -841,6 +841,9 @@ class TranslationsZhTw extends Translations with BaseTranslations<AppLocale, Tra
 	/// 生成摘要
 	@override String get ai_generateSummary => '產生摘要';
 
+	/// 在查看模式下切換到編輯模式並產生摘要
+	@override String get ai_switchToEditAndGenerate => '切換到編輯並產生';
+
 	/// 重新生成
 	@override String get ai_regenerate => '重新產生';
 
@@ -861,9 +864,6 @@ class TranslationsZhTw extends Translations with BaseTranslations<AppLocale, Tra
 
 	/// 点击生成
 	@override String get ai_clickToGenerate => '點擊產生AI摘要';
-
-	/// 进入编辑模式并生成摘要
-	@override String get ai_switchToEditAndGenerate => '進入編輯模式並產生摘要';
 
 	/// 取消收藏
 	@override String get card_unfavoriteTooltip => '取消收藏';
@@ -1731,4 +1731,25 @@ class TranslationsZhTw extends Translations with BaseTranslations<AppLocale, Tra
 
 	/// kb_switchModelWarning
 	@override String get kb_switchModelWarning => '切換模型版本將清空向量索引，切換後將重建索引。';
+
+	/// 匯出按鈕
+	@override String get export_title => '匯出';
+
+	/// 匯出格式：文字檔案
+	@override String get export_format_txt => '文字檔案';
+
+	/// 匯出格式：Markdown 檔案
+	@override String get export_format_md => 'Markdown 檔案';
+
+	/// 匯出格式：PDF 文件
+	@override String get export_format_pdf => 'PDF 文件';
+
+	/// 匯出成功提示
+	@override String get export_success => '匯出成功';
+
+	/// 匯出失敗提示
+	@override String get export_failed => '匯出失敗';
+
+	/// 選擇匯出格式對話框標題
+	@override String get export_select_format => '選擇匯出格式';
 }

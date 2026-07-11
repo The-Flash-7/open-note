@@ -841,6 +841,9 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 	/// 生成摘要
 	@override String get ai_generateSummary => 'Generate Summary';
 
+	/// Switch to edit mode and generate summary in view mode
+	@override String get ai_switchToEditAndGenerate => 'Switch to Edit & Generate';
+
 	/// 重新生成
 	@override String get ai_regenerate => 'Regenerate';
 
@@ -861,9 +864,6 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 
 	/// 点击生成
 	@override String get ai_clickToGenerate => 'Click to generate AI summary';
-
-	/// 进入编辑模式并生成摘要
-	@override String get ai_switchToEditAndGenerate => 'Switch to edit mode & generate summary';
 
 	/// 取消收藏
 	@override String get card_unfavoriteTooltip => 'Unfavorite';
@@ -1737,4 +1737,25 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 
 	/// kb_switchModelWarning
 	@override String get kb_switchModelWarning => 'Switching model version will clear the vector index. The index will be rebuilt after switching.';
+
+	/// Export button
+	@override String get export_title => 'Export';
+
+	/// Export format: Text File
+	@override String get export_format_txt => 'Text File';
+
+	/// Export format: Markdown File
+	@override String get export_format_md => 'Markdown File';
+
+	/// Export format: PDF Document
+	@override String get export_format_pdf => 'PDF Document';
+
+	/// Export success message
+	@override String get export_success => 'Export successful';
+
+	/// Export failed message
+	@override String get export_failed => 'Export failed';
+
+	/// Select export format dialog title
+	@override String get export_select_format => 'Select Export Format';
 }

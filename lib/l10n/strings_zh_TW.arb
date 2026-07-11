@@ -1076,6 +1076,10 @@
   "@ai_generateSummary": {
     "description": "生成摘要"
   },
+  "ai_switchToEditAndGenerate": "切換到編輯並產生",
+  "@ai_switchToEditAndGenerate": {
+    "description": "在查看模式下切換到編輯模式並產生摘要"
+  },
   "ai_regenerate": "重新產生",
   "@ai_regenerate": {
     "description": "重新生成"
@@ -2274,5 +2278,33 @@
   "kb_switchModelWarning": "切換模型版本將清空向量索引，切換後將重建索引。",
   "@kb_switchModelWarning": {
     "description": "kb_switchModelWarning"
+  },
+  "export_title": "匯出",
+  "@export_title": {
+    "description": "匯出按鈕"
+  },
+  "export_format_txt": "文字檔案",
+  "@export_format_txt": {
+    "description": "匯出格式：文字檔案"
+  },
+  "export_format_md": "Markdown 檔案",
+  "@export_format_md": {
+    "description": "匯出格式：Markdown 檔案"
+  },
+  "export_format_pdf": "PDF 文件",
+  "@export_format_pdf": {
+    "description": "匯出格式：PDF 文件"
+  },
+  "export_success": "匯出成功",
+  "@export_success": {
+    "description": "匯出成功提示"
+  },
+  "export_failed": "匯出失敗",
+  "@export_failed": {
+    "description": "匯出失敗提示"
+  },
+  "export_select_format": "選擇匯出格式",
+  "@export_select_format": {
+    "description": "選擇匯出格式對話框標題"
   }
 }

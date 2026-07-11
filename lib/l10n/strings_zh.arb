@@ -1076,6 +1076,10 @@
   "@ai_generateSummary": {
     "description": "生成摘要"
   },
+  "ai_switchToEditAndGenerate": "切换到编辑并生成",
+  "@ai_switchToEditAndGenerate": {
+    "description": "在查看模式下切换到编辑模式并生成摘要"
+  },
   "ai_regenerate": "重新生成",
   "@ai_regenerate": {
     "description": "重新生成"
@@ -2282,5 +2286,33 @@
   "kb_switchModelWarning": "切换模型版本将清空向量索引，切换后将重建索引。",
   "@kb_switchModelWarning": {
     "description": "kb_switchModelWarning"
+  },
+  "export_title": "导出",
+  "@export_title": {
+    "description": "导出按钮"
+  },
+  "export_format_txt": "文本文件",
+  "@export_format_txt": {
+    "description": "导出格式：文本文件"
+  },
+  "export_format_md": "Markdown 文件",
+  "@export_format_md": {
+    "description": "导出格式：Markdown 文件"
+  },
+  "export_format_pdf": "PDF 文档",
+  "@export_format_pdf": {
+    "description": "导出格式：PDF 文档"
+  },
+  "export_success": "导出成功",
+  "@export_success": {
+    "description": "导出成功提示"
+  },
+  "export_failed": "导出失败",
+  "@export_failed": {
+    "description": "导出失败提示"
+  },
+  "export_select_format": "选择导出格式",
+  "@export_select_format": {
+    "description": "选择导出格式对话框标题"
   }
 }

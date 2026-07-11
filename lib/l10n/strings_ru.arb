@@ -1076,6 +1076,10 @@
   "@ai_generateSummary": {
     "description": "生成摘要"
   },
+  "ai_switchToEditAndGenerate": "Переключиться на редактирование и создание",
+  "@ai_switchToEditAndGenerate": {
+    "description": "Переключиться на режим редактирования и создать резюме"
+  },
   "ai_regenerate": "Пересоздать",
   "@ai_regenerate": {
     "description": "重新生成"
@@ -2274,5 +2278,33 @@
   "kb_switchModelWarning": "Переключение версии модели очистит векторный индекс. После переключения индекс будет перестроен.",
   "@kb_switchModelWarning": {
     "description": "kb_switchModelWarning"
+  },
+  "export_title": "Экспорт",
+  "@export_title": {
+    "description": "Кнопка экспорта"
+  },
+  "export_format_txt": "Текстовый файл",
+  "@export_format_txt": {
+    "description": "Формат экспорта: Текстовый файл"
+  },
+  "export_format_md": "Markdown файл",
+  "@export_format_md": {
+    "description": "Формат экспорта: Markdown файл"
+  },
+  "export_format_pdf": "PDF документ",
+  "@export_format_pdf": {
+    "description": "Формат экспорта: PDF документ"
+  },
+  "export_success": "Экспорт успешен",
+  "@export_success": {
+    "description": "Сообщение об успешном экспорте"
+  },
+  "export_failed": "Экспорт не удался",
+  "@export_failed": {
+    "description": "Сообщение о неудачном экспорте"
+  },
+  "export_select_format": "Выберите формат экспорта",
+  "@export_select_format": {
+    "description": "Заголовок диалога выбора формата экспорта"
   }
 }

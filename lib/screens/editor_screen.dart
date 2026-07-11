@@ -12,6 +12,7 @@ import 'package:markdown_editor_plus/src/toolbar.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:file_picker/file_picker.dart';
 
 import '../models/note.dart';
 import '../models/category.dart';
@@ -28,6 +29,8 @@ import '../widgets/ai/ai_summary_panel.dart';
 import '../widgets/editors/plain_text_editor_widget.dart';
 import '../widgets/editors/rich_text_editor_widget.dart';
 import '../widgets/editors/code_editor_widget.dart';
+import '../widgets/export_dialog.dart';
+import '../services/export_service.dart';
 import '../theme/design_tokens.dart';
 import '../utils/snackbar_helper.dart';
 import '../utils/category_path_helper.dart';
@@ -1105,6 +1108,16 @@ class _EditorScreenState extends State<EditorScreen> {
                 onPressed: _isProcessing ? null : _saveNote,
                 tooltip: t.common_save,
               ),
+            if (_currentNote != null && _currentFormat != NoteFormat.code)
+              IconButton(
+                icon: Icon(
+                  Icons.download,
+                  color: DesignTokens.primary500,
+                ),
+                iconSize: DesignTokens.iconSizeStandard,
+                onPressed: _showExportDialog,
+                tooltip: t.export_title,
+              ),
             if (!widget.isEmbedded)
               IconButton(
                 icon: Image.asset(
@@ -1681,6 +1694,63 @@ class _EditorScreenState extends State<EditorScreen> {
           builder: (context) =>
               EditorScreen(note: fullNote, startInEditMode: false),
         ),
+      );
+    }
+  }
+
+  Future<void> _showExportDialog() async {
+    if (_currentNote == null) return;
+
+    final format = await showDialog<ExportFormat>(
+      context: context,
+      builder: (context) => ExportDialog(note: _currentNote!),
+    );
+
+    if (format == null || !mounted) return;
+
+    String defaultFileName = _currentNote!.title.isNotEmpty
+        ? _currentNote!.title
+        : 'note';
+
+    String extension;
+    switch (format) {
+      case ExportFormat.txt:
+        extension = 'txt';
+        break;
+      case ExportFormat.md:
+        extension = 'md';
+        break;
+      case ExportFormat.pdf:
+        extension = 'pdf';
+        break;
+    }
+
+    final result = await FilePicker.platform.saveFile(
+      dialogTitle: t.export_select_format,
+      fileName: '$defaultFileName.$extension',
+    );
+
+    if (result == null || !mounted) return;
+
+    final success = await ExportService.exportNote(
+      _currentNote!,
+      format,
+      result,
+    );
+
+    if (!mounted) return;
+
+    if (success) {
+      SnackBarHelper.showWithDuration(
+        context,
+        t.export_success,
+        duration: const Duration(seconds: 2),
+      );
+    } else {
+      SnackBarHelper.showWithDuration(
+        context,
+        t.export_failed,
+        duration: const Duration(seconds: 2),
       );
     }
   }

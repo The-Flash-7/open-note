@@ -1381,6 +1381,11 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// zh: '生成摘要'
 	String get ai_generateSummary => '生成摘要';
 
+	/// 在查看模式下切换到编辑模式并生成摘要
+	///
+	/// zh: '切换到编辑并生成'
+	String get ai_switchToEditAndGenerate => '切换到编辑并生成';
+
 	/// 重新生成
 	///
 	/// zh: '重新生成'
@@ -1415,11 +1420,6 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	///
 	/// zh: '点击生成AI摘要'
 	String get ai_clickToGenerate => '点击生成AI摘要';
-
-	/// 进入编辑模式并生成摘要
-	///
-	/// zh: '进入编辑模式并生成摘要'
-	String get ai_switchToEditAndGenerate => '进入编辑模式并生成摘要';
 
 	/// 取消收藏
 	///
@@ -2875,4 +2875,39 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	///
 	/// zh: '切换模型版本将清空向量索引，切换后将重建索引。'
 	String get kb_switchModelWarning => '切换模型版本将清空向量索引，切换后将重建索引。';
+
+	/// 导出按钮
+	///
+	/// zh: '导出'
+	String get export_title => '导出';
+
+	/// 导出格式：文本文件
+	///
+	/// zh: '文本文件'
+	String get export_format_txt => '文本文件';
+
+	/// 导出格式：Markdown 文件
+	///
+	/// zh: 'Markdown 文件'
+	String get export_format_md => 'Markdown 文件';
+
+	/// 导出格式：PDF 文档
+	///
+	/// zh: 'PDF 文档'
+	String get export_format_pdf => 'PDF 文档';
+
+	/// 导出成功提示
+	///
+	/// zh: '导出成功'
+	String get export_success => '导出成功';
+
+	/// 导出失败提示
+	///
+	/// zh: '导出失败'
+	String get export_failed => '导出失败';
+
+	/// 选择导出格式对话框标题
+	///
+	/// zh: '选择导出格式'
+	String get export_select_format => '选择导出格式';
 }
