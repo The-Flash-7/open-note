@@ -21,9 +21,9 @@
             alt="docs"
         />
     </a>
-    <a href="https://github.com/The-Flash-7/open-note/releases/tag/v1.0.0">
+    <a href="https://github.com/The-Flash-7/open-note/releases/tag/v1.1.0">
         <img
-            src="https://img.shields.io/badge/version-1.0.0+1-purple?logo=git"
+            src="https://img.shields.io/badge/version-1.1.0+1-purple?logo=git"
             alt="version"
         />
     </a>
@@ -61,6 +61,7 @@
 - **树形分类系统**：支持多级嵌套分类，直观的文件组织
 - **标签系统**：灵活智能的标签创建、推荐和管理
 - **网页提取**：输入URL自动提取正文并转为笔记
+- **笔记导入导出**：现已支持多种格式的笔记导入、导出
 - **多渠道创建和来源追踪**：支持手动创建、剪贴板粘贴、URL 提取、文件导入四种来源
 - **收藏功能**：快速标记重要笔记
 - **AI智能**：AI智能建议、关键词提取和摘要生成
