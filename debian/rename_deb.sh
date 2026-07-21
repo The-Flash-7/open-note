@@ -3,11 +3,12 @@ set -e
 
 cd debian/packages
 
-for f in open-note_*.deb; do
+for f in OpenNote_*.deb; do
   if [ -f "$f" ]; then
-    version=$(echo "$f" | sed -n 's/open-note_\([0-9.]*\.[0-9]*\)_amd64/OpenNote-v\1-linux_x86_64/')
+    # 提取版本号：OpenNote_1.1.0_amd64.deb -> 1.1.0
+    version=$(echo "$f" | sed -n 's/OpenNote_\([0-9.]*\.[0-9]*\.[0-9]*\)_amd64\.deb/\1/p')
     if [ -n "$version" ]; then
-      new_name="OpenNote-${version}.deb"
+      new_name="OpenNote-v${version}-linux_amd64.deb"
       echo "Renaming: $f -> $new_name"
       mv "$f" "$new_name"
     else
