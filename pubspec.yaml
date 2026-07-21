@@ -90,6 +90,9 @@ dev_dependencies:
   slang_flutter: ^4.0.0
   slang_build_runner: ^4.0.0
 
+dependency_overrides:
+  font_awesome_flutter: ^11.0.0
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
