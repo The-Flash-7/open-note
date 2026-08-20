@@ -33,4 +33,29 @@ class SkillRegistry {
         .toList();
     return jsonEncode(definitions);
   }
+
+  String generateToolSummariesPrompt() {
+    final summaries = _skills.values.map((s) => {
+      'name': s.id,
+      'brief': s.description.split('.').first,
+    }).toList();
+    return jsonEncode(summaries);
+  }
+
+  String generateToolRequirementsPrompt() {
+    final buffer = StringBuffer();
+
+    for (final skill in _skills.values) {
+      final requiredParams = skill.parameters
+          .where((p) => p.required)
+          .map((p) => p.name)
+          .toList();
+
+      if (requiredParams.isNotEmpty) {
+        buffer.writeln('- ${skill.id}：需要 ${requiredParams.join("、")}（必需）');
+      }
+    }
+
+    return buffer.toString().trim();
+  }
 }

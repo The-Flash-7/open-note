@@ -12,6 +12,7 @@ import 'skills/skill_registry.dart';
 import 'skills/skill_executor.dart' as skill_executor_pkg;
 import 'skills/models/tool_call.dart' as skill_models;
 import 'skills/models/skill_result.dart';
+import 'skills/parameter_dependency_graph.dart';
 import 'vector_store.dart';
 import 'prompts/react_prompt.dart';
 import 'open_note_tools.dart';
@@ -25,9 +26,18 @@ class ReActEngine {
   final skill_executor_pkg.SkillExecutor _skillExecutor;
   final VectorStore _vectorStore;
   final MemorySettingsProvider _memorySettings;
+  final ParameterDependencyGraph _dependencyGraph = ParameterDependencyGraph();
   AppLocale _userLanguage;
   static const int maxSteps = 10;
   static const int maxRetries = 2;
+
+  // 系统提示（静态规则）
+  late final String _systemPrompt;
+
+  // Token 统计
+  int _totalPromptTokens = 0;
+  int _totalCompletionTokens = 0;
+  int _totalTokens = 0;
 
   ReActEngine({
     required AIService aiService,
@@ -41,9 +51,117 @@ class ReActEngine {
        _skillExecutor = skillExecutor,
        _vectorStore = vectorStore,
        _memorySettings = memorySettings,
-       _userLanguage = userLanguage;
+       _userLanguage = userLanguage {
+    _systemPrompt = ReactPrompt.systemPrompt;
+  }
 
   set userLanguage(AppLocale locale) => _userLanguage = locale;
+
+  /// 调用 AI 流式接口并统计 token
+  Future<({String response, int? promptTokens, int? completionTokens, int? totalTokens})>
+      _callAIWithTokenTracking(
+    String prompt, {
+    String? systemPrompt,
+    void Function(String thinking)? onThinking,
+    CancellationToken? cancellationToken,
+  }) async {
+    String response = '';
+    String thinkingBuffer = '';
+    int? promptTokens;
+    int? completionTokens;
+    int? totalTokens;
+
+    await for (final chunk in _aiService.callAIStream(
+      prompt,
+      systemPrompt: systemPrompt,
+      cancellationToken: cancellationToken,
+    )) {
+      cancellationToken?.throwIfCancelled();
+      if (chunk.thinking != null) {
+        thinkingBuffer += chunk.thinking!;
+        if (onThinking != null && thinkingBuffer.length >= 12) {
+          onThinking(thinkingBuffer);
+        }
+      }
+      if (chunk.content != null) {
+        response += chunk.content!;
+      }
+      if (chunk.totalTokens != null) {
+        promptTokens = chunk.promptTokens;
+        completionTokens = chunk.completionTokens;
+        totalTokens = chunk.totalTokens;
+      }
+    }
+
+    return (
+      response: response,
+      promptTokens: promptTokens,
+      completionTokens: completionTokens,
+      totalTokens: totalTokens,
+    );
+  }
+
+  /// 预处理对话上下文：过滤无关内容，增强相关内容，节约 token
+  Future<String> _preprocessContext(
+    String userMessage,
+    String originalContext,
+    void Function(String thinking) onThinking,
+    CancellationToken? cancellationToken,
+  ) async {
+    if (originalContext.isEmpty || originalContext == '无') {
+      return originalContext;
+    }
+
+    final preprocessStartTime = DateTime.now().millisecondsSinceEpoch;
+    debugPrint('════════════════════════════════════════════════════════════');
+    debugPrint('【预处理】开始处理对话上下文');
+    debugPrint('════════════════════════════════════════════════════════════');
+
+    // 在界面上显示预处理开始
+    onThinking('正在分析对话历史，提取关键信息...');
+
+    final prompt = ReactPrompt.buildContextPreprocessPrompt(
+      userQuery: userMessage,
+      originalContext: originalContext,
+    );
+
+    try {
+      final result = await _callAIWithTokenTracking(
+        prompt,
+        onThinking: onThinking,
+        cancellationToken: cancellationToken,
+      );
+      final processedContext = result.response;
+
+      final preprocessEndTime = DateTime.now().millisecondsSinceEpoch;
+      final preprocessDuration = preprocessEndTime - preprocessStartTime;
+
+      final pTok = result.promptTokens;
+      final cTok = result.completionTokens;
+      final tTok = result.totalTokens;
+      if (tTok != null) {
+        _totalPromptTokens += pTok ?? 0;
+        _totalCompletionTokens += cTok ?? 0;
+        _totalTokens += tTok;
+      }
+
+      final originalLength = originalContext.length;
+      final processedLength = processedContext.length;
+      final compressionRatio = originalLength > 0
+          ? ((originalLength - processedLength) / originalLength * 100).toStringAsFixed(1)
+          : '0.0';
+
+      debugPrint('【预处理】完成，耗时: ${preprocessDuration}ms');
+      debugPrint('【预处理】Token: prompt=${pTok ?? "N/A"}, completion=${cTok ?? "N/A"}, total=${tTok ?? "N/A"}');
+      debugPrint('【预处理】压缩效果: $originalLength字符 → $processedLength字符 (压缩$compressionRatio%)');
+      debugPrint('════════════════════════════════════════════════════════════');
+
+      return processedContext;
+    } catch (e) {
+      debugPrint('【预处理】失败: $e，使用原始上下文');
+      return originalContext;
+    }
+  }
 
   Future<ReActResult> run(
     String userMessage,
@@ -65,9 +183,25 @@ class ReActEngine {
     final discardSet = <String>{}; // 丢弃的笔记ID集合（黑名单）
     final allToolCalls = <ToolCall>[];
 
+    // 重置 token 统计
+    _totalPromptTokens = 0;
+    _totalCompletionTokens = 0;
+    _totalTokens = 0;
+
+    int totalStartTime = 0;
     try {
+      totalStartTime = DateTime.now().millisecondsSinceEpoch;
+      debugPrint('════════════════════════════════════════════════════════════');
+      debugPrint('【ReAct 引擎启动】时间: ${DateTime.now().toString().split('.').first}');
+      debugPrint('════════════════════════════════════════════════════════════');
+
       // 初始化 relevantNotes 为向量预检索结果
+      final vectorStartTime = DateTime.now().millisecondsSinceEpoch;
       final initialResults = await _vectorStore.search(userMessage, topK: 3);
+      final vectorEndTime = DateTime.now().millisecondsSinceEpoch;
+      final vectorDuration = vectorEndTime - vectorStartTime;
+      debugPrint('【向量搜索】耗时: ${vectorDuration}ms, 结果数: ${initialResults.length}');
+      
       for (final r in initialResults) {
         final note = await OpenNoteTools.getNoteById(r.noteId);
         if (note != null) relevantNotes.add(note);
@@ -78,71 +212,130 @@ class ReActEngine {
       // 构建当前打开的笔记上下文
       String currentNoteContext = _buildCurrentNoteContext(currentNote);
 
+      // 预处理对话上下文（在循环之前，只执行一次）
+      final originalHistoryContext = history
+          .map((m) {
+            return '${m['role']}: ${m['content']}';
+          })
+          .join('\n');
+      final processedHistoryContext = await _preprocessContext(
+        userMessage,
+        originalHistoryContext,
+        onThinking,
+        cancellationToken,
+      );
+
       String? replyLanguage;
 
       for (int i = 0; i < maxSteps; i++) {
-        // 检查取消
         cancellationToken?.throwIfCancelled();
+
+        final loopStartTime = DateTime.now().millisecondsSinceEpoch;
+        debugPrint('════════════════════════════════════════════════════════════');
+        debugPrint('【循环 $i 开始】时间: ${DateTime.now().toString().split('.').first}');
+        debugPrint('════════════════════════════════════════════════════════════');
 
         onStepUpdate('thinking', '', '第 ${i + 1} 步推理中...');
 
-        // 1. Reasoning：AI 决定下一步
-        final thought = await _generateThought(
+        // 阶段1：工具选择
+        final stage1StartTime = DateTime.now().millisecondsSinceEpoch;
+        final toolSelection = await _selectTool(
           userMessage,
+          processedHistoryContext,
           steps,
-          history,
+          onThinking,
+          cancellationToken,
+        );
+        final stage1EndTime = DateTime.now().millisecondsSinceEpoch;
+        final stage1Duration = stage1EndTime - stage1StartTime;
+
+        cancellationToken?.throwIfCancelled();
+
+        if (toolSelection == null) {
+          debugPrint('【循环 $i 结束】阶段1返回null，耗时: ${stage1Duration}ms');
+          continue;
+        }
+
+        final selectedTool = toolSelection['selected_tool'] as String? ?? '';
+        debugPrint('【阶段1 完成】工具选择: ${selectedTool.isEmpty ? "无" : selectedTool}, 耗时: ${stage1Duration}ms');
+
+        // 不判断 selectedTool 是否为空，直接进入阶段2
+        // 阶段2：推理 + 参数填充 + 判断是否结束
+        final stage2StartTime = DateTime.now().millisecondsSinceEpoch;
+        final thoughtWhenSelected = toolSelection['thought'] as String? ?? '';
+        final decision = await _fillToolArgsAndDecide(
+          selectedTool,
+          thoughtWhenSelected,
+          userMessage,
+          processedHistoryContext,
+          steps,
           relevantNotesContext,
           currentNoteContext,
           onThinking,
           cancellationToken,
         );
+        final stage2EndTime = DateTime.now().millisecondsSinceEpoch;
+        final stage2Duration = stage2EndTime - stage2StartTime;
 
-        // AI 思考完成后再次检查取消
         cancellationToken?.throwIfCancelled();
 
-        if (thought == null) {
+        debugPrint('【阶段2 完成】推理+参数填充, 耗时: ${stage2Duration}ms');
+
+        // 判断阶段2的输出
+        if (decision['action'] == 'parse_error') {
+          // JSON 解析失败，继续下一轮循环
+          debugPrint('【循环 $i 结束】阶段2 JSON解析失败，耗时: ${stage2Duration}ms');
           continue;
         }
-        // 记录回复语言要求
-        replyLanguage = thought['reply_language'];
+        
+        if (decision['action'] == 'done') {
+          // AI 判断任务完成（可能是纯聊天，也可能是已完成所有工具调用）
+          final finalAnswer = decision['final_answer'] as String? ?? '抱歉，我未能完成您的需求。';
+          final replyLanguage = decision['reply_language'] as String?;
+          final citationNoteIds = (decision['citation_note_ids'] as List?)?.cast<String>() ?? [];
+          
+          final loopEndTime = DateTime.now().millisecondsSinceEpoch;
+          final loopDuration = loopEndTime - loopStartTime;
+          final totalEndTime = DateTime.now().millisecondsSinceEpoch;
+          final totalDuration = totalEndTime - totalStartTime;
+          debugPrint('════════════════════════════════════════════════════════════');
+          debugPrint('【循环 $i 结束】任务完成，总耗时: ${loopDuration}ms');
+          debugPrint('  - 阶段1耗时: ${stage1Duration}ms');
+          debugPrint('  - 阶段2耗时: ${stage2Duration}ms');
+          debugPrint('════════════════════════════════════════════════════════════');
+          debugPrint('【ReAct 引擎结束】总耗时: ${totalDuration}ms');
+          debugPrint('╔══════════════════════════════════════════════════════════╗');
+          debugPrint('║  Token 汇总');
+          debugPrint('║  - Prompt tokens:     $_totalPromptTokens');
+          debugPrint('║  - Completion tokens: $_totalCompletionTokens');
+          debugPrint('║  - Total tokens:      $_totalTokens');
+          debugPrint('║  - AI 调用次数:       ${steps.length * 2} (阶段1+阶段2 per loop)');
+          debugPrint('╚══════════════════════════════════════════════════════════╝');
+          debugPrint('════════════════════════════════════════════════════════════');
 
-        // 2. 如果是 done，返回最终答案
-        if (thought['action'] == 'done') {
-          final finalAnswer =
-              thought['final_answer'] as String? ?? '抱歉，我未能完成您的需求。';
-          final replyLanguage = thought['reply_language'] as String?;
           return ReActResult(
             steps: steps,
             finalAnswer: finalAnswer,
-            referencedNotes: finalCitationNote(
-              relevantNotes,
-              thought['citation_note_ids'],
-            ),
+            referencedNotes: finalCitationNote(relevantNotes, citationNoteIds),
             toolCalls: allToolCalls,
             replyLanguage: replyLanguage,
           );
         }
 
-        // 3. 执行工具
-        final toolName = thought['tool'] as String?;
-        final toolArgs =
-            (thought['args'] as Map?)?.cast<String, dynamic>() ?? {};
+        // action == "tool_call"，执行工具
+        final args = (decision['args'] as Map?)?.cast<String, dynamic>() ?? {};
+        final relevantNoteIds = (decision['relevant_note_ids'] as List?)?.cast<String>() ?? [];
+        
+        onStepUpdate('tool_call', selectedTool, '正在调用...', args: args);
 
-        if (toolName == null || toolName.isEmpty) {
-          continue;
-        }
-
-        onStepUpdate('tool_call', toolName, '正在调用...', args: toolArgs);
-
-        final toolCall = ToolCall(tool: toolName, args: toolArgs);
+        final toolCall = ToolCall(tool: selectedTool, args: args);
         allToolCalls.add(toolCall);
 
         SkillResult? result;
         bool success = false;
 
-        // 重试机制
+        final toolStartTime = DateTime.now().millisecondsSinceEpoch;
         for (int attempt = 0; attempt <= maxRetries; attempt++) {
-          // 重试前检查取消
           cancellationToken?.throwIfCancelled();
 
           try {
@@ -158,7 +351,7 @@ class ReActEngine {
               success = result.success;
             }
           } catch (e) {
-            debugPrint('工具 $toolName 执行异常 (尝试 ${attempt + 1}/$maxRetries): $e');
+            debugPrint('工具 $selectedTool 执行异常 (尝试 ${attempt + 1}/$maxRetries): $e');
           }
 
           if (success) {
@@ -169,35 +362,31 @@ class ReActEngine {
             await Future.delayed(Duration(milliseconds: 500 * (attempt + 1)));
           }
         }
+        final toolEndTime = DateTime.now().millisecondsSinceEpoch;
+        final toolDuration = toolEndTime - toolStartTime;
 
-        // 工具执行完成后检查取消，丢弃结果
+        debugPrint('【工具执行完成】$selectedTool, 成功: $success, 耗时: ${toolDuration}ms');
+
         cancellationToken?.throwIfCancelled();
 
-        // 记录步骤
         final step = ReActStep(
-          thought: thought['thought'] as String? ?? '',
-          tool: toolName,
-          args: toolArgs,
+          thought: decision['thought'] as String? ?? '',
+          tool: selectedTool,
+          args: args,
           observation: result,
         );
         steps.add(step);
 
-        // AI 评价过滤逻辑
-        final aiRelevantIds =
-            (thought['relevant_note_ids'] as List?)?.cast<String>() ?? [];
-
         if (result?.referencedNotes.isNotEmpty == true) {
-          // 1. 过滤 existing relevantNotes：AI 没选的加入 discardSet
           final retainedNotes = <Note>[];
           for (final note in relevantNotes) {
-            if (aiRelevantIds.contains(note.id)) {
+            if (relevantNoteIds.contains(note.id)) {
               retainedNotes.add(note);
             } else {
               discardSet.add(note.id);
             }
           }
 
-          // 2. 过滤新笔记：在 discardSet 中的丢弃
           final filteredNewNotes = <Note>[];
           for (final note in result!.referencedNotes) {
             if (!discardSet.contains(note.id)) {
@@ -205,7 +394,6 @@ class ReActEngine {
             }
           }
 
-          // 3. 合并去重
           final existingIds = retainedNotes.map((n) => n.id).toSet();
           for (final note in filteredNewNotes) {
             if (!existingIds.contains(note.id)) {
@@ -216,18 +404,17 @@ class ReActEngine {
           relevantNotes = retainedNotes;
         }
 
-        // 下轮开始前：动态更新参考笔记上下文
         relevantNotesContext = _buildRelevantNotesContext(relevantNotes);
 
         onStepUpdate(
           'tool_result',
-          toolName,
+          selectedTool,
           success ? '成功' : '失败: ${result?.message ?? "未知错误"}',
-          args: toolArgs,
+          args: args,
           resultData: success ? result?.toJson() : null,
         );
 
-        if (toolName == 'note_open' && success) {
+        if (selectedTool == 'note_open' && success) {
           return ReActResult(
             steps: steps,
             finalAnswer: result?.message ?? '',
@@ -236,7 +423,6 @@ class ReActEngine {
           );
         }
 
-        // 如果失败且还有步数，继续让 AI 推理
         if (!success && i < maxSteps - 1) {
           continue;
         }
@@ -244,6 +430,18 @@ class ReActEngine {
 
       // 超出最大步数，让 AI 生成最终回答
       // 注意：此时没有从 AI 获取 replyLanguage，使用 null 让 _generateFinalAnswer 回退到系统设置
+      final totalEndTime = DateTime.now().millisecondsSinceEpoch;
+      final totalDuration = totalEndTime - totalStartTime;
+      debugPrint('════════════════════════════════════════════════════════════');
+      debugPrint('【ReAct 引擎结束】超出最大步数，总耗时: ${totalDuration}ms');
+      debugPrint('╔══════════════════════════════════════════════════════════╗');
+      debugPrint('║  Token 汇总');
+      debugPrint('║  - Prompt tokens:     $_totalPromptTokens');
+      debugPrint('║  - Completion tokens: $_totalCompletionTokens');
+      debugPrint('║  - Total tokens:      $_totalTokens');
+      debugPrint('╚══════════════════════════════════════════════════════════╝');
+      debugPrint('════════════════════════════════════════════════════════════');
+      
       final finalAnswer = await _generateFinalAnswer(
         userMessage,
         steps,
@@ -260,6 +458,17 @@ class ReActEngine {
         replyLanguage: null,
       );
     } on OperationCancelledException {
+      final totalEndTime = DateTime.now().millisecondsSinceEpoch;
+      final totalDuration = totalEndTime - totalStartTime;
+      debugPrint('════════════════════════════════════════════════════════════');
+      debugPrint('【ReAct 引擎结束】用户中断，总耗时: ${totalDuration}ms');
+      debugPrint('╔══════════════════════════════════════════════════════════╗');
+      debugPrint('║  Token 汇总');
+      debugPrint('║  - Prompt tokens:     $_totalPromptTokens');
+      debugPrint('║  - Completion tokens: $_totalCompletionTokens');
+      debugPrint('║  - Total tokens:      $_totalTokens');
+      debugPrint('╚══════════════════════════════════════════════════════════╝');
+      debugPrint('════════════════════════════════════════════════════════════');
       return ReActResult(
         steps: steps,
         finalAnswer: '操作已被用户中断',
@@ -267,7 +476,17 @@ class ReActEngine {
         toolCalls: allToolCalls,
       );
     } catch (e) {
-      debugPrint('ReAct 引擎异常: $e');
+      final totalEndTime = DateTime.now().millisecondsSinceEpoch;
+      final totalDuration = totalEndTime - totalStartTime;
+      debugPrint('════════════════════════════════════════════════════════════');
+      debugPrint('【ReAct 引擎异常】总耗时: ${totalDuration}ms, 错误: $e');
+      debugPrint('╔══════════════════════════════════════════════════════════╗');
+      debugPrint('║  Token 汇总');
+      debugPrint('║  - Prompt tokens:     $_totalPromptTokens');
+      debugPrint('║  - Completion tokens: $_totalCompletionTokens');
+      debugPrint('║  - Total tokens:      $_totalTokens');
+      debugPrint('╚══════════════════════════════════════════════════════════╝');
+      debugPrint('════════════════════════════════════════════════════════════');
       return ReActResult(
         steps: steps,
         finalAnswer: '抱歉，我未能完成您的需求，请您再试一下。',
@@ -330,54 +549,124 @@ class ReActEngine {
     return buffer.toString().trim();
   }
 
-  Future<Map<String, dynamic>?> _generateThought(
+  Future<Map<String, dynamic>?> _selectTool(
     String userMessage,
+    String processedContext,
     List<ReActStep> steps,
-    List<Map<String, dynamic>> history,
-    String relevantNotesContext,
-    String currentNoteContext,
-    void Function(String) onThinking,
+    void Function(String thinking) onThinking,
     CancellationToken? cancellationToken,
   ) async {
-    final toolDefinitions = _skillRegistry.generateToolDefinitionsPrompt();
+    final toolSummaries = _skillRegistry.generateToolSummariesPrompt();
+    final toolRequirements = _skillRegistry.generateToolRequirementsPrompt();
+    final knownParams = _extractKnownParameters(steps);
+    final dependencyTable = _dependencyGraph.generateDependencyTable(steps);
+
+    debugPrint('──────────────────────────────────────────────────────────');
+    debugPrint('【阶段1 准备】已知参数：${_formatKnownParameters(knownParams)}');
+    debugPrint('【阶段1 准备】依赖关系表：$dependencyTable');
+    debugPrint('──────────────────────────────────────────────────────────');
 
     int stepIndex = 0;
     final previousSteps = steps
         .map((s) {
           stepIndex += 1;
           final buffer = StringBuffer();
-          buffer.writeln('【步骤$stepIndex】思考: ${s.thought}');
-          if (s.tool != null) {
-            buffer.writeln('行动: 调用工具 ${s.tool}，参数: ${jsonEncode(s.args)}');
-            buffer.writeln('观察: ${s.observation?.message ?? '无结果'}');
-
-            // 增强：添加搜索结果的详细信息
-            if (s.observation?.referencedNotes.isNotEmpty == true) {
-              buffer.writeln('--- 找到的笔记 ---');
-              for (int i = 0; i < s.observation!.referencedNotes.length; i++) {
-                final note = s.observation!.referencedNotes[i];
-                buffer.writeln(
-                  '[${i + 1}] ID: ${note.id} | 标题: ${note.title} | 分类ID: ${note.category ?? '无'} | 标签: ${note.tags.isEmpty ? '无' : note.tags.join(', ')} | 收藏: ${note.isFavorite ? '是' : '否'} | 格式: ${note.format.name} | 更新: ${note.updatedAt.toString().split('.').first}',
-                );
-                if (s.tool == 'note_read') {
-                  buffer.writeln(
-                    '[${i + 1}] 读取到的内容: \n${s.observation!.metadata?['readContent']}',
-                  );
-                }
-                if (i < s.observation!.referencedNotes.length - 1) {
-                  buffer.writeln('[${i + 1}] --------------间隔线--------------');
-                }
-              }
-              buffer.writeln('--- 笔记列表结束 ---');
-            }
-          }
+          buffer.writeln('【步骤$stepIndex】');
+          buffer.writeln('工具: ${s.tool}');
+          buffer.writeln('参数: ${jsonEncode(s.args)}');
+          buffer.writeln('结果: ${s.observation?.message ?? "无结果"}');
           return buffer.toString();
         })
-        .join('\n\n');
+        .join('\n');
 
-    final context = history
-        .map((m) {
-          return '${m['role']}: ${m['content']}';
+    final prompt = ReactPrompt.buildToolSelectionPrompt(
+      userQuery: userMessage,
+      knownParameters: _formatKnownParameters(knownParams),
+      dependencyTable: dependencyTable,
+      toolSummaries: toolSummaries,
+      toolRequirements: toolRequirements,
+      previousSteps: previousSteps,
+      context: processedContext,
+    );
+
+    debugPrint('════════════════════════════════════════════════════════════');
+    debugPrint('【阶段1：工具选择】提示词');
+    debugPrint('════════════════════════════════════════════════════════════');
+    debugPrint(prompt);
+    debugPrint('════════════════════════════════════════════════════════════');
+
+    try {
+      final aiStartTime = DateTime.now().millisecondsSinceEpoch;
+
+      final result = await _callAIWithTokenTracking(
+        prompt,
+        onThinking: onThinking,
+        cancellationToken: cancellationToken,
+      );
+      final responseBuffer = result.response;
+
+      final aiEndTime = DateTime.now().millisecondsSinceEpoch;
+      final aiDuration = aiEndTime - aiStartTime;
+
+      final decision = _parseThoughtResponse(responseBuffer);
+
+      // 累计 token
+      final pTok = result.promptTokens;
+      final cTok = result.completionTokens;
+      final tTok = result.totalTokens;
+      if (tTok != null) {
+        _totalPromptTokens += pTok ?? 0;
+        _totalCompletionTokens += cTok ?? 0;
+        _totalTokens += tTok;
+      }
+
+      debugPrint('【阶段1：工具选择】AI 响应耗时: ${aiDuration}ms, '
+          'prompt_tokens: ${pTok ?? "N/A"}, '
+          'completion_tokens: ${cTok ?? "N/A"}, '
+          'total_tokens: ${tTok ?? "N/A"}');
+      debugPrint('【阶段1：工具选择】AI 响应：$responseBuffer');
+      debugPrint('【阶段1：工具选择】解析结果：$decision');
+
+      return decision;
+    } catch (e) {
+      debugPrint('工具选择失败: $e');
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>> _fillToolArgsAndDecide(
+    String selectedTool,
+    String thoughtWhenSelected,
+    String userMessage,
+    String processedContext,
+    List<ReActStep> steps,
+    String relevantNotesContext,
+    String currentNoteContext,
+    void Function(String thinking) onThinking,
+    CancellationToken? cancellationToken,
+  ) async {
+    final toolDefinition = selectedTool.isEmpty 
+        ? null 
+        : _skillRegistry.getSkill(selectedTool)!.toToolDefinition();
+    final knownParams = _extractKnownParameters(steps);
+    final candidateValues = _extractCandidateValues(selectedTool, steps);
+
+    debugPrint('──────────────────────────────────────────────────────────');
+    debugPrint('【阶段2 准备】工具：${selectedTool.isEmpty ? "无" : selectedTool}');
+    debugPrint('【阶段2 准备】已知参数：${_formatKnownParameters(knownParams)}');
+    debugPrint('【阶段2 准备】候选参数值：${_formatCandidateValues(candidateValues)}');
+    debugPrint('──────────────────────────────────────────────────────────');
+
+    int stepIndex = 0;
+    final previousSteps = steps
+        .map((s) {
+          stepIndex += 1;
+          final buffer = StringBuffer();
+          buffer.writeln('【步骤$stepIndex】');
+          buffer.writeln('工具: ${s.tool}');
+          buffer.writeln('参数: ${jsonEncode(s.args)}');
+          buffer.writeln('结果: ${s.observation?.message ?? "无结果"}');
+          return buffer.toString();
         })
         .join('\n');
 
@@ -436,49 +725,191 @@ class ReActEngine {
       );
     }
 
-    final prompt = ReactPrompt.buildThoughtPrompt(
-      toolDefinitions: toolDefinitions,
+    final prompt = ReactPrompt.buildArgFillingPrompt(
+      selectedTool: selectedTool,
+      thoughtWhenSelected: thoughtWhenSelected,
+      toolDefinition: toolDefinition != null ? jsonEncode(toolDefinition) : null,
       userQuery: userMessage,
       currentDatetime: currentDatetime,
       userLanguageInstruction: _getUserLanguageInstruction(),
       userMemories: userMemoriesText,
       experienceTips: experienceTipsText,
-      context: context,
+      context: processedContext,
       relevantNotesContext: relevantNotesContext,
       currentNoteContext: currentNoteContext,
       previousSteps: previousSteps,
+      knownParameters: _formatKnownParameters(knownParams),
+      candidateValues: _formatCandidateValues(candidateValues),
     );
 
-    try {
-      // 使用流式调用以获取 thinking 内容
-      String thinkingContent = '';
-      String responseBuffer = '';
+    debugPrint('════════════════════════════════════════════════════════════');
+    debugPrint('【阶段2：推理+参数填充】提示词');
+    debugPrint('════════════════════════════════════════════════════════════');
+    debugPrint(prompt);
+    debugPrint('════════════════════════════════════════════════════════════');
 
-      await for (final chunk in _aiService.callAIStream(
+    try {
+      final aiStartTime = DateTime.now().millisecondsSinceEpoch;
+
+      final result = await _callAIWithTokenTracking(
         prompt,
+        systemPrompt: _systemPrompt,
+        onThinking: onThinking,
         cancellationToken: cancellationToken,
-      )) {
-        if (chunk.thinking != null) {
-          thinkingContent += chunk.thinking!;
-          onThinking(thinkingContent);
-        }
-        if (chunk.content != null) {
-          responseBuffer += chunk.content!;
+      );
+      final response = result.response;
+
+      final aiEndTime = DateTime.now().millisecondsSinceEpoch;
+      final aiDuration = aiEndTime - aiStartTime;
+
+      final parsed = _parseThoughtResponse(response);
+
+      // 累计 token
+      final pTok = result.promptTokens;
+      final cTok = result.completionTokens;
+      final tTok = result.totalTokens;
+      if (tTok != null) {
+        _totalPromptTokens += pTok ?? 0;
+        _totalCompletionTokens += cTok ?? 0;
+        _totalTokens += tTok;
+      }
+
+      debugPrint('【阶段2：推理+参数填充】AI 响应耗时: ${aiDuration}ms, '
+          'prompt_tokens: ${pTok ?? "N/A"}, '
+          'completion_tokens: ${cTok ?? "N/A"}, '
+          'total_tokens: ${tTok ?? "N/A"}');
+      debugPrint('【阶段2：推理+参数填充】AI 响应：$response');
+      debugPrint('【阶段2：推理+参数填充】解析结果：$parsed');
+
+      return parsed ?? {};
+    } catch (e) {
+      debugPrint('参数填充失败: $e');
+      return {};
+    }
+  }
+
+  Map<String, dynamic> _extractKnownParameters(List<ReActStep> steps) {
+    final knownParams = <String, dynamic>{};
+
+    for (final step in steps) {
+      if (step.observation?.referencedNotes.isNotEmpty == true) {
+        final noteIds = step.observation!.referencedNotes.map((n) => n.id).toList();
+        if (knownParams.containsKey('note_id')) {
+          final existing = knownParams['note_id'] as List;
+          for (final id in noteIds) {
+            if (!existing.contains(id)) {
+              existing.add(id);
+            }
+          }
+        } else {
+          knownParams['note_id'] = noteIds;
         }
       }
 
-      // 解析 JSON 响应
-      final decision = _parseThoughtResponse(responseBuffer);
-      return decision;
-    } catch (e) {
-      debugPrint('生成思考失败: $e');
-      return null;
+      if (step.observation?.metadata?['categories'] != null) {
+        final categories = step.observation!.metadata!['categories'] as List;
+        if (knownParams.containsKey('category_id')) {
+          final existing = knownParams['category_id'] as List;
+          for (final cat in categories) {
+            if (!existing.contains(cat)) {
+              existing.add(cat);
+            }
+          }
+        } else {
+          knownParams['category_id'] = categories;
+        }
+      }
     }
+
+    return knownParams;
+  }
+
+  Map<String, List<String>> _extractCandidateValues(
+    String toolName,
+    List<ReActStep> steps,
+  ) {
+    final candidates = <String, List<String>>{};
+    final skill = _skillRegistry.getSkill(toolName);
+
+    if (skill == null) return candidates;
+
+    for (final param in skill.parameters) {
+      if (!param.required) continue;
+
+      if (param.name == 'note_id') {
+        final noteIds = <String>[];
+        for (final step in steps) {
+          if (step.observation?.referencedNotes.isNotEmpty == true) {
+            noteIds.addAll(step.observation!.referencedNotes.map((n) => n.id));
+          }
+        }
+        if (noteIds.isNotEmpty) {
+          candidates['note_id'] = noteIds;
+        }
+      }
+
+      if (param.name == 'category_id') {
+        final categoryIds = <String>[];
+        for (final step in steps) {
+          if (step.observation?.metadata?['categories'] != null) {
+            final categories = step.observation!.metadata!['categories'] as List;
+            for (final cat in categories) {
+              if (cat is Map && cat.containsKey('id')) {
+                categoryIds.add(cat['id'] as String);
+              }
+            }
+          }
+        }
+        if (categoryIds.isNotEmpty) {
+          candidates['category_id'] = categoryIds;
+        }
+      }
+    }
+
+    return candidates;
+  }
+
+  String _formatKnownParameters(Map<String, dynamic> knownParams) {
+    if (knownParams.isEmpty) return '（无）';
+
+    final buffer = StringBuffer();
+    for (final entry in knownParams.entries) {
+      if (entry.value is List) {
+        buffer.writeln('- ${entry.key}: ${(entry.value as List).join(", ")}');
+      } else {
+        buffer.writeln('- ${entry.key}: ${entry.value}');
+      }
+    }
+    return buffer.toString().trim();
+  }
+
+  String _formatCandidateValues(Map<String, List<String>> candidates) {
+    if (candidates.isEmpty) return '（无）';
+
+    final buffer = StringBuffer();
+    for (final entry in candidates.entries) {
+      buffer.writeln('- ${entry.key} 可选值：');
+      for (final value in entry.value) {
+        buffer.writeln('  * $value');
+      }
+    }
+    return buffer.toString().trim();
   }
 
   Map<String, dynamic>? _parseThoughtResponse(String response) {
     try {
       String cleaned = response.trim();
+      
+      // 尝试提取 JSON 片段（处理 AI 在 JSON 前后添加文本的情况）
+      if (!cleaned.startsWith('{')) {
+        final start = cleaned.indexOf('{');
+        final end = cleaned.lastIndexOf('}');
+        if (start != -1 && end > start) {
+          cleaned = cleaned.substring(start, end + 1);
+        }
+      }
+      
+      // 原有的清理逻辑
       if (cleaned.contains('```json')) {
         final start = cleaned.indexOf('```json') + 7;
         final end = cleaned.indexOf('```', start);
@@ -489,15 +920,20 @@ class ReActEngine {
         cleaned = cleaned.substring(start, end).trim();
       }
 
-      // 预处理：修复 JSON 字符串值内部未转义的引号
+      // 预处理：修复 JSON 字符串值内部未转义的引号和反引号
       cleaned = _fixUnescapedQuotes(cleaned);
 
       final json = jsonDecode(cleaned) as Map<String, dynamic>;
       return json;
     } catch (e) {
       debugPrint('解析思考响应失败: $e, 原始响应: $response');
-      // 如果解析失败，返回 done 并解释
-      return {'thought': '解析响应失败', 'action': 'done', 'final_answer': response};
+      // 如果解析失败，返回 parse_error 状态
+      return {
+        'thought': 'JSON 解析失败',
+        'action': 'parse_error',
+        'raw_response': response,
+        'error': e.toString(),
+      };
     }
   }
 

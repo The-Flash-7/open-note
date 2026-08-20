@@ -12,7 +12,7 @@ class NoteSearchSkill extends Skill {
     : super(
         id: 'note_search',
         name: '搜索笔记',
-        description: '通过关键词、分类、标签等条件进行文本匹配搜索笔记',
+        description: '通过关键词、分类、标签等条件进行文本匹配搜索笔记，返回匹配的笔记 ID 和基本信息',
         parameters: [
           const SkillParameter(
             name: 'queryList',

@@ -10,8 +10,17 @@ import '../utils/cancellation_token.dart';
 class AIStreamChunk {
   final String? thinking;
   final String? content;
+  final int? promptTokens;
+  final int? completionTokens;
+  final int? totalTokens;
 
-  AIStreamChunk({this.thinking, this.content});
+  AIStreamChunk({
+    this.thinking,
+    this.content,
+    this.promptTokens,
+    this.completionTokens,
+    this.totalTokens,
+  });
 }
 
 class AIService {
@@ -130,6 +139,7 @@ class AIService {
 
   Stream<AIStreamChunk> callAIStream(
     String prompt, {
+    String? systemPrompt,
     String? modelOverride,
     CancellationToken? cancellationToken,
   }) async* {
@@ -148,15 +158,20 @@ class AIService {
     try {
       final modelName = modelOverride ?? _currentConfig!.defaultModel;
 
+      final messages = <Map<String, String>>[];
+      if (systemPrompt != null && systemPrompt.isNotEmpty) {
+        messages.add({'role': 'system', 'content': systemPrompt});
+      }
+      messages.add({'role': 'user', 'content': prompt});
+
       final response = await _dio!.post(
         '/chat/completions',
         data: {
           'model': modelName,
-          'messages': [
-            {'role': 'user', 'content': prompt},
-          ],
+          'messages': messages,
           'temperature': 0.7,
           'stream': true,
+          'stream_options': {'include_usage': true},
         },
         options: Options(responseType: ResponseType.stream),
         cancelToken: cancelToken,
@@ -177,11 +192,39 @@ class AIService {
             if (data == '[DONE]') return;
             try {
               final json = jsonDecode(data);
-              final delta = json['choices'][0]['delta'];
-              final reasoning = delta['reasoning_content'] as String?;
-              final content = delta['content'] as String?;
-              if (reasoning != null || content != null) {
-                yield AIStreamChunk(thinking: reasoning, content: content);
+
+              // 解析 token usage（最后一个 chunk 会包含 usage）
+              final usage = json['usage'] as Map<String, dynamic>?;
+              int? promptTokens;
+              int? completionTokens;
+              int? totalTokens;
+              if (usage != null) {
+                promptTokens = usage['prompt_tokens'] as int?;
+                completionTokens = usage['completion_tokens'] as int?;
+                totalTokens = usage['total_tokens'] as int?;
+              }
+
+              final choices = json['choices'] as List?;
+              if (choices != null && choices.isNotEmpty) {
+                final delta = choices[0]['delta'];
+                final reasoning = delta['reasoning_content'] as String?;
+                final content = delta['content'] as String?;
+                if (reasoning != null || content != null) {
+                  yield AIStreamChunk(
+                    thinking: reasoning,
+                    content: content,
+                    promptTokens: promptTokens,
+                    completionTokens: completionTokens,
+                    totalTokens: totalTokens,
+                  );
+                }
+              } else if (usage != null) {
+                // 最后一个 chunk 只有 usage，没有 choices
+                yield AIStreamChunk(
+                  promptTokens: promptTokens,
+                  completionTokens: completionTokens,
+                  totalTokens: totalTokens,
+                );
               }
             } catch (e) {
               // 忽略解析错误（可能是空行或格式异常）

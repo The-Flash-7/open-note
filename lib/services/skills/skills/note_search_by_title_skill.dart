@@ -12,7 +12,7 @@ class NoteSearchByTitleSkill extends Skill {
     : super(
         id: 'note_search_by_title',
         name: '按标题搜索笔记',
-        description: '通过标题模糊搜索笔记，返回匹配的笔记 ID 和基本信息',
+        description: '通过标题模糊搜索笔记，返回匹配的笔记 ID 和基本信息，返回匹配的笔记 ID 和基本信息',
         parameters: [
           const SkillParameter(
             name: 'title_query',
