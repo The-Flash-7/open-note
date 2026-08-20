@@ -206,7 +206,8 @@ class CiciAgent {
       String streamedContent = '';
       String thinkingBuffer = '';
       await for (final chunk in _aiService.callAIStream(
-        '不改变任何东西，原样输出：\n${result.finalAnswer}',
+        '无需其他回复，直接原样输出下面内容：\n${result.finalAnswer}',
+        // result.finalAnswer,
         cancellationToken: cancellationToken,
       )) {
         if (cancellationToken?.isCancelled == true) {
