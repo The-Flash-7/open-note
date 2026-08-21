@@ -39,6 +39,10 @@ class ReActEngine {
   int _totalCompletionTokens = 0;
   int _totalTokens = 0;
 
+  // 快速决策缓存（问候/闲聊）
+  static final Map<String, String> _greetingCache = {};
+  static const int _maxCacheSize = 20;
+
   ReActEngine({
     required AIService aiService,
     required SkillRegistry skillRegistry,
@@ -194,6 +198,22 @@ class ReActEngine {
       debugPrint('════════════════════════════════════════════════════════════');
       debugPrint('【ReAct 引擎启动】时间: ${DateTime.now().toString().split('.').first}');
       debugPrint('════════════════════════════════════════════════════════════');
+
+      // ========== 快速决策：识别简单闲聊 ==========
+      final quickResult = await _quickDecision(userMessage, cancellationToken);
+
+      if (quickResult != null) {
+        // 快速决策成功，直接返回
+        final totalEndTime = DateTime.now().millisecondsSinceEpoch;
+        final totalDuration = totalEndTime - totalStartTime;
+
+        debugPrint('════════════════════════════════════════════════════════════');
+        debugPrint('【ReAct 引擎结束】快速决策路径，总耗时: ${totalDuration}ms');
+        debugPrint('════════════════════════════════════════════════════════════');
+
+        return quickResult;
+      }
+      // ========== 快速决策结束 ==========
 
       // 初始化 relevantNotes 为向量预检索结果
       final vectorStartTime = DateTime.now().millisecondsSinceEpoch;
@@ -1089,5 +1109,152 @@ $notesContext
   /// Falls back to system setting if replyLanguage is null
   String _getLanguagePromptFor(String? replyLanguage) {
     return replyLanguage ?? _getUserLanguageInstruction();
+  }
+
+  /// 快速决策：判断是否为简单闲聊
+  /// 返回 null 表示需要继续原有流程
+  Future<ReActResult?> _quickDecision(
+    String userMessage,
+    CancellationToken? cancellationToken,
+  ) async {
+    final decisionStartTime = DateTime.now().millisecondsSinceEpoch;
+
+    // 1. 检查缓存
+    final normalizedMessage = userMessage.trim().toLowerCase();
+    if (_greetingCache.containsKey(normalizedMessage)) {
+      final cachedReply = _greetingCache[normalizedMessage]!;
+      final decisionEndTime = DateTime.now().millisecondsSinceEpoch;
+
+      debugPrint('【快速决策】命中缓存，耗时: ${decisionEndTime - decisionStartTime}ms');
+
+      return ReActResult(
+        steps: [
+          ReActStep(thought: '快速决策：命中缓存，直接回复'),
+        ],
+        finalAnswer: cachedReply,
+        replyLanguage: _detectReplyLanguage(cachedReply),
+      );
+    }
+
+    // 2. 构建快速决策prompt
+    final prompt = ReactPrompt.quickDecisionPrompt
+        .replaceAll('{user_language_instruction}', _getUserLanguageInstruction())
+        .replaceAll('{user_message}', userMessage);
+
+    // 3. 调用AI（极简配置）
+    String aiResponse = '';
+
+    try {
+      await for (final chunk in _aiService.callAIStream(
+        prompt,
+        cancellationToken: cancellationToken,
+      )) {
+        cancellationToken?.throwIfCancelled();
+        if (chunk.content != null) {
+          aiResponse += chunk.content!;
+        }
+      }
+
+      final decisionEndTime = DateTime.now().millisecondsSinceEpoch;
+      debugPrint('【快速决策】AI耗时: ${decisionEndTime - decisionStartTime}ms');
+      debugPrint('【快速决策】AI响应: $aiResponse');
+
+      // 4. 解析响应
+      final parsed = _parseQuickDecision(aiResponse);
+
+      if (parsed == null) {
+        debugPrint('【快速决策】解析失败，继续原有流程');
+        return null;
+      }
+
+      final type = parsed['type'] as int;
+      final reply = parsed['reply'] as String;
+
+      debugPrint('【快速决策】类型: $type, 回复: $reply');
+
+      // 5. 类型1：直接回复
+      if (type == 1) {
+        debugPrint('【快速决策】识别为闲聊，直接回复');
+
+        // 添加到缓存
+        _addToCache(normalizedMessage, reply);
+
+        return ReActResult(
+          steps: [
+            ReActStep(thought: '快速决策：识别为闲聊，直接回复'),
+          ],
+          finalAnswer: reply,
+          replyLanguage: _detectReplyLanguage(reply),
+        );
+      }
+
+      // 6. 类型2：继续原有流程
+      debugPrint('【快速决策】识别为复杂任务，继续原有流程');
+      return null;
+
+    } catch (e) {
+      debugPrint('【快速决策】失败: $e，继续原有流程');
+      return null;
+    }
+  }
+
+  /// 解析快速决策响应
+  Map<String, dynamic>? _parseQuickDecision(String response) {
+    try {
+      // 清理响应
+      final cleaned = response.trim();
+
+      // 按 || 分割
+      final parts = cleaned.split('||');
+
+      if (parts.length != 2) {
+        debugPrint('【快速决策解析】格式错误：缺少分隔符 ||');
+        return null;
+      }
+
+      final typeStr = parts[0].trim();
+      final reply = parts[1].trim();
+
+      // 验证类型
+      final type = int.tryParse(typeStr);
+      if (type == null || (type != 1 && type != 2)) {
+        debugPrint('【快速决策解析】类型无效：$typeStr');
+        return null;
+      }
+
+      return {
+        'type': type,
+        'reply': reply,
+      };
+    } catch (e) {
+      debugPrint('【快速决策解析】异常: $e');
+      return null;
+    }
+  }
+
+  /// 添加到缓存（LRU策略）
+  void _addToCache(String key, String value) {
+    if (_greetingCache.containsKey(key)) {
+      return; // 已存在，不重复添加
+    }
+
+    if (_greetingCache.length >= _maxCacheSize) {
+      // 缓存已满，移除最早的条目（简化版LRU）
+      final firstKey = _greetingCache.keys.first;
+      _greetingCache.remove(firstKey);
+      debugPrint('【快速决策缓存】淘汰旧条目: $firstKey');
+    }
+
+    _greetingCache[key] = value;
+    debugPrint('【快速决策缓存】添加新条目: $key');
+  }
+
+  /// 检测回复语言（简单启发式）
+  String? _detectReplyLanguage(String reply) {
+    // 如果包含中文字符，认为是中文
+    if (reply.contains(RegExp(r'[\u4e00-\u9fa5]'))) {
+      return 'zh';
+    }
+    return 'en';
   }
 }
