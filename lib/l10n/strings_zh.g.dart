@@ -181,6 +181,11 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// zh: '完成'
 	String get common_done => '完成';
 
+	/// 管理模型
+	///
+	/// zh: '管理模型'
+	String get common_manageModels => '管理模型';
+
 	/// 更多选项
 	///
 	/// zh: '更多'
@@ -651,6 +656,11 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// zh: '请先配置模型'
 	String get settings_setModelFirst => '请先配置模型';
 
+	/// 设为当前默认服务商
+	///
+	/// zh: '设为当前默认服务商'
+	String get settings_setAsActive => '设为当前默认服务商';
+
 	/// 添加提供商
 	///
 	/// zh: '添加 {name}'
@@ -1025,11 +1035,6 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	///
 	/// zh: '创建笔记'
 	String get dialog_createNote => '创建笔记';
-
-	/// 模型管理标题
-	///
-	/// zh: '管理模型 - {providerName}'
-	String dialog_manageModelsTitle({required Object providerName}) => '管理模型 - ${providerName}';
 
 	/// 新模型标签
 	///
@@ -2446,15 +2451,15 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// zh: '请先在"AI服务"中配置可用的AI模型'
 	String get assistant_configureAIModelsFirst => '请先在"AI服务"中配置可用的AI模型';
 
-	/// 无模型
+	/// 无服务商
 	///
-	/// zh: '状态: 无可用模型'
-	String get assistant_noAvailableModels => '状态: 无可用模型';
+	/// zh: '无可用服务商'
+	String get assistant_noAvailableModels => '无可用服务商';
 
-	/// 可用模型
+	/// 可用服务商数量
 	///
-	/// zh: '状态: {count}个可用模型'
-	String assistant_availableModelsCount({required Object count}) => '状态: ${count}个可用模型';
+	/// zh: '{count}个可用服务商'
+	String assistant_availableModelsCount({required Object count}) => '${count}个可用服务商';
 
 	/// 档案记忆
 	///

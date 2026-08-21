@@ -116,6 +116,10 @@
   "@common_done": {
     "description": "完成按钮"
   },
+  "common_manageModels": "Управление моделями",
+  "@common_manageModels": {
+    "description": "管理模型"
+  },
   "common_more": "Ещё",
   "@common_more": {
     "description": "更多选项"
@@ -492,6 +496,10 @@
   "@settings_setModelFirst": {
     "description": "配置模型提示"
   },
+  "settings_setAsActive": "Сделать провайдером по умолчанию",
+  "@settings_setAsActive": {
+    "description": "设为当前默认服务商"
+  },
   "settings_addProvider": "Добавить {name}",
   "@settings_addProvider": {
     "description": "添加提供商"
@@ -791,10 +799,6 @@
   "dialog_createNote": "Создать заметку",
   "@dialog_createNote": {
     "description": "创建笔记按钮"
-  },
-  "dialog_manageModelsTitle": "Управление моделями - {providerName}",
-  "@dialog_manageModelsTitle": {
-    "description": "模型管理标题"
   },
   "dialog_newModelLabel": "Новая модель",
   "@dialog_newModelLabel": {
@@ -1943,13 +1947,13 @@
   "@assistant_configureAIModelsFirst": {
     "description": "配置模型提示2"
   },
-  "assistant_noAvailableModels": "Нет доступных моделей",
+  "assistant_noAvailableModels": "Нет доступных провайдеров",
   "@assistant_noAvailableModels": {
-    "description": "无模型"
+    "description": "无服务商"
   },
-  "assistant_availableModelsCount": "{count} моделей доступно",
+  "assistant_availableModelsCount": "{count} провайдеров доступно",
   "@assistant_availableModelsCount": {
-    "description": "可用模型"
+    "description": "可用服务商数量"
   },
   "assistant_profileMemory": "Профиль пользователя",
   "@assistant_profileMemory": {

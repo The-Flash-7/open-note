@@ -121,6 +121,9 @@ class TranslationsRu extends Translations with BaseTranslations<AppLocale, Trans
 	/// 完成按钮
 	@override String get common_done => 'Готово';
 
+	/// 管理模型
+	@override String get common_manageModels => 'Управление моделями';
+
 	/// 更多选项
 	@override String get common_more => 'Ещё';
 
@@ -403,6 +406,9 @@ class TranslationsRu extends Translations with BaseTranslations<AppLocale, Trans
 	/// 配置模型提示
 	@override String get settings_setModelFirst => 'Сначала настройте модель';
 
+	/// 设为当前默认服务商
+	@override String get settings_setAsActive => 'Сделать провайдером по умолчанию';
+
 	/// 添加提供商
 	@override String settings_addProvider({required Object name}) => 'Добавить ${name}';
 
@@ -627,9 +633,6 @@ class TranslationsRu extends Translations with BaseTranslations<AppLocale, Trans
 
 	/// 创建笔记按钮
 	@override String get dialog_createNote => 'Создать заметку';
-
-	/// 模型管理标题
-	@override String dialog_manageModelsTitle({required Object providerName}) => 'Управление моделями - ${providerName}';
 
 	/// 新模型标签
 	@override String get dialog_newModelLabel => 'Новая модель';
@@ -1480,11 +1483,11 @@ class TranslationsRu extends Translations with BaseTranslations<AppLocale, Trans
 	/// 配置模型提示2
 	@override String get assistant_configureAIModelsFirst => 'Настройте модели в "ИИ-сервис"';
 
-	/// 无模型
-	@override String get assistant_noAvailableModels => 'Нет доступных моделей';
+	/// 无服务商
+	@override String get assistant_noAvailableModels => 'Нет доступных провайдеров';
 
-	/// 可用模型
-	@override String assistant_availableModelsCount({required Object count}) => '${count} моделей доступно';
+	/// 可用服务商数量
+	@override String assistant_availableModelsCount({required Object count}) => '${count} провайдеров доступно';
 
 	/// 档案记忆
 	@override String get assistant_profileMemory => 'Профиль пользователя';

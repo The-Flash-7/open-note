@@ -116,6 +116,10 @@
   "@common_done": {
     "description": "完成按钮"
   },
+  "common_manageModels": "管理模型",
+  "@common_manageModels": {
+    "description": "管理模型"
+  },
   "common_more": "更多",
   "@common_more": {
     "description": "更多选项"
@@ -492,6 +496,10 @@
   "@settings_setModelFirst": {
     "description": "配置模型提示"
   },
+  "settings_setAsActive": "设为当前默认服务商",
+  "@settings_setAsActive": {
+    "description": "设为当前默认服务商"
+  },
   "settings_addProvider": "添加 {name}",
   "@settings_addProvider": {
     "description": "添加提供商"
@@ -791,10 +799,6 @@
   "dialog_createNote": "创建笔记",
   "@dialog_createNote": {
     "description": "创建笔记按钮"
-  },
-  "dialog_manageModelsTitle": "管理模型 - {providerName}",
-  "@dialog_manageModelsTitle": {
-    "description": "模型管理标题"
   },
   "dialog_newModelLabel": "新模型名称",
   "@dialog_newModelLabel": {
@@ -1943,13 +1947,13 @@
   "@assistant_configureAIModelsFirst": {
     "description": "配置模型提示2"
   },
-  "assistant_noAvailableModels": "状态: 无可用模型",
+  "assistant_noAvailableModels": "无可用服务商",
   "@assistant_noAvailableModels": {
-    "description": "无模型"
+    "description": "无服务商"
   },
-  "assistant_availableModelsCount": "状态: {count}个可用模型",
+  "assistant_availableModelsCount": "{count}个可用服务商",
   "@assistant_availableModelsCount": {
-    "description": "可用模型"
+    "description": "可用服务商数量"
   },
   "assistant_profileMemory": "用户档案记忆",
   "@assistant_profileMemory": {

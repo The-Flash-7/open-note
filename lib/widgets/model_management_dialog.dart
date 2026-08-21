@@ -62,9 +62,7 @@ class _ModelManagementDialogState extends State<ModelManagementDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  t.dialog_manageModelsTitle(
-                    providerName: widget.config.displayName,
-                  ),
+                  "${t.common_manageModels} - ${widget.config.displayName}",
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 IconButton(

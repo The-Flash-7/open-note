@@ -121,6 +121,9 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 	/// 完成按钮
 	@override String get common_done => 'Done';
 
+	/// 管理模型
+	@override String get common_manageModels => 'Manage Models';
+
 	/// 更多选项
 	@override String get common_more => 'More';
 
@@ -403,6 +406,9 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 	/// 配置模型提示
 	@override String get settings_setModelFirst => 'Please configure a model first';
 
+	/// 设为当前默认服务商
+	@override String get settings_setAsActive => 'Set as Default Provider';
+
 	/// 添加提供商
 	@override String settings_addProvider({required Object name}) => 'Add ${name}';
 
@@ -627,9 +633,6 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 
 	/// 创建笔记按钮
 	@override String get dialog_createNote => 'Create Note';
-
-	/// 模型管理标题
-	@override String dialog_manageModelsTitle({required Object providerName}) => 'Manage Models - ${providerName}';
 
 	/// 新模型标签
 	@override String get dialog_newModelLabel => 'New Model Name';
@@ -1480,11 +1483,11 @@ class TranslationsEn extends Translations with BaseTranslations<AppLocale, Trans
 	/// 配置模型提示2
 	@override String get assistant_configureAIModelsFirst => 'Please configure available AI models in "AI Service" first';
 
-	/// 无模型
-	@override String get assistant_noAvailableModels => 'Status: No available models';
+	/// 无服务商
+	@override String get assistant_noAvailableModels => 'No available providers';
 
-	/// 可用模型
-	@override String assistant_availableModelsCount({required Object count}) => 'Status: ${count} available models';
+	/// 可用服务商数量
+	@override String assistant_availableModelsCount({required Object count}) => '${count} available providers';
 
 	/// 档案记忆
 	@override String get assistant_profileMemory => 'Profile Memory';

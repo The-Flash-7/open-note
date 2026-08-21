@@ -1036,7 +1036,7 @@ class _SettingsDialogState extends State<SettingsDialog> {
                       value: 'activate',
                       child: ListTile(
                         leading: const Icon(Icons.check),
-                        title: Text(t.settings_setModelFirst),
+                        title: Text(t.settings_setAsActive),
                       ),
                     ),
                   PopupMenuItem(
@@ -1046,13 +1046,13 @@ class _SettingsDialogState extends State<SettingsDialog> {
                       title: Text(t.common_edit),
                     ),
                   ),
-                  PopupMenuItem(
-                    value: 'manage_models',
-                    child: ListTile(
-                      leading: const Icon(Icons.list),
-                      title: Text(t.dialog_manageModelsTitle(providerName: '')),
+PopupMenuItem(
+                      value: 'manage_models',
+                      child: ListTile(
+                        leading: const Icon(Icons.list),
+                        title: Text(t.common_manageModels),
+                      ),
                     ),
-                  ),
                   PopupMenuItem(
                     value: 'test',
                     child: ListTile(
