@@ -105,20 +105,35 @@ class ReActEngine {
     );
   }
 
-  /// 预处理对话上下文：过滤无关内容，增强相关内容，节约 token
+  /// 判断是否需要执行预处理
+  bool _shouldPreprocess({required String originalHistoryContext}) {
+    // 对话上下文长度 ≥ 2500 → 执行预处理
+    if (originalHistoryContext.length >= 2500) {
+      debugPrint('【预处理判断】对话上下文长度 ${originalHistoryContext.length} ≥ 2500，需要预处理');
+      return true;
+    }
+
+    debugPrint('【预处理判断】对话上下文长度 ${originalHistoryContext.length} < 2500，跳过预处理');
+    return false;
+  }
+
+  /// 预处理对话上下文：仅对早期对话进行AI压缩，近期对话（最近2轮）原样保留
   Future<String> _preprocessContext(
     String userMessage,
-    String originalContext,
+    String earlyContext,
+    String recentContext,
     void Function(String thinking) onThinking,
     CancellationToken? cancellationToken,
   ) async {
-    if (originalContext.isEmpty || originalContext == '无') {
-      return originalContext;
+    // 无早期对话 → 无需压缩，直接返回近期对话
+    if (earlyContext.isEmpty || earlyContext == '无') {
+      debugPrint('【预处理】无早期对话，跳过AI压缩，直接返回近期对话');
+      return recentContext;
     }
 
     final preprocessStartTime = DateTime.now().millisecondsSinceEpoch;
     debugPrint('════════════════════════════════════════════════════════════');
-    debugPrint('【预处理】开始处理对话上下文');
+    debugPrint('【预处理】开始压缩早期对话上下文');
     debugPrint('════════════════════════════════════════════════════════════');
 
     // 在界面上显示预处理开始
@@ -126,7 +141,7 @@ class ReActEngine {
 
     final prompt = ReactPrompt.buildContextPreprocessPrompt(
       userQuery: userMessage,
-      originalContext: originalContext,
+      originalContext: earlyContext,
     );
 
     try {
@@ -135,7 +150,7 @@ class ReActEngine {
         onThinking: onThinking,
         cancellationToken: cancellationToken,
       );
-      final processedContext = result.response;
+      final compressedEarly = result.response;
 
       final preprocessEndTime = DateTime.now().millisecondsSinceEpoch;
       final preprocessDuration = preprocessEndTime - preprocessStartTime;
@@ -149,21 +164,28 @@ class ReActEngine {
         _totalTokens += tTok;
       }
 
-      final originalLength = originalContext.length;
-      final processedLength = processedContext.length;
-      final compressionRatio = originalLength > 0
-          ? ((originalLength - processedLength) / originalLength * 100).toStringAsFixed(1)
+      final earlyLength = earlyContext.length;
+      final compressedLength = compressedEarly.length;
+      final compressionRatio = earlyLength > 0
+          ? ((earlyLength - compressedLength) / earlyLength * 100).toStringAsFixed(1)
           : '0.0';
 
       debugPrint('【预处理】完成，耗时: ${preprocessDuration}ms');
       debugPrint('【预处理】Token: prompt=${pTok ?? "N/A"}, completion=${cTok ?? "N/A"}, total=${tTok ?? "N/A"}');
-      debugPrint('【预处理】压缩效果: $originalLength字符 → $processedLength字符 (压缩$compressionRatio%)');
+      debugPrint('【预处理】压缩效果: 早期$earlyLength字符 → 压缩后$compressedLength字符 (压缩$compressionRatio%) + 近期${recentContext.length}字符');
       debugPrint('════════════════════════════════════════════════════════════');
 
-      return processedContext;
+      // 拼接压缩后的早期对话与近期对话，作为最终预处理结果
+      if (recentContext.isEmpty) {
+        return compressedEarly;
+      }
+      return '$compressedEarly\n$recentContext';
     } catch (e) {
-      debugPrint('【预处理】失败: $e，使用原始上下文');
-      return originalContext;
+      debugPrint('【预处理】失败: $e，使用原始上下文（早期原文 + 近期原文）');
+      if (recentContext.isEmpty) {
+        return earlyContext;
+      }
+      return '$earlyContext\n$recentContext';
     }
   }
 
@@ -187,6 +209,8 @@ class ReActEngine {
     final discardSet = <String>{}; // 丢弃的笔记ID集合（黑名单）
     final allToolCalls = <ToolCall>[];
 
+    String processedHistoryContext = '';
+
     // 重置 token 统计
     _totalPromptTokens = 0;
     _totalCompletionTokens = 0;
@@ -199,51 +223,116 @@ class ReActEngine {
       debugPrint('【ReAct 引擎启动】时间: ${DateTime.now().toString().split('.').first}');
       debugPrint('════════════════════════════════════════════════════════════');
 
+      // 构建原始对话上下文（用于预处理）
+      final originalHistoryContext = history
+          .map((m) {
+            return '${m['role']}: ${m['content']}';
+          })
+          .join('\n');
+
+      // 拆分历史对话：近期 = 最近1轮（2条记录），早期 = 其余更早记录
+      // （提前拆分：供快速决策复用 recentContext，预处理复用 earlyContext/recentContext）
+      final splitIndex = history.length > 2 ? history.length - 2 : 0;
+      final earlyHistory = history.sublist(0, splitIndex);
+      final recentHistory = history.sublist(splitIndex);
+      final earlyContext = earlyHistory
+          .map((m) {
+            return '${m['role']}: ${m['content']}';
+          })
+          .join('\n');
+      final recentContext = recentHistory
+          .map((m) {
+            return '${m['role']}: ${m['content']}';
+          })
+          .join('\n');
+
       // ========== 快速决策：识别简单闲聊 ==========
-      final quickResult = await _quickDecision(userMessage, cancellationToken);
+      final quickDecision = await _quickDecision(
+        userMessage,
+        recentContext,
+        cancellationToken,
+      );
 
-      if (quickResult != null) {
-        // 快速决策成功，直接返回
-        final totalEndTime = DateTime.now().millisecondsSinceEpoch;
-        final totalDuration = totalEndTime - totalStartTime;
+      if (quickDecision != null) {
+        final type = quickDecision.type;
 
-        debugPrint('════════════════════════════════════════════════════════════');
-        debugPrint('【ReAct 引擎结束】快速决策路径，总耗时: ${totalDuration}ms');
-        debugPrint('════════════════════════════════════════════════════════════');
+        // 类型1：直接回复
+        if (type == 1 && quickDecision.result != null) {
+          final totalEndTime = DateTime.now().millisecondsSinceEpoch;
+          final totalDuration = totalEndTime - totalStartTime;
 
-        return quickResult;
+          debugPrint('════════════════════════════════════════════════════════════');
+          debugPrint('【ReAct 引擎结束】快速决策路径（类型1），总耗时: ${totalDuration}ms');
+          debugPrint('════════════════════════════════════════════════════════════');
+
+          return quickDecision.result!;
+        }
+
+        // 类型2：跳过向量检索
+        if (type == 2) {
+          debugPrint('【快速决策】类型2：跳过向量检索，直接进入预处理');
+          // 不执行向量检索，relevantNotes 保持为空列表
+        }
+
+        // 类型3：需要向量检索
+        if (type == 3) {
+          debugPrint('【快速决策】类型3：执行向量检索');
+          // 执行向量检索
+          final vectorStartTime = DateTime.now().millisecondsSinceEpoch;
+          final initialResults = await _vectorStore.search(userMessage, topK: 3);
+          final vectorEndTime = DateTime.now().millisecondsSinceEpoch;
+          final vectorDuration = vectorEndTime - vectorStartTime;
+          debugPrint('【向量搜索】耗时: ${vectorDuration}ms, 结果数: ${initialResults.length}');
+          
+          for (final r in initialResults) {
+            final note = await OpenNoteTools.getNoteById(r.noteId);
+            if (note != null) relevantNotes.add(note);
+          }
+        }
+      } else {
+        // 快速决策失败，执行默认的向量检索
+        debugPrint('【快速决策】失败，执行默认向量检索');
+        final vectorStartTime = DateTime.now().millisecondsSinceEpoch;
+        final initialResults = await _vectorStore.search(userMessage, topK: 3);
+        final vectorEndTime = DateTime.now().millisecondsSinceEpoch;
+        final vectorDuration = vectorEndTime - vectorStartTime;
+        debugPrint('【向量搜索】耗时: ${vectorDuration}ms, 结果数: ${initialResults.length}');
+        
+        for (final r in initialResults) {
+          final note = await OpenNoteTools.getNoteById(r.noteId);
+          if (note != null) relevantNotes.add(note);
+        }
       }
       // ========== 快速决策结束 ==========
 
-      // 初始化 relevantNotes 为向量预检索结果
-      final vectorStartTime = DateTime.now().millisecondsSinceEpoch;
-      final initialResults = await _vectorStore.search(userMessage, topK: 3);
-      final vectorEndTime = DateTime.now().millisecondsSinceEpoch;
-      final vectorDuration = vectorEndTime - vectorStartTime;
-      debugPrint('【向量搜索】耗时: ${vectorDuration}ms, 结果数: ${initialResults.length}');
-      
-      for (final r in initialResults) {
-        final note = await OpenNoteTools.getNoteById(r.noteId);
-        if (note != null) relevantNotes.add(note);
-      }
       // 给AI参考的笔记上下文（动态更新）
       String relevantNotesContext = _buildRelevantNotesContext(relevantNotes);
 
       // 构建当前打开的笔记上下文
       String currentNoteContext = _buildCurrentNoteContext(currentNote);
 
-      // 预处理对话上下文（在循环之前，只执行一次）
-      final originalHistoryContext = history
-          .map((m) {
-            return '${m['role']}: ${m['content']}';
-          })
-          .join('\n');
-      final processedHistoryContext = await _preprocessContext(
-        userMessage,
-        originalHistoryContext,
-        onThinking,
-        cancellationToken,
-      );
+      // 初始化处理后的上下文为原始上下文（预处理可能按需执行）
+      processedHistoryContext = originalHistoryContext;
+
+      // 预处理对话上下文（在循环之前，只执行一次，按长度条件判断）
+      // 复用前面已拆分好的 earlyContext / recentContext
+      if (_shouldPreprocess(originalHistoryContext: originalHistoryContext)) {
+        debugPrint('【预处理】开始执行预处理（长度条件触发）');
+        try {
+          processedHistoryContext = await _preprocessContext(
+            userMessage,
+            earlyContext,
+            recentContext,
+            onThinking,
+            cancellationToken,
+          );
+        } catch (e) {
+          debugPrint('【预处理】执行失败: $e，使用原始上下文');
+          processedHistoryContext = originalHistoryContext;
+        }
+      } else {
+        debugPrint('【预处理】跳过预处理（对话历史较短）');
+      }
 
       String? replyLanguage;
 
@@ -1111,10 +1200,15 @@ $notesContext
     return replyLanguage ?? _getUserLanguageInstruction();
   }
 
-  /// 快速决策：判断是否为简单闲聊
-  /// 返回 null 表示需要继续原有流程
-  Future<ReActResult?> _quickDecision(
+  /// 快速决策：判断用户意图类型
+  /// 返回 null 表示解析失败，继续原有流程
+  /// 返回 (type, result) 表示决策成功：
+  ///   - type=1: 直接回复（闲聊），result 包含回复内容
+  ///   - type=2: 跳过向量检索，进入ReAct
+  ///   - type=3: 需要向量检索，然后进入ReAct
+  Future<({int type, ReActResult? result})?> _quickDecision(
     String userMessage,
+    String recentContext,
     CancellationToken? cancellationToken,
   ) async {
     final decisionStartTime = DateTime.now().millisecondsSinceEpoch;
@@ -1127,18 +1221,25 @@ $notesContext
 
       debugPrint('【快速决策】命中缓存，耗时: ${decisionEndTime - decisionStartTime}ms');
 
-      return ReActResult(
-        steps: [
-          ReActStep(thought: '快速决策：命中缓存，直接回复'),
-        ],
-        finalAnswer: cachedReply,
-        replyLanguage: _detectReplyLanguage(cachedReply),
+      return (
+        type: 1,
+        result: ReActResult(
+          steps: [
+            ReActStep(thought: '快速决策：命中缓存，直接回复'),
+          ],
+          finalAnswer: cachedReply,
+          replyLanguage: _detectReplyLanguage(cachedReply),
+        ),
       );
     }
 
-    // 2. 构建快速决策prompt
+    // 2. 构建快速决策prompt（带最近对话上下文，截断保护：最多取尾部1500字符）
+    final recentForDecision = recentContext.length > 1500
+        ? recentContext.substring(recentContext.length - 1500)
+        : recentContext;
     final prompt = ReactPrompt.quickDecisionPrompt
         .replaceAll('{user_language_instruction}', _getUserLanguageInstruction())
+        .replaceAll('{recent_context}', recentForDecision.isEmpty ? '无' : recentForDecision)
         .replaceAll('{user_message}', userMessage);
 
     // 3. 调用AI（极简配置）
@@ -1179,17 +1280,31 @@ $notesContext
         // 添加到缓存
         _addToCache(normalizedMessage, reply);
 
-        return ReActResult(
-          steps: [
-            ReActStep(thought: '快速决策：识别为闲聊，直接回复'),
-          ],
-          finalAnswer: reply,
-          replyLanguage: _detectReplyLanguage(reply),
+        return (
+          type: 1,
+          result: ReActResult(
+            steps: [
+              ReActStep(thought: '快速决策：识别为闲聊，直接回复'),
+            ],
+            finalAnswer: reply,
+            replyLanguage: _detectReplyLanguage(reply),
+          ),
         );
       }
 
-      // 6. 类型2：继续原有流程
-      debugPrint('【快速决策】识别为复杂任务，继续原有流程');
+      // 6. 类型2：跳过向量检索
+      if (type == 2) {
+        debugPrint('【快速决策】识别为工具调用，跳过向量检索');
+        return (type: 2, result: null);
+      }
+
+      // 7. 类型3：需要向量检索
+      if (type == 3) {
+        debugPrint('【快速决策】识别为笔记查询，需要向量检索');
+        return (type: 3, result: null);
+      }
+
+      debugPrint('【快速决策】类型无效，继续原有流程');
       return null;
 
     } catch (e) {
@@ -1217,7 +1332,7 @@ $notesContext
 
       // 验证类型
       final type = int.tryParse(typeStr);
-      if (type == null || (type != 1 && type != 2)) {
+      if (type == null || (type != 1 && type != 2 && type != 3)) {
         debugPrint('【快速决策解析】类型无效：$typeStr');
         return null;
       }
