@@ -227,7 +227,7 @@ class MarkdownToPdfConverter {
     final text = _extractText(element);
     if (text.isEmpty) return pw.SizedBox();
 
-    debugPrint('    H$level heading: "${text.length > 50 ? text.substring(0, 50) + '...' : text}" (${text.length} chars)');
+    debugPrint('    H$level heading: "${text.length > 50 ? '${text.substring(0, 50)}...' : text}" (${text.length} chars)');
 
     final sizes = {
       1: 28.0,
@@ -259,7 +259,7 @@ class MarkdownToPdfConverter {
     if (children.isEmpty) return pw.SizedBox();
 
     final text = _extractText(element);
-    debugPrint('    Paragraph: "${text.length > 80 ? text.substring(0, 80) + '...' : text}" (${text.length} chars)');
+    debugPrint('    Paragraph: "${text.length > 80 ? '${text.substring(0, 80)}...' : text}" (${text.length} chars)');
 
     return pw.Padding(
       padding: const pw.EdgeInsets.only(bottom: 8),
@@ -280,7 +280,7 @@ class MarkdownToPdfConverter {
   pw.Widget _convertBlockquote(md.Element element) {
     final children = _convertInlineNodes(element.children);
     final text = _extractText(element);
-    debugPrint('    Blockquote: "${text.length > 80 ? text.substring(0, 80) + '...' : text}" (${text.length} chars)');
+    debugPrint('    Blockquote: "${text.length > 80 ? '${text.substring(0, 80)}...' : text}" (${text.length} chars)');
 
     return pw.Container(
       margin: const pw.EdgeInsets.only(bottom: 8),

@@ -2,6 +2,9 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 
 import 'package:flutter/material.dart';
+// markdown_editor_plus 的公开组件 MarkdownToolbar 要求传入 Toolbar 实例，
+// 但该包未公开导出 Toolbar 类型，只能从 src 目录导入（包设计缺陷）
+// ignore: implementation_imports
 import 'package:markdown_editor_plus/src/toolbar.dart';
 import '../l10n/strings.g.dart';
 

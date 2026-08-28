@@ -168,7 +168,6 @@ class NotesProvider extends ChangeNotifier {
 
     OpenNoteTools.initialize(
       notesProvider: this,
-      aiService: _aiService,
       vectorStore: _vectorStore,
     );
 

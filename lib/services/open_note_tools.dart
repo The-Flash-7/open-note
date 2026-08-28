@@ -4,7 +4,6 @@
 import 'package:flutter/foundation.dart';
 import '../models/note.dart';
 import '../providers/notes_provider.dart';
-import '../services/ai_service.dart';
 import '../services/vector_store.dart';
 
 class NoteContext {
@@ -27,16 +26,13 @@ class NoteContext {
 
 class OpenNoteTools {
   static NotesProvider? _notesProvider;
-  static AIService? _aiService;
   static VectorStore? _vectorStore;
 
   static void initialize({
     required NotesProvider notesProvider,
-    AIService? aiService,
     required VectorStore vectorStore,
   }) {
     _notesProvider = notesProvider;
-    _aiService = aiService;
     _vectorStore = vectorStore;
   }
 
