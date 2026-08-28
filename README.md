@@ -21,9 +21,9 @@
             alt="docs"
         />
     </a>
-    <a href="https://github.com/The-Flash-7/open-note/releases/tag/v1.1.0">
+    <a href="https://github.com/The-Flash-7/open-note/releases/tag/v1.2.0">
         <img
-            src="https://img.shields.io/badge/version-1.1.0+1-purple?logo=git"
+            src="https://img.shields.io/badge/version-1.2.0+1-purple?logo=git"
             alt="version"
         />
     </a>
