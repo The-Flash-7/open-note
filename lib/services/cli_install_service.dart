@@ -4,6 +4,7 @@
 import 'dart:io';
 
 import 'media/process_runner.dart';
+import 'shell_path_service.dart';
 
 /// 进程执行器（可注入测试）；默认接 runCommand。
 typedef CliProcRunner = Future<ProcessRunResult> Function(
@@ -14,6 +15,9 @@ typedef CliProcRunner = Future<ProcessRunResult> Function(
 
 /// 文件存在性（可注入测试）；默认真实文件系统。
 typedef CliExistsFn = bool Function(String path);
+
+/// 登录 shell PATH 目录解析器（可注入测试）；默认接会话缓存的快照服务。
+typedef CliShellDirsResolver = Future<List<String>> Function();
 
 /// CLI 环境检测与安装。
 ///
@@ -52,43 +56,55 @@ class CLIInstallService {
         '${_home()}/.local/bin',
       ];
 
+  /// 合并去重：shell 快照目录优先（用户真实环境），静态常见目录兜底。
+  static List<String> _mergedBinDirs(List<String> shellDirs) {
+    final seen = <String>{};
+    return [
+      ...shellDirs,
+      ..._commonBinDirs(),
+      if (Platform.isLinux) '/usr/bin',
+    ].where((d) => d.isNotEmpty && seen.add(d)).toList();
+  }
+
   /// python3 绝对路径候选：裸命令之外的兜底（版本化名覆盖 brew 未 link
   /// python3 别名的情况；conda 系 bin 内固定有 python3）。系统自带
   /// /usr/bin/python3 排最后，仅作存在兜底（版本校验会挡掉 3.9）。
-  static List<String> _pythonCandidates() => Platform.isMacOS
-      ? [
-          for (final dir in _commonBinDirs()) ...[
-            '$dir/python3',
-            for (final n in _pythonVersionedNames) '$dir/$n',
-          ],
-          '/usr/bin/python3',
-        ]
-      : Platform.isLinux
-          ? ['/usr/local/bin/python3', '/usr/bin/python3']
+  static List<String> _pythonCandidates(List<String> shellDirs) =>
+      Platform.isMacOS || Platform.isLinux
+          ? [
+              for (final dir in _mergedBinDirs(shellDirs)) ...[
+                '$dir/python3',
+                for (final n in _pythonVersionedNames) '$dir/$n',
+              ],
+              '/usr/bin/python3',
+            ]
           : const [];
 
   /// pip3 绝对路径候选（版本化名同理；缺失时还有 python -m pip 兜底）。
-  static List<String> _pipCandidates() => Platform.isMacOS
-      ? [
-          for (final dir in _commonBinDirs()) ...[
-            '$dir/pip3',
-            for (final n in _pipVersionedNames) '$dir/$n',
-          ],
-        ]
-      : Platform.isLinux
-          ? ['/usr/local/bin/pip3', '${_home()}/.local/bin/pip3']
+  static List<String> _pipCandidates(List<String> shellDirs) =>
+      Platform.isMacOS || Platform.isLinux
+          ? [
+              for (final dir in _mergedBinDirs(shellDirs)) ...[
+                '$dir/pip3',
+                for (final n in _pipVersionedNames) '$dir/$n',
+              ],
+            ]
           : const [];
 
   /// opennote CLI 绝对路径候选（含 pip user 安装的 macOS 框架脚本目录）。
-  static List<String> _cliCandidates() => Platform.isMacOS
-      ? [
-          for (final dir in _commonBinDirs()) '$dir/opennote',
-          for (final v in _pythonVersionedNames)
-            '${_home()}/Library/Python/${v.substring(7)}/bin/opennote',
-        ]
-      : Platform.isLinux
-          ? ['/usr/local/bin/opennote', '${_home()}/.local/bin/opennote']
-          : const [];
+  static List<String> _cliCandidates(List<String> shellDirs) =>
+      Platform.isMacOS
+          ? [
+              for (final dir in _mergedBinDirs(shellDirs)) '$dir/opennote',
+              for (final v in _pythonVersionedNames)
+                '${_home()}/Library/Python/${v.substring(7)}/bin/opennote',
+            ]
+          : Platform.isLinux
+              ? [
+                  for (final dir in _mergedBinDirs(shellDirs))
+                    '$dir/opennote',
+                ]
+              : const [];
 
   static String _home() => Platform.environment['HOME'] ?? '~';
 
@@ -98,9 +114,10 @@ class CLIInstallService {
   static Future<(String?, String)> _resolvePython(
     CliProcRunner run,
     CliExistsFn exists,
+    List<String> shellDirs,
   ) async {
     final bare = Platform.isWindows ? 'python' : 'python3';
-    final candidates = <String>[bare, ..._pythonCandidates()];
+    final candidates = <String>[bare, ..._pythonCandidates(shellDirs)];
     String? lastVersionOutput;
     for (final cmd in candidates) {
       // 绝对路径先做存在性守卫；裸命令交给 PATH 解析（ENOENT 由 catch 兜底）
@@ -127,11 +144,12 @@ class CLIInstallService {
     CliProcRunner run,
     CliExistsFn exists,
     String? pythonCmd,
+    List<String> shellDirs,
   ) async {
     final bare = Platform.isWindows ? 'pip' : 'pip3';
     final candidates = <(String, List<String>)>[
       (bare, ['--version']),
-      ..._pipCandidates().map((p) => (p, <String>['--version'])),
+      ..._pipCandidates(shellDirs).map((p) => (p, <String>['--version'])),
       if (pythonCmd != null) (pythonCmd, ['-m', 'pip', '--version']),
     ];
     for (final (cmd, args) in candidates) {
@@ -152,9 +170,11 @@ class CLIInstallService {
   static Future<EnvCheckResult> checkEnvironment({
     CliProcRunner run = runCommand,
     CliExistsFn exists = defaultExists,
+    CliShellDirsResolver? shellDirs,
   }) async {
     try {
-      final (pythonCmd, pythonVersion) = await _resolvePython(run, exists);
+      final dirs = await (shellDirs?.call() ?? ShellPathService.loginShellBinDirs());
+      final (pythonCmd, pythonVersion) = await _resolvePython(run, exists, dirs);
       if (pythonCmd == null) {
         // spawn 过但版本不达标 -> 版本过低；完全没找到 -> 未安装
         if (pythonVersion.isNotEmpty) {
@@ -167,7 +187,8 @@ class CLIInstallService {
         return EnvCheckResult(available: false, errorKey: 'pythonNotInstalled');
       }
 
-      final (pipCmd, pipArgs) = await _resolvePip(run, exists, pythonCmd);
+      final (pipCmd, pipArgs) =
+          await _resolvePip(run, exists, pythonCmd, dirs);
       if (pipCmd == null) {
         return EnvCheckResult(available: false, errorKey: 'pipNotInstalled');
       }
@@ -223,6 +244,7 @@ class CLIInstallService {
     CliProcRunner run,
     CliExistsFn exists, {
     String? pythonCmd,
+    List<String> shellDirs = const [],
   }) async {
     final candidates = Platform.isWindows
         ? <(String, List<String>)>[('cmd', ['/c', 'opennote', '--version'])]
@@ -233,7 +255,7 @@ class CLIInstallService {
                 '${pythonCmd.substring(0, pythonCmd.lastIndexOf('/'))}/opennote',
                 const <String>['--version'],
               ),
-            ..._cliCandidates().map((p) => (p, <String>['--version'])),
+            ..._cliCandidates(shellDirs).map((p) => (p, <String>['--version'])),
           ];
     for (final (cmd, args) in candidates) {
       // cmd /c 与裸命令交给系统解析；绝对候选做存在性守卫
@@ -258,19 +280,31 @@ class CLIInstallService {
   static Future<bool> isCLIInstalled({
     CliProcRunner run = runCommand,
     CliExistsFn exists = defaultExists,
+    CliShellDirsResolver? shellDirs,
   }) async {
+    final dirs =
+        await (shellDirs?.call() ?? ShellPathService.loginShellBinDirs());
     // 先解析 python 以启用「同 bin 推导」兜底（conda/venv 自定义前缀场景）
-    final (pythonCmd, _) = await _resolvePython(run, exists);
-    return await _resolveCli(run, exists, pythonCmd: pythonCmd) != null;
+    final (pythonCmd, _) = await _resolvePython(run, exists, dirs);
+    return await _resolveCli(
+          run,
+          exists,
+          pythonCmd: pythonCmd,
+          shellDirs: dirs,
+        ) !=
+        null;
   }
 
   static Future<InstallResult> install({
     CliProcRunner run = runCommand,
     CliExistsFn exists = defaultExists,
+    CliShellDirsResolver? shellDirs,
   }) async {
     try {
+      final dirs =
+          await (shellDirs?.call() ?? ShellPathService.loginShellBinDirs());
       // 用检测通过的 python 解释器 -m pip 安装，确保 CLI 装到正确环境
-      final (pythonCmd, _) = await _resolvePython(run, exists);
+      final (pythonCmd, _) = await _resolvePython(run, exists, dirs);
       if (pythonCmd == null) {
         return InstallResult(
           success: false,

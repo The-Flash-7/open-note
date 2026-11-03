@@ -43,6 +43,7 @@ Widget _missingHost({
   required MediaToolKind kind,
   TargetPlatform platform = TargetPlatform.macOS,
   MediaToolService? toolService,
+  bool finishing = false,
 }) =>
     TranslationProvider(
       child: MaterialApp(
@@ -52,7 +53,7 @@ Widget _missingHost({
             kind: kind,
             status: MediaToolStatus.missing(kind),
             downloading: false,
-            finishing: false,
+            finishing: finishing,
             autoInstalling: false,
             guide: 'brew install whisper-cpp',
             toolService: toolService,
@@ -82,6 +83,15 @@ void main() {
     ));
     expect(find.text('模型下载失败\nHTTP 404'), findsOneWidget);
     expect(find.byType(SelectionArea), findsOneWidget);
+  });
+
+  testWidgets('finishing 阶段不显示下载便携版按钮（防闪烁回归）', (tester) async {
+    await tester.pumpWidget(_missingHost(
+      kind: MediaToolKind.ffmpeg,
+      finishing: true,
+    ));
+    // ffmpeg 平台不过滤 hideDownload，按钮可显示性完全由状态机决定
+    expect(find.text('下载便携版'), findsNothing);
   });
 
   testWidgets('? 按钮打开手动安装指引对话框（ffmpeg 仅指引命令段）', (tester) async {
