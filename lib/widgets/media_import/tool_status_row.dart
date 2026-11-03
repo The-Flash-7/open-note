@@ -20,7 +20,7 @@ const Map<MediaToolKind, Map<String, String>> installGuides = {
     'linux': 'python3 -m pip install -U yt-dlp',
   },
   MediaToolKind.whisperCli: {
-    'macos': 'brew install whisper-cpp',
+    'macos': 'brew install whisper.cpp',
     'windows': 'winget install ggml.whisper-cpp',
     'linux': 'sudo apt install whisper-cpp || 见 whisper.cpp 仓库源码编译指引',
   },

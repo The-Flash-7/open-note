@@ -408,7 +408,7 @@ void main() {
   });
 
   group('autoInstallPlan（一键安装命令构建）', () {
-    test('macOS + brew 路径 -> brew install whisper-cpp', () {
+    test('macOS + brew 路径 -> brew install whisper.cpp', () {
       final plan = MediaToolService.autoInstallPlan(
         MediaToolKind.whisperCli,
         brewPath: '/opt/homebrew/bin/brew',
@@ -417,7 +417,7 @@ void main() {
       );
       expect(plan, isNotNull);
       expect(plan!.executable, '/opt/homebrew/bin/brew');
-      expect(plan.args, ['install', '-q', 'whisper-cpp']);
+      expect(plan.args, ['install', '-q', 'whisper.cpp']);
     });
 
     test('macOS 但未找到 brew -> null（回退指引）', () {

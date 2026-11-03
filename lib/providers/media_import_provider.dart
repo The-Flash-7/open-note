@@ -267,7 +267,8 @@ class MediaImportProvider extends ChangeNotifier {
         _notify();
       }
       recommendedTier = await modelService.recommendTierForDevice();
-      selectedTier = recommendedTier;
+      // 恢复用户持久化选择（历史版本未落盘时为 null -> 回退推荐档）
+      selectedTier = await settings.whisperModelTier() ?? recommendedTier;
       downloadedTiers.clear();
       for (final t in WhisperModelTier.values) {
         if (await modelService.localModelFile(t) != null) {
@@ -834,7 +835,7 @@ class MediaImportProvider extends ChangeNotifier {
       }
       errorMessage = '无法自动安装';
       errorDetail = Platform.isMacOS
-          ? '未检测到 Homebrew，请按指引手动安装（终端执行 brew install whisper-cpp）'
+          ? '未检测到 Homebrew，请按指引手动安装（终端执行 brew install whisper.cpp）'
           : '当前平台不支持自动安装，请按指引手动安装';
       _notify();
       return;
@@ -862,7 +863,7 @@ class MediaImportProvider extends ChangeNotifier {
     }
   }
 
-  /// 卸载计划：mac 走 brew（ffmpeg/yt-dlp/whisper-cpp），windows 仅 whisper-cli 走 winget。
+  /// 卸载计划：mac 走 brew（ffmpeg/yt-dlp/whisper.cpp），windows 仅 whisper-cli 走 winget。
   static InstallerPlan? uninstallPlan(
     MediaToolKind kind, {
     String? brewPath,
@@ -875,7 +876,8 @@ class MediaImportProvider extends ChangeNotifier {
       final name = switch (kind) {
         MediaToolKind.ffmpeg => 'ffmpeg',
         MediaToolKind.ytDlp => 'yt-dlp',
-        MediaToolKind.whisperCli => 'whisper-cpp',
+        // 与安装计划一致：brew 公式名为 whisper.cpp
+        MediaToolKind.whisperCli => 'whisper.cpp',
       };
       return InstallerPlan(brewPath, ['uninstall', '-q', name]);
     }
@@ -1185,6 +1187,8 @@ class MediaImportProvider extends ChangeNotifier {
 
   void selectTier(WhisperModelTier tier) {
     selectedTier = tier;
+    // fire-and-forget：选择即持久化，跨会话恢复（checkEnvironment 恢复）
+    unawaited(settings.setWhisperModelTier(tier));
     notifyListeners();
   }
 

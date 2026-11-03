@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'media_downloader.dart';
 import 'transcript_formatter.dart';
+import 'whisper_model_service.dart';
 
 /// 视频转笔记用户偏好（下载源 / 完成后删除源文件）。
 class MediaImportSettings {
@@ -21,6 +22,24 @@ class MediaImportSettings {
   static const _kWhisperBuild = 'media_tool_whisper_build';
   static const _kGpuDetectCache = 'media_gpu_detect_cache';
   static const _kMetalOk = 'media_metal_ok_versions';
+  static const _kModelTier = 'media_whisper_model_tier';
+
+  /// 识别模型档（用户手动选择后持久化；null 表示从未选择，回退推荐档）。
+  Future<WhisperModelTier?> whisperModelTier() async {
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString(_kModelTier);
+    if (raw == null) return null;
+    try {
+      return WhisperModelTier.values.byName(raw);
+    } catch (_) {
+      return null; // 枚举演进/脏数据
+    }
+  }
+
+  Future<void> setWhisperModelTier(WhisperModelTier tier) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_kModelTier, tier.name);
+  }
 
   /// 工具验证缓存（kind -> JSON 条目），避免每次检测 spawn 慢二进制。
   Future<Map<String, String>> readVerifyCache() async {

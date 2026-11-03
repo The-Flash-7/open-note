@@ -290,7 +290,8 @@ class MediaToolService {
     if (kind != MediaToolKind.whisperCli) return null;
     if (isMac) {
       if (brewPath == null || brewPath.isEmpty) return null;
-      return InstallerPlan(brewPath, ['install', '-q', 'whisper-cpp']);
+      // brew 公式名为 whisper.cpp（此前 whisper-cpp 已被官方重命名）
+      return InstallerPlan(brewPath, ['install', '-q', 'whisper.cpp']);
     }
     if (isWin) {
       if (wingetPath == null || wingetPath.isEmpty) return null;

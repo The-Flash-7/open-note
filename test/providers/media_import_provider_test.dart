@@ -227,15 +227,32 @@ void main() {
     expect(p.environmentReady, isTrue);
   });
 
-  test('checkEnvironment 后 selectedTier==recommendedTier（不再读默认模型档设置）',
-      () async {
-    // 预置历史默认模型档偏好：实现不再读取该设置时，选中档恒等于推荐档
+  test('checkEnvironment 恢复持久化模型档，未存档时回退推荐档', () async {
+    // 预置用户手动选择的历史档：恢复应优先于推荐档
     SharedPreferences.setMockInitialValues(
-        <String, Object>{'media_import_default_model': 'base'});
+        <String, Object>{'media_whisper_model_tier': 'base'});
     final p = makeProvider();
     await p.checkEnvironment();
+    await drainMetalProbe(p);
+    expect(p.recommendedTier, WhisperModelTier.largeV3Turbo);
+    expect(p.selectedTier, WhisperModelTier.base,
+        reason: '已持久化的用户选择应覆盖推荐档');
+  });
+
+  test('checkEnvironment 无持久化档 -> selectedTier==recommendedTier', () async {
+    final p = makeProvider();
+    await p.checkEnvironment();
+    await drainMetalProbe(p);
     expect(p.selectedTier, p.recommendedTier);
     expect(p.selectedTier, WhisperModelTier.largeV3Turbo);
+  });
+
+  test('selectTier 落盘 media_whisper_model_tier（跨会话恢复依据）', () async {
+    final p = makeProvider();
+    p.selectTier(WhisperModelTier.base);
+    await Future<void>.delayed(const Duration(milliseconds: 5));
+    final sp = await SharedPreferences.getInstance();
+    expect(sp.getString('media_whisper_model_tier'), 'base');
   });
 
   test('URL 来源时 yt-dlp 必检', () async {
@@ -471,7 +488,7 @@ void main() {
       expect(
           MediaImportProvider.uninstallPlan(MediaToolKind.whisperCli,
               brewPath: '/brew', isMac: true, isWin: false)!.args
-              .last, 'whisper-cpp');
+              .last, 'whisper.cpp');
     });
     test('mac 无 brew / linux：返回 null', () {
       expect(
