@@ -97,7 +97,9 @@ class MediaToolService {
       final cached = await _cachedStatus(kind);
       if (cached != null &&
           (appPath == cached.path ||
-              (appPath == null && await _whichPath(kind) == cached.path))) {
+              (appPath == null &&
+                  ((await _whichPath(kind)) == cached.path ||
+                      systemAbsoluteCandidates(kind).contains(cached.path))))) {
         return cached;
       }
     }
@@ -129,7 +131,37 @@ class MediaToolService {
         return st;
       }
     }
+    // GUI 启动（Finder/双击）无 shell PATH，`which` 找不到 brew 装的
+    // 工具；绝对路径兜底与 wingetCandidatePaths 同因。仅 macOS：
+    // Linux apt 路径本身在 GUI PATH 内
+    for (final path in systemAbsoluteCandidates(kind)) {
+      final st = await _verify(kind, path, MediaToolSource.systemPath);
+      if (st != null) {
+        await _storeCache(kind, st);
+        return st;
+      }
+    }
     return MediaToolStatus.missing(kind);
+  }
+
+  /// macOS 绝对路径兜底候选（GUI 启动无 shell PATH，`which` 失效时逐一
+  /// 验证；顺序即优先级，Intel Mac 走 /usr/local）。
+  static List<String> systemAbsoluteCandidates(MediaToolKind kind) {
+    if (!Platform.isMacOS) return const [];
+    return switch (kind) {
+      MediaToolKind.ffmpeg => [
+          '/opt/homebrew/bin/ffmpeg',
+          '/usr/local/bin/ffmpeg',
+        ],
+      MediaToolKind.ytDlp => [
+          '/opt/homebrew/bin/yt-dlp',
+          '/usr/local/bin/yt-dlp',
+        ],
+      MediaToolKind.whisperCli => [
+          '/opt/homebrew/bin/whisper-cli',
+          '/usr/local/bin/whisper-cli',
+        ],
+    };
   }
 
   /// 验证结果缓存：key=kind，value=JSON(path/size/mtime/version/source)。
