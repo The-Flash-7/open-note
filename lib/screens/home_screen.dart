@@ -1981,10 +1981,13 @@ class _HomeScreenState extends State<HomeScreen> with ClipboardListener {
             onPressed: () async {
               await provider.emptyTrash();
               await provider.refreshTrashNotes();
-              setState(() {});
               if (!dialogCtx.mounted) return;
-              Navigator.pop(dialogCtx);
-              SnackBarHelper.show(ctx, t.home_trashEmptied);
+              // 清空后直接关闭确认框与回收站对话框，无需展示空回收站
+              Navigator.of(dialogCtx)
+                ..pop() // 确认框
+                ..pop(); // 回收站对话框
+              if (!mounted) return;
+              SnackBarHelper.show(context, t.home_trashEmptied);
             },
             child: Text(t.common_clear, style: TextStyle(color: Colors.white)),
           ),
