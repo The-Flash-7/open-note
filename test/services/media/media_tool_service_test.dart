@@ -62,10 +62,17 @@ void main() {
     });
 
     test('自管缺失且 which 成功 -> systemPath', () async {
+      // _verify 有存在性前置守卫（release SIGPIPE 防护），which 命中的
+      // 路径必须真实落盘
+      final sysBin = Directory('${tmp.path}/sysbin')..createSync(recursive: true);
+      final sysFfmpeg = File('${sysBin.path}/ffmpeg')..writeAsStringSync('');
+      if (!Platform.isWindows) {
+        await Process.run('chmod', ['+x', sysFfmpeg.path]);
+      }
       final svc = MediaToolService(
         resolveBaseDir: () async => tmp.path,
         run: (exe, args, {String? workingDirectory}) async {
-          if (exe == 'which') return ok('/usr/local/bin/ffmpeg\n');
+          if (exe == 'which') return ok('${sysFfmpeg.path}\n');
           if (args.contains('-version')) return ok('ffmpeg version 6.0');
           return fail;
         },
@@ -73,7 +80,7 @@ void main() {
       final st = await svc.check(MediaToolKind.ffmpeg);
       expect(st.ready, isTrue);
       expect(st.source, MediaToolSource.systemPath);
-      expect(st.path, '/usr/local/bin/ffmpeg');
+      expect(st.path, sysFfmpeg.path);
     });
 
     test('全部缺失 -> ready=false', () async {
@@ -84,36 +91,77 @@ void main() {
       expect((await svc.check(MediaToolKind.ytDlp)).ready, isFalse);
     });
 
-    test('自管缺失且 which 失败 -> macOS 绝对路径兜底 systemPath（GUI 无 PATH）',
-        () async {
-      // 绝对路径兜底按平台常量实现，仅在 macOS 生效；本套件在 macOS 上运行
-      //（其余平台由 which/appManaged 语义覆盖，不引入平台分叉测试）
+    test('verify 前置存在性守卫：不存在的绝对路径不发起 spawn', () async {
       if (!Platform.isMacOS) {
         return;
       }
-      var verifySpawns = 0;
+      // 真机实证：release 下 spawn 不存在的路径会在 dart:io 原生层
+      // 触发主线程 SIGPIPE 杀死应用（进程平台线程未忽略该信号），
+      // _verify 必须先 stat 再 spawn。断言目标为真实候选路径，
+      // 且测试前置条件要求该路径当前不存在
+      final missingPath = '/opt/homebrew/bin/whisper-cli';
+      if (File(missingPath).existsSync()) {
+        return; // 本机存在该工具时无法模拟缺失场景，跳过
+      }
+      final spawned = <String>[];
       final svc = MediaToolService(
         resolveBaseDir: () async => tmp.path,
         run: (exe, args, {String? workingDirectory}) async {
-          if (exe == 'which') return fail;
-          if (exe == '/opt/homebrew/bin/whisper-cli' &&
-              args.contains('--version')) {
-            verifySpawns++;
-            return ok('whisper.cpp version: 1.9.5 (built: Nov  1 2025)');
-          }
+          spawned.add(exe);
           return fail;
         },
       );
       final st = await svc.check(MediaToolKind.whisperCli);
-      expect(st.ready, isTrue);
-      expect(st.source, MediaToolSource.systemPath);
-      expect(st.path, '/opt/homebrew/bin/whisper-cli');
-      expect(st.version, '1.9.5');
+      expect(st.ready, isFalse);
+      expect(spawned, isNot(contains(missingPath)),
+          reason: '绝对路径候选不存在时应跳过 spawn');
+    });
 
-      // 绝对路径命中写入缓存后，二次 check 不再 spawn 验证
-      final st2 = await svc.check(MediaToolKind.whisperCli);
-      expect(st2.path, '/opt/homebrew/bin/whisper-cli');
-      expect(verifySpawns, 1, reason: '缓存命中不应重复验证');
+    test('自管缺失且 which 失败 -> macOS 绝对路径兜底 systemPath（GUI 无 PATH）',
+        () async {
+      // 绝对路径兜底按平台常量实现，仅在 macOS 生效；本套件在 macOS 上运行
+      //（其余平台由 which/appManaged 语义覆盖，不引入平台分叉测试）。
+      // _verify 有存在性前置守卫，候选路径须真实落盘：测试期间临时创建，
+      // 结束时清理（仅当本机原本不存在时）
+      if (!Platform.isMacOS) {
+        return;
+      }
+      const candidate = '/opt/homebrew/bin/whisper-cli';
+      final created = !File(candidate).existsSync();
+      if (created) {
+        File(candidate).writeAsStringSync('#!/bin/sh\nexit 0\n');
+        await Process.run('chmod', ['+x', candidate]);
+      }
+      try {
+        var verifySpawns = 0;
+        final svc = MediaToolService(
+          resolveBaseDir: () async => tmp.path,
+          run: (exe, args, {String? workingDirectory}) async {
+            if (exe == 'which') return fail;
+            if (exe == candidate && args.contains('--version')) {
+              verifySpawns++;
+              return ok('whisper.cpp version: 1.9.5 (built: Nov  1 2025)');
+            }
+            return fail;
+          },
+        );
+        final st = await svc.check(MediaToolKind.whisperCli);
+        expect(st.ready, isTrue);
+        expect(st.source, MediaToolSource.systemPath);
+        expect(st.path, candidate);
+        expect(st.version, '1.9.5');
+
+        // 绝对路径命中写入缓存后，二次 check 不再 spawn 验证
+        final st2 = await svc.check(MediaToolKind.whisperCli);
+        expect(st2.path, candidate);
+        expect(verifySpawns, 1, reason: '缓存命中不应重复验证');
+      } finally {
+        if (created) {
+          try {
+            File(candidate).deleteSync();
+          } catch (_) {}
+        }
+      }
     });
 
     test('whisperCli 探测以 exe 所在目录为工作目录（dll 搜索保险）', () async {

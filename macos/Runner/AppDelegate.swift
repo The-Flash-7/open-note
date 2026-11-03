@@ -4,22 +4,22 @@ import FlutterMacOS
 @main
 class AppDelegate: FlutterAppDelegate {
   private var cliChannel: FlutterMethodChannel?
-  
+
   override func applicationDidFinishLaunching(_ notification: Notification) {
     guard let window = mainFlutterWindow,
           let controller = window.contentViewController as? FlutterViewController else { return }
-    
+
     cliChannel = FlutterMethodChannel(
       name: "cli_installer",
       binaryMessenger: controller.engine.binaryMessenger
     )
-    
+
     // 添加 "安装 CLI 工具" 菜单项到应用菜单
     if let mainMenu = NSApplication.shared.mainMenu,
        let appMenuItem = mainMenu.items.first {
       let separator = NSMenuItem.separator()
       appMenuItem.submenu?.addItem(separator)
-      
+
       let installCLIItem = NSMenuItem(
         title: "安装 CLI 工具",
         action: #selector(installCLIClicked),
@@ -27,10 +27,11 @@ class AppDelegate: FlutterAppDelegate {
       )
       appMenuItem.submenu?.addItem(installCLIItem)
     }
-    
-    super.applicationDidFinishLaunching(notification)
+    // 注意：不可调用 super.applicationDidFinishLaunching——本 Flutter 版本的
+    // FlutterAppDelegate 未实现该方法，调用即抛 unrecognized selector
+    // （真机实证：每次启动都被 AppKit 捕获记录 FAULT）
   }
-  
+
   @objc private func installCLIClicked() {
     cliChannel?.invokeMethod("triggerInstallCLI", arguments: nil)
   }

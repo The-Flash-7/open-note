@@ -243,6 +243,10 @@ class MediaToolService {
   Future<MediaToolStatus?> _verify(
       MediaToolKind kind, String path, MediaToolSource source) async {
     try {
+      // 存在性前置守卫：release 下 spawn 不存在的路径会在 dart:io 原生层
+      // 触发主线程 SIGPIPE 直接杀死应用（真机实证，见绝对路径候选兜底）；
+      // 顺带省掉对缺失二进制的一次性 spawn 开销
+      if (!await File(path).exists()) return null;
       // whisperCli 探测以 exe 所在目录为工作目录：Windows dll 与 exe 同目录，
       // 从应用内启动时 PATH 无该目录，dll 搜索需工作目录兜底
       final r = await run(path, switch (kind) {

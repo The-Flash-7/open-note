@@ -17,6 +17,14 @@ import 'l10n/strings.g.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // SIGPIPE 免疫（纵深防御）：真机实证 release 下任一原生线程收到 SIGPIPE
+  // 会直接杀死应用且无崩溃报告（dart:io 子进程管道写失败场景）。watch() 使
+  // VM 以 kqueue 接管该信号，未监听的投递被安全丢弃，行为对齐裸 Dart VM 的
+  // SIG_IGN。仅 POSIX 平台需要
+  if (!Platform.isWindows) {
+    ProcessSignal.sigpipe.watch();
+  }
+
   // 单实例检查（仅 Windows 生效，其他平台自动跳过）
   await WindowsSingleInstance.ensureSingleInstance(
     [],
