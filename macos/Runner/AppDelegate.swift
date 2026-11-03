@@ -6,6 +6,12 @@ class AppDelegate: FlutterAppDelegate {
   private var cliChannel: FlutterMethodChannel?
 
   override func applicationDidFinishLaunching(_ notification: Notification) {
+    // SIGPIPE 免疫（纵深防御）：真机实证 spawn 不存在的二进制路径时
+    // dart:io 原生层会在平台线程触发 SIGPIPE 直接杀死应用且无崩溃报告
+    //（Flutter 的 Dart VM 不支持 ProcessSignal.sigpipe.watch()，只能在
+    // 原生层忽略）。Dart 侧另有存在性前置守卫做根因防护
+    signal(SIGPIPE, SIG_IGN)
+
     guard let window = mainFlutterWindow,
           let controller = window.contentViewController as? FlutterViewController else { return }
 
