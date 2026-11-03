@@ -170,7 +170,7 @@ class ToolStatusRow extends StatelessWidget {
               ],
             )
           : Text(t.media_env_missing),
-      trailing: uninstalling
+      trailing: uninstalling || finishing
           ? const SizedBox(
               width: 14,
               height: 14,

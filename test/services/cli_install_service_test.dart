@@ -117,10 +117,67 @@ void main() {
       expect(r.errorKey, 'pythonVersionTooLow');
       expect(r.pythonVersion, 'Python 3.9.6');
     });
+
+    test('conda 系前缀（miniforge3）命中 python/pip', () async {
+      final home = Platform.environment['HOME'] ?? '~';
+      final py = '$home/miniforge3/bin/python3';
+      final r = await CLIInstallService.checkEnvironment(
+        run: (exe, args, {String? workingDirectory}) async {
+          if (exe == py && args.contains('--version') && !args.contains('pip')) {
+            return ProcessRunResult(0, 'Python 3.13.1\n', '');
+          }
+          if (exe == py && args.contains('pip')) {
+            return ProcessRunResult(0, 'pip 25.0 (python 3.13)\n', '');
+          }
+          throw ProcessException(exe, args, 'not found', 2);
+        },
+        exists: (p) => p == py,
+      );
+      expect(r.available, isTrue);
+      expect(r.pythonVersion, 'Python 3.13.1');
+      expect(r.pipVersion, contains('pip 25.0'));
+    });
+
+    test('brew 未 link python3 别名 -> 版本化名候选命中', () async {
+      final r = await CLIInstallService.checkEnvironment(
+        run: (exe, args, {String? workingDirectory}) async {
+          if (exe == '/opt/homebrew/bin/python3.13' &&
+              args.contains('--version') &&
+              !args.contains('pip')) {
+            return ProcessRunResult(0, 'Python 3.13.3\n', '');
+          }
+          if (exe == '/opt/homebrew/bin/python3.13' && args.contains('pip')) {
+            return ProcessRunResult(0, 'pip 24.2\n', '');
+          }
+          throw ProcessException(exe, args, 'not found', 2);
+        },
+        exists: (p) => p == '/opt/homebrew/bin/python3.13',
+      );
+      expect(r.available, isTrue);
+      expect(r.pythonVersion, 'Python 3.13.3');
+    });
   });
 
   group('isCLIInstalled', () {
-    test('裸命令缺失 -> ~/.local/bin/opennote 候选命中', () async {
+    test('裸命令缺失 -> python 同 bin 推导命中（conda/venv 场景）', () async {
+      final home = Platform.environment['HOME'] ?? '~';
+      final py = '$home/miniforge3/bin/python3';
+      final r = await CLIInstallService.isCLIInstalled(
+        run: (exe, args, {String? workingDirectory}) async {
+          if (exe == py && args.contains('--version')) {
+            return ProcessRunResult(0, 'Python 3.13.1\n', '');
+          }
+          if (exe == '$home/miniforge3/bin/opennote') {
+            return ProcessRunResult(0, 'open-note-cli 0.3.2\n', '');
+          }
+          throw ProcessException(exe, args, 'not found', 2);
+        },
+        exists: (p) => p == py || p == '$home/miniforge3/bin/opennote',
+      );
+      expect(r, isTrue);
+    });
+
+    test('裸命令与同 bin 推导缺失 -> ~/.local/bin/opennote 候选命中', () async {
       final home = Platform.environment['HOME'] ?? '~';
       final r = await CLIInstallService.isCLIInstalled(
         run: (exe, args, {String? workingDirectory}) async {

@@ -26,30 +26,65 @@ class CLIInstallService {
   static const int _minPythonMajor = 3;
   static const int _minPythonMinor = 10;
 
-  /// 各平台 python3 绝对路径候选（顺序即优先级：brew 前缀 > 系统自带）。
+  /// python3 达标的版本化名（3.10 起才可能过最低版本校验，无需枚举更低）。
+  static const _pythonVersionedNames = [
+    'python3.13',
+    'python3.12',
+    'python3.11',
+    'python3.10',
+  ];
+  static const _pipVersionedNames = [
+    'pip3.13',
+    'pip3.12',
+    'pip3.11',
+    'pip3.10',
+  ];
+
+  /// 常见工具 bin 目录（顺序即优先级：brew 前缀 > conda 系 > 用户级 pip）。
+  /// macOS GUI 从 Finder 启动时 PATH 只有系统 4 目录，brew/conda/用户级
+  /// 安装的工具全靠这里兜底（真机实证：终端工具链可能是 miniforge）。
+  static List<String> _commonBinDirs() => [
+        '/opt/homebrew/bin',
+        '/usr/local/bin',
+        '${_home()}/miniforge3/bin',
+        '${_home()}/miniconda3/bin',
+        '${_home()}/anaconda3/bin',
+        '${_home()}/.local/bin',
+      ];
+
+  /// python3 绝对路径候选：裸命令之外的兜底（版本化名覆盖 brew 未 link
+  /// python3 别名的情况；conda 系 bin 内固定有 python3）。系统自带
+  /// /usr/bin/python3 排最后，仅作存在兜底（版本校验会挡掉 3.9）。
   static List<String> _pythonCandidates() => Platform.isMacOS
-      ? ['/opt/homebrew/bin/python3', '/usr/local/bin/python3', '/usr/bin/python3']
+      ? [
+          for (final dir in _commonBinDirs()) ...[
+            '$dir/python3',
+            for (final n in _pythonVersionedNames) '$dir/$n',
+          ],
+          '/usr/bin/python3',
+        ]
       : Platform.isLinux
           ? ['/usr/local/bin/python3', '/usr/bin/python3']
           : const [];
 
-  /// pip3 绝对路径候选（brew/用户级脚本目录）。
+  /// pip3 绝对路径候选（版本化名同理；缺失时还有 python -m pip 兜底）。
   static List<String> _pipCandidates() => Platform.isMacOS
       ? [
-          '/opt/homebrew/bin/pip3',
-          '/usr/local/bin/pip3',
-          '${_home()}/.local/bin/pip3',
+          for (final dir in _commonBinDirs()) ...[
+            '$dir/pip3',
+            for (final n in _pipVersionedNames) '$dir/$n',
+          ],
         ]
       : Platform.isLinux
           ? ['/usr/local/bin/pip3', '${_home()}/.local/bin/pip3']
           : const [];
 
-  /// opennote CLI 绝对路径候选。
+  /// opennote CLI 绝对路径候选（含 pip user 安装的 macOS 框架脚本目录）。
   static List<String> _cliCandidates() => Platform.isMacOS
       ? [
-          '/opt/homebrew/bin/opennote',
-          '/usr/local/bin/opennote',
-          '${_home()}/.local/bin/opennote',
+          for (final dir in _commonBinDirs()) '$dir/opennote',
+          for (final v in _pythonVersionedNames)
+            '${_home()}/Library/Python/${v.substring(7)}/bin/opennote',
         ]
       : Platform.isLinux
           ? ['/usr/local/bin/opennote', '${_home()}/.local/bin/opennote']
@@ -181,16 +216,23 @@ class CLIInstallService {
     }
   }
 
-  /// 解析 opennote CLI 命令：裸命令 -> 平台绝对候选链。
-  /// 返回 (命令, 参数)；Windows 经 cmd /c 保证 PATH 解析并避免匹配桌面应用 exe。
+  /// 解析 opennote CLI 命令：裸命令 -> python 同 bin 推导 -> 平台绝对候选链。
+  /// pythonCmd 非空时优先在其所在目录找 opennote（pip 脚本与解释器同 bin，
+  /// 覆盖 conda/venv 自定义前缀场景）。
   static Future<(String, List<String>)?> _resolveCli(
     CliProcRunner run,
-    CliExistsFn exists,
-  ) async {
+    CliExistsFn exists, {
+    String? pythonCmd,
+  }) async {
     final candidates = Platform.isWindows
         ? <(String, List<String>)>[('cmd', ['/c', 'opennote', '--version'])]
         : <(String, List<String>)>[
             ('opennote', ['--version']),
+            if (pythonCmd != null && pythonCmd.contains('/'))
+              (
+                '${pythonCmd.substring(0, pythonCmd.lastIndexOf('/'))}/opennote',
+                const <String>['--version'],
+              ),
             ..._cliCandidates().map((p) => (p, <String>['--version'])),
           ];
     for (final (cmd, args) in candidates) {
@@ -217,7 +259,9 @@ class CLIInstallService {
     CliProcRunner run = runCommand,
     CliExistsFn exists = defaultExists,
   }) async {
-    return await _resolveCli(run, exists) != null;
+    // 先解析 python 以启用「同 bin 推导」兜底（conda/venv 自定义前缀场景）
+    final (pythonCmd, _) = await _resolvePython(run, exists);
+    return await _resolveCli(run, exists, pythonCmd: pythonCmd) != null;
   }
 
   static Future<InstallResult> install({
